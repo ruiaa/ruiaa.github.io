@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>gradle学习</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <link rel="stylesheet" href="style-index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>gradle学习</h1>
+        <h2>设置环境变量</h2>
+        <ul>
+            <li>GRADLE_HOME Gradle的安装路径</li>
+            <li>PATH环境变量 GRADLE_HOME/bin</li>
+        </ul>
+
+        <h2>命令参数</h2>
+        <ul>
+            <li>-q,quiet,不会生成 Gradle 的日志信息</li>
+        </ul>
+
+        <h2>taks</h2>
+        <ul>
+            <em>gradle -q taskName</em>
+            <li><pre><code>task hello {
+    doLast {
+        println 'Hello world!'
+    }
+}</code></pre>
+            </li>
+            <li><pre><code>task hello &lt;&lt; {
+    println 'Hello world!'
+}</code></pre>
+            </li>
+            <li>任务依赖
+                <br>允许taskX 到 taskY 的依赖在 taskY 被定义之前就已经声明
+                <pre><code>task intro(dependsOn: hello) &lt;&lt; {
+    println "I'm Gradle"
+}</code></pre>
+            </li>
+            <li>动态任务
+                <br><em>动态创建task0, task1, task2, task3</em>
+                <pre><code>4.times { counter ->
+    task "task$counter" &lt;&lt; {
+        println "I'm task number $counter"
+    }
+}</code></pre>
+
+                <pre><code>> gradle -q task1
+I'm task number 1</code></pre>
+            </li>
+            <li>创建额外的依赖
+                <br>task0.dependsOn task2, task3</li>
+            <li>加入行为<br>&lt;&lt; 操作符是 doLast 的简单别称<pre><code>task hello &lt;&lt; {
+    println 'Hello Earth'
+}
+hello.doFirst {
+    println 'Hello Venus'
+}
+hello.doLast {
+    println 'Hello Mars'
+}
+hello &lt;&lt; {
+    println 'Hello Jupiter'
+}</code></pre>
+            <pre><code>> gradle -q hello
+Hello Venus
+Hello Earth
+Hello Mars
+Hello Jupiter</code></pre></li>
+            <li>短标记法$ 访问一个存在的任务
+                <br>$hello.name 
+                <br>name 是任务的默认属性, 代表当前任务的名称, 这里是 hello</li>
+            <li>自定义任务属性
+            <br>myTask.myProperty</li>
+        </ul>
+        
+        <h2>依赖管理</h2>
+        
+        <h2>Android Gradle</h2>
+
+
+    </main>
+</body>
+
+</html>

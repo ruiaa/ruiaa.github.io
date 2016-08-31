@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>wpf控件</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>wpf控件</h1>
+        <ol>
+            <li>布局
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li>按钮
+                <ul>
+                    <li>button</li>
+                </ul>
+            </li>
+            <li>数据显示</li>
+            <li>日期
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li>菜单</li>
+            <li>选择</li>
+            <li>导航</li>
+            <li>对话框</li>
+            <li>用户消息</li>
+            <li>文档</li>
+            <li>输入</li>
+            <li>媒体</li>
+            <li>数字墨迹</li>
+        </ol>
+        <br>
+        <br>
+        
+        <h2>WPF Windows</h2>
+        <h3></h3>
+        
+        <h2>布局</h2>
+        <h3>Grid</h3>
+        <p>。对于每一列，可以指定一个ColumnDefinition；对于每一行，可以指定一个RowDefinition。</p>
+<ol>
+    <li>简单控件</li>
+    <li>内容控件</li>
+    <li>带标题的内容控件</li>
+    <li>项控件</li>
+    <li>带标题的项控件</li>
+    <li>修饰控件</li>
+</ol>
+   <h2>简单控件:没有Content 属性</h2>
+   <h3>PasswordBox</h3>
+   <p>用于输入密码,有用于输入密码的专用属性，例如，PasswordChar 属性定义了在用户输入密码时显示的字符，Password 属性可以访问输入的密码。PasswordChanged 事件在修改密码时立即调用</p>
+   <h3>Scrollbar</h3>
+   <p>包含一个Thumb，用户可以从Thumb 中选择—个值。例如，如果文档在屏幕中放不下，就可以使用滚动条</p>
+   <h3>ProgressBar</h3>
+   <p></p>
+   <h3>Slider</h3>
+   <h3>TextBox</h3>
+   <h3>RichTextBox</h3>
+   <p>通过FlowDocument 类支持带格式的文本</p>
+   <h3>Calendar</h3>
+   <p>选择一个日期或日期范围</p>
+   <h3>DatePicker</h3>
+   
+<h2>ContentControl内容控件:有Content 属性</h2>
+<h3>ButtonBase</h3>
+<ul>
+    <li>Button</li>
+    <li>RepeatButton:会重复引发Click 事件,直到释放按钮为止</li>
+    <li>ToggleButton:有开关状态
+        <ul>
+            <li>CheckBox:由用户选择和取消选择</li>
+            <li>RadioButton:可以由用户选择,清除RadioButton的选择必须通过编程方式实现</li>
+        </ul>
+    </li>
+</ul>
+<h3>Label</h3>
+<p></p>
+<h3>Frame</h3>
+<p>Frame 控件支持导航。使用Navigate()方法可以导航到一个页面内容上。如果该内容是一个网页，就使用浏览器控件来显示</p>
+<h3>ListBoxItem</h3>
+<h3>StatusBoxItem</h3>
+<h3>ScrollViewer</h3>
+<h3>ToolTip</h3>
+<h3>UserControl</h3>
+<p>将UserControl 类用作基类，可以为创建自定义控件提供一种简单方式。但是，基类UserControl 不支持模板</p>
+<h3>Window</h3>
+<h3>NavigationWindow</h3>
+
+<h2>HeaderedContentControl带标题的内容控件</h2>
+<h3>Expander</h3>
+<p>使用Expander 控件，可以创建一个带对话框的“高级”模式，它在默认情况下不显示所有的信息，只有用户展开它，才会显示更多的信息。在未展开模式下，只显示标题信息；在展开模式下，显示内容</p>
+<h3>GroupBox</h3>
+<p>提供了边框和标题来组合控件</p>
+<h3>TabItem</h3>
+<h2>ItemsControl项控件:包含一个可以用Items 属性访问的数据项列表</h2>
+<h3>Menu</h3>
+<h3>ContextMenu</h3>
+<h3>StatusBar</h3>
+<h3>TreeView</h3>
+<h3>ListBox</h3>
+<p></p>
+<h3>ComboBox</h3>
+<p>有一个附带的Button 控件，只有单击该按钮,才会显示数据项</p>
+<h3>TabControl</h3>
+<p>内容可以排列为表格形式</p>
+<h3>DataGrid</h3>
+<p>显示数据的可定制网格</p>
+<h2>HeaderedItemsControl带标题的项控件</h2>
+<h3>MenuItem</h3>
+<h3>TreeViewItem</h3>
+<h3>ToolBar</h3>
+<h2>Decorator修饰控件</h2>
+   <h3>Border</h3>
+   <h3>Viewbox</h3>
+   <h3>BulletDecorator</h3>
+   
+   <h2>对话框</h2>
+   <h3>消息框MessageBox</h3>
+   <p>MessageBox.Show(string messageBoxText,string caption,MessageBoxButton button,MessageBoxImage icon);</p>
+   <pre><code>MessageBoxResult result =MessageBox.Show(
+                           "messageBoxText", 
+                           "caption", 
+                           MessageBoxButton.YesNoCancel, 
+                           MessageBoxImage.Warning
+                           );
+switch (result)
+{
+    case MessageBoxResult.Yes:
+        // User pressed Yes button
+        // ...
+        break;
+    case MessageBoxResult.No:
+        // User pressed No button
+        // ...
+        break;
+    case MessageBoxResult.Cancel:
+        // User pressed Cancel button
+        // ...
+        break;
+}
+
+</code></pre>
+   <h3>通用对话框</h3>
+   <h3>“打开文件”对话框OpenFileDialog </h3>
+   <pre><code>Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+dlg.FileName = "Document"; // Default file name
+dlg.DefaultExt = ".txt"; // Default file extension
+dlg.Filter = "Text documents |*.txt"; // Filter files by extension
+
+// Show open file dialog box
+Nullable<bool> result = dlg.ShowDialog();
+
+// Process open file dialog box results
+if (result == true)
+{
+    // Open document
+    string filename = dlg.FileName;
+}
+</code></pre>
+   <h3>“保存文件”对话框SaveFileDialog </h3>
+   <pre><code>// Configure save file dialog box
+Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+dlg.FileName = "Document"; // Default file name
+dlg.DefaultExt = ".text"; // Default file extension
+dlg.Filter = "Text documents|*.txt"; // Filter files by extension
+
+// Show save file dialog box
+Nullable<bool> result = dlg.ShowDialog();
+
+// Process save file dialog box results
+if (result == true)
+{
+    // Save document
+    string filename = dlg.FileName;
+}</code></pre>
+   <h3>“打印”对话框PrintDialog </h3>
+   <pre><code>// Configure printer dialog box
+System.Windows.Controls.PrintDialog dlg = new System.Windows.Controls.PrintDialog();
+dlg.PageRangeSelection = PageRangeSelection.AllPages;
+dlg.UserPageRangeEnabled = true;
+
+// Show save file dialog box
+Nullable<bool> result = dlg.ShowDialog();
+
+// Process save file dialog box results
+if (result == true)
+{
+    // Print document
+}
+
+</code></pre>
+   <h3>自定义对话框Window</h3>
+    </main>
+</body>
+
+</html>

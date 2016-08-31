@@ -1,0 +1,69 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html {
+    font-size: 100%;
+    /* 16px */
+}
+body {
+    font-family: cursive;
+    line-height: 2.0;
+}
+h1 {
+    font-size: 2.1875rem;
+    /* 35px/16px */
+    color: #ab47bc;
+    /* purple_400 */
+}
+h2 {
+    font-size: 1.75rem;
+    /* 28px/16px */
+    color: #e84e40;
+    /* red_400 */
+}
+h3 {
+    font-size: 1.0rem;
+    color: #738ffe;
+    /* blue_400 */
+}
+p {
+    text-indent: 2em;
+}
+input,
+select,
+textarea,
+xmp,
+pre,
+code {
+    font-family: inherit;
+    font-size: inherit;
+}
+/* :::: 可伸缩图像 :::: */
+
+img {
+    max-width: 100%;
+}
+/* :::: 链接 :::: */
+
+a {
+    color: #fdb09d;
+    /* 略带粉色 */
+}
+a:link {
+    color: #e10000;
+    /* a red */
+    text-decoration: none;
+}
+a:visited {
+    color: #b44f4f;
+}
+a:hover {
+    color: #f00;
+    text-decoration: underline;
+}
+em {
+    font-style: normal;
+    font-weight: bold;
+}

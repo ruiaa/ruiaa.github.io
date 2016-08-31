@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Google Java编程风格指南</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>Google Java编程风格指南</h1>
+
+        <h2>源文件</h2>
+        <ul>
+            <li>源文件以其最顶层的类名来命名，大小写敏感，文件扩展名为.java</li>
+            <li>编码格式为UTF-8</li>
+        </ul>
+
+        <h2>字符</h2>
+        <ul>
+            <li>仅允许出现行结束符序列和空格</li>
+            <li>具有特殊转义序列的任何字符(\b, \t, \n, \f, \r, ", ',\),使用其转义序列</li>
+            <li>使用Unicode转义符时，必须注释</li>
+        </ul>
+
+        <h2>源文件结构</h2>
+        <ul>
+            <li>许可证或版权信息(如有需要)</li>
+            <li>package语句
+                <br>package语句写在一行里</li>
+            <li>import语句
+                <br>import语句不换行
+                <br>不要使用通配符
+                <br>分组,每组由一个空行分隔,按字典序排列
+                <ul>
+                    <li>静态导入</li>
+                    <li>com.goole</li>
+                    <li>第三方 android,com,junit,org,sun</li>
+                    <li>java</li>
+                    <li>javax</li>
+                </ul>
+            </li>
+            <li>一个顶级类(只有一个)</li>
+        </ul>
+
+        <h2>类</h2>
+        <ul>
+            <li>只有一个顶级类声明</li>
+            <li>类的成员按逻辑排序</li>
+            <li>重载,永不分离</li>
+        </ul>
+
+        <h2>格式</h2>
+        <ul><em>大括号</em>
+            <li>必选：大括号与if, else, for, do, while语句一起使用,即使只有一条语句(或是空),也应该把大括号写上。</li>
+            <li>大括号遵循Kernighan和Ritchie风格
+                <ul>
+                    <li>左大括号前不换行</li>
+                    <li>左大括号后换行</li>
+                    <li>右大括号前换行</li>
+                    <li>如果右大括号是一个语句、函数体或类的终止，则右大括号后换行; 否则不换行</li>
+                </ul>
+            </li>
+            <li>空块,大括号可以简洁地写成{},不需要换行</li>
+        </ul>
+        <ul><em>缩进</em>
+            <li>每当开始一个新的块，缩进增加2个空格</li>
+            <li>当块结束时，缩进返回先前的缩进级别</li>
+            <li>每个语句后要换行</li>
+            <li>列限制：80或100</li>
+        </ul>
+        <ul><em>自动换行</em>：更倾向于在更高的语法级别处断开
+            <li>自动换行时缩进至少+4个空格</li>
+            <li>在非赋值运算符处断开，那么在该符号前断开(比如+，它将位于下一行)</li>
+            <li>如果在赋值运算符处断开，通常的做法是在该符号后断开(比如=,foreach :,它与前面的内容留在同一行)</li>
+            <li>方法名或构造函数名与左括号留在同一行</li>
+            <li>逗号(,)与其前面的内容留在同一行</li>
+        </ul>
+
+        <ul><em>水平空白</em>
+            <li>如果在一条语句后做注释，则双斜杠(//)两边都要空格</li>
+        </ul>
+
+        <ul><em>用小括号来限定组</em>
+            <li>尽可能使用()表示Java运算符优先级</li>
+        </ul>
+
+        <ul><em>枚举类</em>
+            <li>枚举常量间用逗号隔开，换行可选</li>
+        </ul>
+        <ul><em>变量声明</em>
+            <li>每次只声明一个变量</li>
+            <li>需要时才声明，并尽快进行初始化</li>
+        </ul>
+        <ul><em>数组</em>
+            <li>数组初始化：可写成块状结构</li>
+            <li>中括号是类型的一部分：String[] args</li>
+        </ul>
+        <ul><em>switch语句</em>
+            <li>块中的内容缩进为2个空格</li>
+            <li>每个switch标签后新起一行，再缩进2个空格，写下一条或多条语句</li>
+            <li>Fall-through：注释
+                <br>通过一条注释来说明程序将继续执行到下一个语句组</li>
+            <li>每个switch语句都包含一个default语句组，即使它什么代码也不包含</li>
+        </ul>
+
+        <ul><em>modifiers顺序</em>
+            <li>public protected private abstract static final transient volatile synchronized native strictfp</li>
+        </ul>
+
+        <h2>注释</h2>
+        <ul><em>块注释</em>
+            <li>块注释与其周围的代码在同一缩进级别</li>
+            <li>对于多行的/* ... */注释，后续行必须从*开始,并且与前一行的*对齐</li>
+        </ul>
+
+        <h2>命名</h2>
+        <ul>
+            <li>标识符只能使用ASCII字母和数字</li>
+            <li>不使用特殊前缀或后缀</li>
+        </ul>
+        <ul>
+            <li>包名全部小写，连续的单词只是简单地连接起来，不使用下划线</li>
+            <li>类名都以UpperCamelCase风格编写</li>
+            <li>测试类的命名以它要测试的类的名称开始，以Test结束</li>
+            <li>类型变量名
+                <br>单个的大写字母，后面可以跟一个数字(如：E, T, X, T2)
+                <br>以类命名方式,后面加个大写的T</li>
+            <br>
+            <li>方法名都以lowerCamelCase风格编写</li>
+            <li>参数名以lowerCamelCase风格编写
+                <br>参数应该避免用单个字符命名</li>
+            <br>
+            <li>常量名命名模式为CONSTANT_CASE，全部字母大写，用下划线分隔单词</li>
+            <li>非常量字段名以lowerCamelCase风格编写</li>
+            <li>局部变量名以lowerCamelCase风格编写
+                <br>即使局部变量是final和不可改变的，也不应该把它示为常量</li>
+
+        </ul>
+
+        <h2>编程实践</h2>
+        <ul>
+            <li>@Override：能用则用</li>
+            <br>
+            <li>捕获的异常：不能忽视
+                <br>典型的响应方式是打印日志
+                <br>如果它被认为是不可能的，则把它当作一个AssertionError重新抛出
+                <br>如果它确实是不需要在catch块中做任何响应，需要做注释加以说明
+                <br>在测试中，如果一个捕获的异常被命名为expected，则它可以被不加注释地忽略
+            </li>
+            <br>
+            <li>静态成员：使用类进行调用</li>
+            <br>
+            <li>Finalizers: 禁用</li>
+        </ul>
+
+        <h2>Javadoc</h2>
+        <a href="https://github.com/waylau/java-code-conventions/blob/master/page05.md">waylau/java-code-conventions</a>
+        <ul>
+            <li>开头注释
+                <pre><code>    /*
+     * Classname
+     * 
+     * Version information
+     *
+     * Date
+     * 
+     * Copyright notice
+     */</code></pre>
+            </li>
+        </ul>
+        
+        <h2> Java 源文件示例</h2>
+        <pre><code>    /*
+     * @(#)Blah.java        1.82 99/03/18
+     *
+     * Copyright (c) 1994-1999 Sun Microsystems, Inc.
+     * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
+     * All rights reserved.
+     *
+     * This software is the confidential and proprietary information of Sun
+     * Microsystems, Inc. ("Confidential Information").  You shall not
+     * disclose such Confidential Information and shall use it only in
+     * accordance with the terms of the license agreement you entered into
+     * with Sun.
+     */
+
+
+    package java.blah;
+
+    import java.blah.blahdy.BlahBlah;
+
+    /**
+     * Class description goes here.
+     *
+     * @version 1.82 18 Mar 1999
+     * @author Firstname Lastname
+     */
+    public class Blah extends SomeClass {
+        /* A class implementation comment can go here. */
+
+        /** classVar1 documentation comment */
+        public static int classVar1;
+
+        /**
+         * classVar2 documentation comment that happens to be
+         * more than one line long
+         */
+        private static Object classVar2;
+
+        /** instanceVar1 documentation comment */
+        public Object instanceVar1;
+
+        /** instanceVar2 documentation comment */
+        protected int instanceVar2;
+
+        /** instanceVar3 documentation comment */
+        private Object[] instanceVar3;
+
+        /** 
+         * ...constructor Blah documentation comment...
+         */
+        public Blah() {
+            // ...implementation goes here...
+        }
+
+        /**
+         * ...method doSomething documentation comment...
+         */
+        public void doSomething() {
+            // ...implementation goes here...
+        }
+
+        /**
+         * ...method doSomethingElse documentation comment...
+         * @param someParam description
+         */
+        public void doSomethingElse(Object someParam) {
+            // ...implementation goes here...
+        }
+    }</code></pre>
+    </main>
+</body>
+
+</html>

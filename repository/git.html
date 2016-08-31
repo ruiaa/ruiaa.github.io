@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>git学习</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <article>
+            <h1>Git学习</h1>
+            <a href="https://github.com/flyhigher139/Git-Cheat-Sheet"><em>git命令手册</em></a>
+            <a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000"><em>廖雪峰 gre</em></a>
+            <h2>Git安装</h2>
+
+            <h2>SSH</h2>
+            <ul>
+                <li>$ git config --global user.name "xxx"</li>
+                <li>$ git config --global user.email "xxx@qq.com"</li>
+                <li>$ ssh-keygen -t rsa -C "xxx@qq.com"</li>
+            </ul>
+
+            <h2>创建仓库 repository</h2>
+            <ul>
+                <li>$ git init</li>
+                <li>$ git clone ssh://user@domain.com/repo.git</li>
+                <li>$ git clone http://domain.com/user/repo.git</li>
+            </ul>
+
+            <h2>状态</h2>
+            <ul>
+                <li>$ git status</li>
+                <li>$ git diff</li>
+            </ul>
+
+            <h2>本地修改</h2>
+            <ul>
+                <li>$ git add -p &lt;filename&gt;</li>
+                <li>$ git add *</li>
+                <li>$ git commit -a</li>
+                <li>$ git commit -m 'message of this commit'</li>
+                <br>
+            </ul>
+
+            <h2>撤销修改</h2>
+            <ul>
+                <li>$ git checkout -- &lt;filename&gt;</li>
+                <li>$ git checkout HEAD &lt;filename&gt;</li>
+                <li>$ git reset --hard HEAD</li>
+                <br>
+                <li>$ git reset HEAD &lt;filename&gt;</li>
+                <br>
+                <li>$ git reset --hard commit_id</li>
+            </ul>
+
+            <h2>删除</h2>
+            <ul>
+                <li>$ git rm &lt;filename&gt;</li>
+            </ul>
+
+            <h2>提交历史</h2>
+            <ul>
+                <li>$ git log</li>
+                <li>$ git log --oneline</li>
+                <li>$ git log --author="username"</li>
+                <li>$ git log -p &lt;filename&gt;</li>
+                <br>
+                <li>$ git reflog</li>
+            </ul>
+
+            <h2>分支 branch</h2>
+            <ul>
+                <li>$ git branch</li>
+                <li>$ git branch -r</li>
+                <br>
+                <li>$ git branch &lt;new-branchName</li>
+                <li>$ git branch --track &lt;new-branchName&gt; &lt;remote-branchName</li>
+                <br>
+                <li>$ git checkout &lt;branchNmae&gt;</li>
+                <li>$ git checkout -b &lt;new-branchNmae&gt;</li>
+                <br>
+                <li>$ git branch -d &lt;branchName&gt;</li>
+            </ul>
+
+            <h2>合并 merge</h2>
+            <ul>
+                <Li>$ git merge &lt;other-branch-name&gt;</Li>
+                <li>$ git merge --no--ff -m "merge commit message" &lt;other-branch-name&gt;</li>
+            </ul>
+
+            <h2>隐藏 stash</h2>
+            <ul>
+                <li>$ git stash</li>
+                <br>
+                <li>$ git stash list</li>
+                <br>
+                <li>$ git stash apply &lt;stash-id&gt;</li>
+                <li>$ git stash drop</li>
+                <br>
+                <li>$ git stash pop</li>
+            </ul>
+
+            <h2>标签</h2>
+            <ul>
+                <li>$ git tag</li>
+                <li>$ show &lt;tag-name v1.0&gt;</li>
+                <br>
+                <li>$ git tag &lt;tag-name v1.0&gt;</li>
+                <li>$ git tag &lt;tag-name v1.0&gt; &lt;commit--id&gt;</li>
+                <li>$ git tag -a &lt;tag-name&gt;</li>
+                <li>$ git tag -a &lt;tag-name&gt; -m "version message" &lt;commit--id&gt;</li>
+                <br>
+                <li>$ git tag -d &lt;tag-name&gt;</li>
+                <br>
+                <li>$ git push origin &lt;tag-name&gt;</li>
+                <li>$ git push origin --tags</li>
+                <br>
+                <li>$ git tag -d &lt;tag-name&gt;</li>
+                <li>$ git push origin :refs/tags/&lt;tag-name&gt;</li>
+            </ul>
+
+
+            <h2>添加远程库</h2>
+            <ul>
+                <li>$ git remote -v</li>
+                <li>$ git remote show &lt;remotename&gt;</li>
+                <br>
+                <li>$ git remote add &lt;remoteName&gt; &lt;url&gt;</li>
+                <br>
+                <li>$ git remote add origin git@github.com:username/project.git</li>
+                <li>$ git push -u origin master</li>
+                <li>$ git push origin master</li>
+            </ul>
+
+            <h2>上传到远程库</h2>
+            <ul>
+                <li>$ git push -u origin master</li>
+                <li>$ git push origin master</li>
+                <br>
+                <br>
+                <br>
+                <li>$ git pull</li>
+                <li>$ git checkout -b branch-name origin/branch-name</li>
+                <li>$　git branch --set-upstream branch-name origin/branch-name</li>
+                <li>$ git pull</li>
+                <li>$ git push origin master</li>
+            </ul>
+
+            <h2>从远程库克隆</h2>
+            <ul>
+                <li>$ git clone git@github.com:username/project.git</li>
+                <li>$ git clone ssh://user@domain.com/repo.git</li>
+                <li>$ git clone http://domain.com/user/repo.git</li>
+            </ul>
+
+            <h2>搜索</h2>
+            <ul>
+                <li>$ git grep "xxx"</li>
+                <li>$ git grep "xxx" v2.5</li>
+            </ul>
+
+            <h2>忽略特殊文件</h2>
+            <ul>
+                <li>.gitignore</li>
+                <li>$ git check ignore</li>
+            </ul>
+
+            <h2>别名</h2>
+            <ul>
+                <li>$ git config --global alias.aliasName gitCommand</li>
+                <li>$ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"</li>
+            </ul>
+        </article>
+    </main>
+</body>
+
+</html>
