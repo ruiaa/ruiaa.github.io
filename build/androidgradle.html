@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>gradle for android</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <link rel="stylesheet" href="style-index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>Android Gradle </h1>
+
+        <pre><code>build.gradle
+        
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+
+        dependencies {
+            classpath 'com.android.tools.build:gradle:0.11.1'
+        }
+    }
+
+    apply plugin: 'android'
+
+    android {
+        compileSdkVersion 19
+        buildToolsVersion "19.0.0"
+        
+        defaultConfig {
+            versionCode 12
+            versionName "2.0"
+            minSdkVersion 16
+            targetSdkVersion 16
+        }
+    }</code></pre>
+        
+        <h2>buildscrip{...} 配置驱动构建过程</h2>
+
+    </main>
+</body>
+
+</html>

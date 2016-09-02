@@ -14,18 +14,18 @@ body {
 h1 {
     font-size: 2.1875rem;
     /* 35px/16px */
-    color: #ab47bc;
+    color: black;
     /* purple_400 */
 }
 h2 {
     font-size: 1.75rem;
     /* 28px/16px */
-    color: #e84e40;
+    color: black;
     /* red_400 */
 }
 h3 {
-    font-size: 1.0rem;
-    color: #738ffe;
+    font-size: 1.25rem;
+    color: black;
     /* blue_400 */
 }
 p {
@@ -48,11 +48,10 @@ img {
 /* :::: 链接 :::: */
 
 a {
-    color: #fdb09d;
-    /* 略带粉色 */
+    color: blue;
 }
 a:link {
-    color: #e10000;
+    color: blue;
     /* a red */
     text-decoration: none;
 }

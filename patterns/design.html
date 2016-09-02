@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>设计模式学习</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>设计模式学习</h1>
+        <a href="http://www.cnblogs.com/beijiguangyong/archive/2010/11/15/2302807.html">郗晓勇 23种设计模式 使用性分析</a>
+        <a href="http://www.cnblogs.com/meet/p/5116504.html">Java23种设计模式学习笔记</a>
+        <a href="http://blog.csdn.net/longyulu/article/details/9159589"> 23种设计模式全解析</a>
+        <a href="http://blog.csdn.net/lovelion/article/details/17517213">刘伟技术博客 史上最全设计模式导学目录（完整版）</a>
+        
+        <h2>原则</h2>
+        <ol>
+            <li>单一职责原则
+                <br>每个类应该实现单一的职责,不要存在多于一个导致类变更的原因</li>
+            <li>里氏替换原则
+                <br>任何基类可以出现的地方，子类一定可以出现</li>
+            <li>依赖倒转原则
+                <br>面向接口编程，依赖于抽象而不依赖于具体</li>
+            <li>接口隔离原则
+                <br>每个接口中不存在子类用不到却必须实现的方法，如果不然，就要将接口拆分</li>
+            <li>迪米特法则（最少知道原则）
+                <br>说无论被依赖的类多么复杂，都应该将逻辑封装在方法的内部
+                <br>要求陌生的类不要作为局部变量出现在类中</li>
+            <li>合成复用原则
+                <br>尽量首先使用合成/聚合的方式，而不是使用继承
+            </li>
+        </ol>
+        
+        
+        <h2>创建型</h2>
+        
+        <h3>简单工厂模式 功能接口+多实现&gt;工厂:静态方法&gt;创建</h3>
+        <pre><code>//接口
+public interface Sender {  
+    public void Send();  
+} 
+
+//实现类
+public class MailSender implements Sender {  
+    @Override  
+    public void Send() {  
+        System.out.println("this is mailsender!");  
+    }  
+}
+public class SmsSender implements Sender {  
+  
+    @Override  
+    public void Send() {  
+        System.out.println("this is sms sender!");  
+    }  
+}
+
+//简单型工厂类
+public class SendFactory {  
+  
+    public Sender produce(String type) {  
+        if ("mail".equals(type)) {  
+            return new MailSender();  
+        } else if ("sms".equals(type)) {  
+            return new SmsSender();  
+        } else {  
+            System.out.println("请输入正确的类型!");  
+            return null;  
+        }  
+    }  
+} 
+//使用
+SendFactory factory = new SendFactory();  
+Sender sender = factory.produce("sms");  
+sender.Send(); 
+
+//多个方法型工厂类
+public class SendFactory {  
+   public Sender produceMail(){  
+        return new MailSender();  
+    }  
+      
+    public Sender produceSms(){  
+        return new SmsSender();  
+    }  
+}
+//使用
+SendFactory factory = new SendFactory();  
+Sender sender = factory.produceMail();  
+sender.Send();
+
+
+//多个静态方法工厂类
+public class SendFactory {  
+      
+    public static Sender produceMail(){  
+        return new MailSender();  
+    }  
+      
+    public static Sender produceSms(){  
+        return new SmsSender();  
+    }  
+} 
+//使用
+Sender sender = SendFactory.produceMail();  
+sender.Send();</code></pre>
+        <h3>工厂方法模式 功能接口+多实现&gt;工厂接口+具体工厂&gt;创建</h3>
+        <pre><code>public interface Provider {  
+    public Sender produce();  
+} 
+
+public class SendMailFactory implements Provider {  
+      
+    @Override  
+    public Sender produce(){  
+        return new MailSender();  
+    }  
+}
+
+public class SendSmsFactory implements Provider{  
+  
+    @Override  
+    public Sender produce() {  
+        return new SmsSender();  
+    }  
+} </code></pre>
+        <h3>抽象工厂模式 多个子产品组合成父产品</h3>
+        <pre><code>
+/**
+ * 发动机接口
+ */
+public interface Engine {
+    void run();
+    void start();
+}
+//好的发动机
+class LuxuryEngine implements Engine{
+    @Override
+    public void run() {
+        System.out.println("好发动机转的快");
+    }
+    @Override
+    public void start() {
+        System.out.println("启动快，自动启停");
+    }
+}
+//差的发动机
+class LowEngine implements Engine{
+    @Override
+    public void run() {
+        System.out.println("转的慢");
+    }
+    @Override
+    public void start() {
+        System.out.println("启动慢");
+    }
+}
+
+/**
+ *  汽车总工厂，可以创建轮胎，座椅，发动机
+ */
+public interface CarFactory {
+    Engine createEngine();//创建发动机
+    Seat createSeat();//创建座椅
+    Tyre createTyre();//创建轮胎
+}
+
+/**
+ *  高端汽车制造工厂
+ */
+public class LuxuryCarFactory implements CarFactory{
+    @Override
+    public Engine createEngine() {
+        return new LuxuryEngine();
+    }
+    @Override
+    public Seat createSeat() {
+        return new LuxurySeat();
+    }
+    @Override
+    public Tyre createTyre() {
+        return new LuxuryTyre();
+    }
+}
+/**
+ *  低端汽车制造工厂
+ */
+public class LowCarFactory implements CarFactory{
+    @Override
+    public Engine createEngine() {
+        return new LowEngine();
+    }
+    @Override
+    public Seat createSeat() {
+        return new LowSeat();
+    }
+    @Override
+    public Tyre createTyre() {
+        return new LowTyre();
+    }
+}</code></pre>
+        <h3>单例模式 保证仅创建一次</h3>
+        <pre><code>//即时加载
+public class Singleton {
+    private static Singleton instance = new Singleton();
+    private Singleton(){}
+    public static Singleton getInstance(){
+        return instance;
+    }
+}
+
+//延时加载+线程安全
+//内部静态类实例化
+public class Singleton {  
+    private Singleton() { }  
+    private static class SingletonFactory {  
+        private static Singleton instance = new Singleton();  
+    }  
+    public static Singleton getInstance() {  
+        return SingletonFactory.instance;  
+    }  
+}  
+//双重检索
+public class Singleton {
+    private static Singleton instance = null;
+    private Singleton(){}
+    public static Singleton getInstance(){
+        if (instance == null ) {
+            Singleton s;
+            synchronized (Singleton.class) {
+                s = instance;
+                if (s3 == null ) {
+                    synchronized (Singleton.class) {
+                        if (s == null ) {
+                            s = new Singleton();
+                        }
+                    }
+                    instance = s;
+                }
+            }
+        }
+        return instance;
+    } 
+}
+
+//防反射
+    private Singleton(){
+        if (instance != null) {
+            //如果不是第一次构建，则直接抛出异常。不让创建
+            throw new RuntimeException();
+        }
+    }
+//防反序列化
+    private Object readResolve() throws ObjectStreamException{
+        return getInstance();
+    }</code></pre>
+        <h3>原型模式 克隆 适用于对象new的过程很耗时</h3>
+        <pre><code>implements Cloneable
+    //浅克隆
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        //直接调用Object对象的clone方法
+        Object obj = super.clone();
+        return obj;
+    }
+    
+    //深克隆
+    
+implements Serializable 
+    //通过序列化和反序列化来实现深克隆对象
+    public Object deepClone() throws IOException, ClassNotFoundException {  
+  
+        /* 写入当前对象的二进制流 */  
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();  
+        ObjectOutputStream oos = new ObjectOutputStream(bos);  
+        oos.writeObject(this);  
+  
+        /* 读出二进制流产生的新对象 */  
+        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());  
+        ObjectInputStream ois = new ObjectInputStream(bis);  
+        return ois.readObject();  
+    } 
+</code></pre>
+        <h3>建造者模式 对象的构建很复杂 把对象的构建和最后的组装分离开</h3>
+        <pre><code>public class AirShip {
+    private OrbitalModule orbitalModule;//轨道舱
+    private Engine engine;//发动机
+    private EscapeTower escapeTower;//逃逸塔
+    //省略get，set，构造器
+}
+class OrbitalModule{}
+class Engine{}
+class EscapeTower{}
+
+//构建
+public interface AirShipBuilder {
+    Engine builderEngine();//构建发动机
+    OrbitalModule builderOrbitalModule();//构建轨道舱
+    EscapeTower builderEscapeTower();//构建逃逸塔
+}
+public class BestAirShipBuilder implements AirShipBuilder{
+    @Override
+    public Engine builderEngine() {
+        return new Engine("万能牌发动机");
+    }
+    @Override
+    public OrbitalModule builderOrbitalModule() {
+        return new OrbitalModule("万能牌轨道舱");
+    }
+    @Override
+    public EscapeTower builderEscapeTower() {
+        return new EscapeTower("万能牌逃逸塔");
+    }
+}
+
+//组装
+public interface AirShipDirector {
+    AirShip directorAirShip();
+}
+public class BestAirShipDirector implements AirShipDirector{
+    private AirShipBuilder builder;//创建构建者的引用
+    public BestAirShipDirector(AirShipBuilder airShipBuilder) {
+        this.builder = airShipBuilder;
+    }
+    /**
+     * 组装具体的对象，为了简单，这里的组装步骤比较简单。实际产品中较复杂
+     */
+    @Override
+    public AirShip directorAirShip() {
+        Engine e = builder.builderEngine();//构建发动机
+        EscapeTower et = builder.builderEscapeTower();//构建逃逸塔
+        OrbitalModule o = builder.builderOrbitalModule();//构建轨道舱
+        //装配对象
+        AirShip ship = new AirShip();
+        ship.setEngine(e);
+        ship.setEscapeTower(et);
+        ship.setOrbitalModule(o);
+        return ship;
+    }
+}
+
+//使用
+    AirShipDirector shipDirector = new BestAirShipDirector(new BestAirShipBuilder()); 
+    AirShip airShip = shipDirector.directorAirShip();</code></pre>
+
+        <h2>结构型模式</h2>
+        <h3>适配器模式 将一个类转换成满足另一个新接口的类</h3>
+        <pre><code>//类的适配器模式  
+public class Source {  
+    public void method1() {... }  
+}
+public interface Targetable {   
+    public void method1();  
+    public void method2();  
+}
+public class Adapter extends Source implements Targetable {  
+    @Override  
+    public void method2() { ... }  
+} 
+
+//使用
+        Targetable target = new Adapter();  
+        target.method1();  
+        target.method2(); 
+        
+        
+//对象的适配器模式
+public class Wrapper implements Targetable {  
+  
+    private Source source;  
+      
+    public Wrapper(Source source){  
+        super();  
+        this.source = source;  
+    }  
+    @Override  
+    public void method2() { ... }  
+  
+    @Override  
+    public void method1() {  
+        source.method1();  
+    }  
+} 
+
+
+//接口的适配器模式 一个接口中有多个抽象方法,仅有一部分需要实现
+public interface Sourceable {      
+    public void method1();  
+    public void method2();  
+    public void method3();  
+    public void method4(); 
+}
+public abstract class Wrapper2 implements Sourceable{  
+    public void method1(){}  
+    public void method2(){}  
+    public void method3(){}  
+    public void method4(){}  
+}
+
+//仅使用一部分接口方法
+public class SourceSub1 extends Wrapper2 {  
+    public void method1(){  
+        System.out.println("the sourceable interface's first Sub1!");  
+    }  
+}
+public class SourceSub2 extends Wrapper2 {  
+    public void method2(){  
+        System.out.println("the sourceable interface's second Sub2!");  
+    }  
+}</code></pre>
+        <h3>桥接模式 将抽象化与实现化解耦</h3>
+        <pre><code>public interface Sourceable {  
+    public void method();  
+} 
+public class SourceSub1 implements Sourceable {  
+  
+    @Override  
+    public void method() {  
+        System.out.println("this is the first sub!");  
+    }  
+}
+public class SourceSub2 implements Sourceable {  
+  
+    @Override  
+    public void method() {  
+        System.out.println("this is the second sub!");  
+    }  
+}
+public abstract class Bridge {  
+    private Sourceable source;  
+  
+    public void method(){  
+        source.method();  
+    }  
+      
+    public Sourceable getSource() {  
+        return source;  
+    }  
+  
+    public void setSource(Sourceable source) {  
+        this.source = source;  
+    }  
+} 
+public class MyBridge extends Bridge {  
+    public void method(){  
+        getSource().method();  
+        ......
+    }  
+} 
+
+//使用    
+        Bridge bridge = new MyBridge();  
+          
+        /*调用第一个对象*/  
+        Sourceable source1 = new SourceSub1();  
+        bridge.setSource(source1);  
+        bridge.method();  
+          
+        /*调用第二个对象*/  
+        Sourceable source2 = new SourceSub2();  
+        bridge.setSource(source2);  
+        bridge.method(); </code></pre>
+        <h3>组合模式 将多个对象组合在一起进行操作，常用于表示树形结构</h3>
+        <pre><code>public class TreeNode {  
+      
+    private String name;  
+    private TreeNode parent;  
+    private Vector<TreeNode> children = new Vector<TreeNode>();  
+      
+    public TreeNode(String name){  
+        this.name = name;  
+    }  
+  
+    public String getName() {  
+        return name;  
+    }  
+  
+    public void setName(String name) {  
+        this.name = name;  
+    }  
+  
+    public TreeNode getParent() {  
+        return parent;  
+    }  
+  
+    public void setParent(TreeNode parent) {  
+        this.parent = parent;  
+    }  
+      
+    //添加子节点  
+    public void add(TreeNode node){  
+        children.add(node);  
+    }  
+      
+    //删除子节点  
+    public void remove(TreeNode node){  
+        children.remove(node);  
+    }  
+      
+    //取得子节点  
+    public Enumeration<TreeNode> getChildren(){  
+        return children.elements();  
+    }  
+}  </code></pre>
+        <h3>装饰模式 动态扩展一个类的功能</h3>
+        <pre><code>public interface Sourceable {  
+    public void method();  
+}
+public class Source implements Sourceable {   
+    @Override  
+    public void method() {  
+        System.out.println("the original method!");  
+    }  
+}
+public class Decorator implements Sourceable {  
+  
+    private Sourceable source;  
+      
+    public Decorator(Sourceable source){  
+        super();  
+        this.source = source;  
+    }  
+    @Override  
+    public void method() {  
+        System.out.println("before decorator!");  
+        source.method();  
+        System.out.println("after decorator!");  
+    }  
+}
+
+//使用
+        Sourceable source = new Source();  
+        Sourceable obj = new Decorator(source);  
+        obj.method(); </code></pre>
+        <h3>外观模式 定义高层接口 为子系统中的一组接口提供一个一致的界面</h3>
+        <pre><code>public class CPU {  
+      
+    public void startup(){  
+        System.out.println("cpu startup!");  
+    }  
+      
+    public void shutdown(){  
+        System.out.println("cpu shutdown!");  
+    }  
+}
+
+public class Memory {  
+      
+    public void startup(){  
+        System.out.println("memory startup!");  
+    }  
+      
+    public void shutdown(){  
+        System.out.println("memory shutdown!");  
+    }  
+} 
+       
+public class Disk {  
+      
+    public void startup(){  
+        System.out.println("disk startup!");  
+    }  
+      
+    public void shutdown(){  
+        System.out.println("disk shutdown!");  
+    }  
+}
+       
+public class Computer {  
+    private CPU cpu;  
+    private Memory memory;  
+    private Disk disk;  
+      
+    public Computer(){  
+        cpu = new CPU();  
+        memory = new Memory();  
+        disk = new Disk();  
+    }  
+      
+    public void startup(){  
+        System.out.println("start the computer!");  
+        cpu.startup();  
+        memory.startup();  
+        disk.startup();  
+        System.out.println("start computer finished!");  
+    }  
+      
+    public void shutdown(){  
+        System.out.println("begin to close the computer!");  
+        cpu.shutdown();  
+        memory.shutdown();  
+        disk.shutdown();  
+        System.out.println("computer closed!");  
+    }  
+}</code></pre>
+        <h3>享元模式 对象池 实现对象的共享 共享内部状态，分离外部状态</h3>
+        <pre><code>//对象池
+public class ConnectionPool {  
+      
+    private Vector&lt;Connection&gt; pool;  
+      
+    /*公有属性*/  
+    private String url = "jdbc:mysql://localhost:3306/test";  
+    private String username = "root";  
+    private String password = "root";  
+    private String driverClassName = "com.mysql.jdbc.Driver";  
+  
+    private int poolSize = 100;  
+    private static ConnectionPool instance = null;  
+    Connection conn = null;  
+  
+    /*构造方法，做一些初始化工作*/  
+    private ConnectionPool() {  
+        pool = new Vector&lt;Connection&gt;(poolSize);  
+  
+        for (int i = 0; i &lt; poolSize; i++) {  
+            try {  
+                Class.forName(driverClassName);  
+                conn = DriverManager.getConnection(url, username, password);  
+                pool.add(conn);  
+            } catch (ClassNotFoundException e) {  
+                e.printStackTrace();  
+            } catch (SQLException e) {  
+                e.printStackTrace();  
+            }  
+        }  
+    }  
+  
+    /* 返回连接到连接池 */  
+    public synchronized void release() {  
+        pool.add(conn);  
+    }  
+  
+    /* 返回连接池中的一个数据库连接 */  
+    public synchronized Connection getConnection() {  
+        if (pool.size() &gt; 0) {  
+            Connection conn = pool.get(0);  
+            pool.remove(conn);  
+            return conn;  
+        } else {  
+            return null;  
+        }  
+    }  
+}</code></pre>
+        <h3>代理模式 代理类替原对象进行一些操作 对原有的方法进行改进</h3>
+        <pre><code>public interface Sourceable {  
+    public void method();  
+}
+public class Source implements Sourceable {  
+  
+    @Override  
+    public void method() {  
+        System.out.println("the original method!");  
+    }  
+} 
+public class Proxy implements Sourceable {  
+  
+    private Source source;  
+    public Proxy(){  
+        super();  
+        this.source = new Source();  
+    }  
+    @Override  
+    public void method() {  
+        before();  
+        source.method();  
+        atfer();  
+    }  
+    private void atfer() {  
+        System.out.println("after proxy!");  
+    }  
+    private void before() {  
+        System.out.println("before proxy!");  
+    }  
+}</code></pre>
+
+        <h2>行为型模式</h2>
+        <h3>策略模式 设计接口，为一系列实现类提供统一的方法,由使用者决定实现类</h3>
+        <pre><code>public interface ICalculator {  
+    public int calculate(String exp);  
+} 
+public abstract class AbstractCalculator {  
+      
+    public int[] split(String exp,String opt){  
+        String array[] = exp.split(opt);  
+        int arrayInt[] = new int[2];  
+        arrayInt[0] = Integer.parseInt(array[0]);  
+        arrayInt[1] = Integer.parseInt(array[1]);  
+        return arrayInt;  
+    }  
+}
+public class Plus extends AbstractCalculator implements ICalculator {  
+  
+    @Override  
+    public int calculate(String exp) {  
+        int arrayInt[] = split(exp,"\\+");  
+        return arrayInt[0]+arrayInt[1];  
+    }  
+} 
+public class Minus extends AbstractCalculator implements ICalculator {  
+  
+    @Override  
+    public int calculate(String exp) {  
+        int arrayInt[] = split(exp,"-");  
+        return arrayInt[0]-arrayInt[1];  
+    }  
+  
+} 
+public class Multiply extends AbstractCalculator implements ICalculator {  
+  
+    @Override  
+    public int calculate(String exp) {  
+        int arrayInt[] = split(exp,"\\*");  
+        return arrayInt[0]*arrayInt[1];  
+    }  
+} 
+
+        String exp = "2+8";  
+        ICalculator cal = new Plus();  
+        int result = cal.calculate(exp);  
+</code></pre>
+        <h3>模板方法模式 不变的算法为模板，多变的算法在子类实现</h3>
+        <pre><code>public abstract class AbstractCalculator {  
+      
+    /*主方法，实现对本类其它方法的调用*/  
+    public final int calculate(String exp,String opt){  
+        int array[] = split(exp,opt);  
+        return calculate(array[0],array[1]);  
+    }  
+      
+    /*被子类重写的方法*/  
+    abstract public int calculate(int num1,int num2);  
+      
+    public int[] split(String exp,String opt){  
+        String array[] = exp.split(opt);  
+        int arrayInt[] = new int[2];  
+        arrayInt[0] = Integer.parseInt(array[0]);  
+        arrayInt[1] = Integer.parseInt(array[1]);  
+        return arrayInt;  
+    }  
+}
+public class Plus extends AbstractCalculator {  
+  
+    @Override  
+    public int calculate(int num1,int num2) {  
+        return num1 + num2;  
+    }  
+}       </code></pre>
+        
+        <h3>职责链模式 每个对象持有对下一个对象的引用,请求命令在该链/树上传递</h3>
+        <pre><code>public interface Handler {  
+    public void operator();  
+}
+//设置对下一个对象的引用
+public abstract class AbstractHandler {  
+      
+    private Handler handler;  
+  
+    public Handler getHandler() {  
+        return handler;  
+    }  
+  
+    public void setHandler(Handler handler) {  
+        this.handler = handler;  
+    }  
+      
+} 
+public class MyHandler extends AbstractHandler implements Handler {  
+  
+    private String name;  
+  
+    public MyHandler(String name) {  
+        this.name = name;  
+    }  
+  
+    @Override  
+    public void operator() {  
+        System.out.println(name+"deal!"); 
+        //判断操作请求是否往下传 
+        if(getHandler()!=null){  
+            getHandler().operator();  
+        }  
+    }  
+}
+public class Test {  
+  
+    public static void main(String[] args) {  
+        MyHandler h1 = new MyHandler("h1");  
+        MyHandler h2 = new MyHandler("h2");  
+        MyHandler h3 = new MyHandler("h3");  
+  
+        h1.setHandler(h2);  
+        h2.setHandler(h3);  
+  
+        h1.operator();  
+    }  
+}
+</code></pre>
+        <h3>命令模式 触发器(发出特殊命令)&gt;命令(调用所持有的接收器)</h3>
+        <pre><code>public interface Command {  
+    public void exe();  
+}
+public class MyCommand implements Command {  
+  
+    private Receiver receiver;  
+      
+    public MyCommand(Receiver receiver) {  
+        this.receiver = receiver;  
+    }  
+  
+    @Override  
+    public void exe() {  
+        receiver.action();  
+    }  
+}
+public class Receiver {  
+    public void action(){  
+        System.out.println("command received!");  
+    }  
+} 
+public class Invoker {  
+      
+    private Command command;  
+      
+    public Invoker(Command command) {  
+        this.command = command;  
+    }  
+  
+    public void action(){  
+        command.exe();  
+    }  
+}
+public class Test {  
+  
+    public static void main(String[] args) {  
+        Receiver receiver = new Receiver();  
+        Command cmd = new MyCommand(receiver);  
+        Invoker invoker = new Invoker(cmd);  
+        invoker.action();  
+    }  
+}
+</code></pre>
+        <h3>迭代器模式</h3>
+        <pre><code>//游标接口
+public interface Iterator {  
+    //前移  
+    public Object previous();  
+      
+    //后移  
+    public Object next();  
+    public boolean hasNext();  
+      
+    //取得第一个元素  
+    public Object first();  
+}
+//集合接口
+public interface Collection {  
+      
+    public Iterator iterator();  
+      
+    /*取得集合元素*/  
+    public Object get(int i);  
+      
+    /*取得集合大小*/  
+    public int size();  
+}
+//游标实现
+public class MyIterator implements Iterator {  
+  
+    private Collection collection;  
+    private int pos = -1;  
+      
+    public MyIterator(Collection collection){  
+        this.collection = collection;  
+    }  
+      
+    @Override  
+    public Object previous() {  
+        if(pos &gt; 0){  
+            pos--;  
+        }  
+        return collection.get(pos);  
+    }  
+  
+    @Override  
+    public Object next() {  
+        if(pos&lt;collection.size()-1){  
+            pos++;  
+        }  
+        return collection.get(pos);  
+    }  
+  
+    @Override  
+    public boolean hasNext() {  
+        if(pos&lt;collection.size()-1){  
+            return true;  
+        }else{  
+            return false;  
+        }  
+    }  
+  
+    @Override  
+    public Object first() {  
+        pos = 0;  
+        return collection.get(pos);  
+    }  
+  
+}
+//集合实现
+public class MyCollection implements Collection {  
+  
+    public String string[] = {"A","B","C","D","E"};  
+    @Override  
+    public Iterator iterator() {  
+        return new MyIterator(this);  
+    }  
+  
+    @Override  
+    public Object get(int i) {  
+        return string[i];  
+    }  
+  
+    @Override  
+    public int size() {  
+        return string.length;  
+    }  
+} 
+
+</code></pre>
+        <h3>观察者模式 被观察者调用观察者接口</h3>
+        <pre><code>public interface Observer {  
+    public void update();  
+} 
+public class Observer1 implements Observer {  
+  
+    @Override  
+    public void update() {  
+        System.out.println("observer1 has received!");  
+    }  
+}
+ 
+public interface Subject {  
+      
+    /*增加观察者*/  
+    public void add(Observer observer);  
+      
+    /*删除观察者*/  
+    public void del(Observer observer);  
+      
+    /*通知所有的观察者*/  
+    public void notifyObservers();  
+      
+    /*自身的操作*/  
+    public void operation();  
+} 
+public abstract class AbstractSubject implements Subject {  
+  
+    private Vector<Observer> vector = new Vector<Observer>();  
+    @Override  
+    public void add(Observer observer) {  
+        vector.add(observer);  
+    }  
+  
+    @Override  
+    public void del(Observer observer) {  
+        vector.remove(observer);  
+    }  
+  
+    @Override  
+    public void notifyObservers() {  
+        Enumeration<Observer> enumo = vector.elements();  
+        while(enumo.hasMoreElements()){  
+            enumo.nextElement().update();  
+        }  
+    }  
+} 
+public class MySubject extends AbstractSubject {  
+  
+    @Override  
+    public void operation() {  
+        System.out.println("update self!");  
+        notifyObservers();  
+    }  
+  
+} 
+
+//使用
+        Subject sub = new MySubject();  
+        sub.add(new Observer1());  
+        sub.add(new Observer2());  
+          
+        sub.operation();
+</code></pre>
+        
+        <h3>备忘录模式 保存一个对象的某个状态,以便在适当的时候恢复</h3>
+        <pre><code>public class Original {  
+      
+    private String value;  
+      
+    public String getValue() {  
+        return value;  
+    }  
+  
+    public void setValue(String value) {  
+        this.value = value;  
+    }  
+  
+    public Original(String value) {  
+        this.value = value;  
+    }  
+  
+    public Memento createMemento(){  
+        return new Memento(value);  
+    }  
+      
+    public void restoreMemento(Memento memento){  
+        this.value = memento.getValue();  
+    }  
+}public class Memento {  
+      
+    private String value;  
+  
+    public Memento(String value) {  
+        this.value = value;  
+    }  
+  
+    public String getValue() {  
+        return value;  
+    }  
+  
+    public void setValue(String value) {  
+        this.value = value;  
+    }  
+}
+public class Storage {  
+      
+    private Memento memento;  
+      
+    public Storage(Memento memento) {  
+        this.memento = memento;  
+    }  
+  
+    public Memento getMemento() {  
+        return memento;  
+    }  
+  
+    public void setMemento(Memento memento) {  
+        this.memento = memento;  
+    }  
+}
+
+        // 创建原始类  
+        Original origi = new Original("egg");  
+  
+        // 创建备忘录  
+        Storage storage = new Storage(origi.createMemento());  
+  
+        // 修改原始类的状态   
+        origi.setValue("niu");   
+  
+        // 回复原始类的状态  
+        origi.restoreMemento(storage.getMemento());    
+</code></pre>
+        <h3>状态模式 可以通过改变状态来获得不同的行为</h3>
+        <pre><code>public class State {  
+      
+    private String value;  
+      
+    public String getValue() {  
+        return value;  
+    }  
+  
+    public void setValue(String value) {  
+        this.value = value;  
+    }  
+  
+    public void method1(){  
+        System.out.println("execute the first opt!");  
+    }  
+      
+    public void method2(){  
+        System.out.println("execute the second opt!");  
+    }  
+}
+public class Context {  
+  
+    private State state;  
+  
+    public Context(State state) {  
+        this.state = state;  
+    }  
+  
+    public State getState() {  
+        return state;  
+    }  
+  
+    public void setState(State state) {  
+        this.state = state;  
+    }  
+  
+    public void method() {  
+        if (state.getValue().equals("state1")) {  
+            state.method1();  
+        } else if (state.getValue().equals("state2")) {  
+            state.method2();  
+        }  
+    }  
+}
+public class Test {  
+  
+    public static void main(String[] args) {  
+          
+        State state = new State();  
+        Context context = new Context(state);  
+          
+        //设置第一种状态  
+        state.setValue("state1");  
+        context.method();  
+          
+        //设置第二种状态  
+        state.setValue("state2");  
+        context.method();  
+    }  
+} 
+</code></pre>
+
+        <h3>访问者模式 分离对象数据结构与行为</h3>
+        <pre><code>public interface Visitor {  
+    public void visit(Subject sub);  
+}
+public class MyVisitor implements Visitor {  
+  
+    @Override  
+    public void visit(Subject sub) {  
+        System.out.println("visit the subject："+sub.getSubject());  
+    }  
+} 
+public interface Subject {  
+    public void accept(Visitor visitor);  
+    public String getSubject();  
+}
+public class MySubject implements Subject {  
+  
+    @Override  
+    public void accept(Visitor visitor) {  
+        visitor.visit(this);  
+    }  
+  
+    @Override  
+    public String getSubject() {  
+        return "love";  
+    }  
+} 
+public class Test {  
+  
+    public static void main(String[] args) {  
+          
+        Visitor visitor = new MyVisitor();  
+        Subject sub = new MySubject();  
+        sub.accept(visitor);      
+    }  
+}
+</code></pre>
+        <h3>中介者模式 用一个中介对象来封装一系列的对象交互</h3>
+        <pre><code>public interface Mediator {  
+    public void createMediator();  
+    public void workAll();  
+}
+public class MyMediator implements Mediator {  
+  
+    private User user1;  
+    private User user2;  
+    public User getUser1() {...}  
+    public User getUser2() {...}  
+  
+    @Override  
+    public void createMediator() {  
+        user1 = new User1(this);  
+        user2 = new User2(this);  
+    }  
+  
+    @Override  
+    public void workAll() {  
+        user1.work();  
+        user2.work();  
+    }  
+}
+public abstract class User {  
+      
+    private Mediator mediator;  
+    public Mediator getMediator(){...}  
+      
+    public User(Mediator mediator) {  
+        this.mediator = mediator;  
+    }  
+  
+    public abstract void work();  
+} 
+public class User1 extends User {  
+  
+    public User1(Mediator mediator){  
+        super(mediator);  
+    }  
+      
+    @Override  
+    public void work() {  
+        System.out.println("user1 exe!");  
+    }  
+}
+public class User2 extends User {  
+  
+    public User2(Mediator mediator){  
+        super(mediator);  
+    }  
+      
+    @Override  
+    public void work() {  
+        System.out.println("user2 exe!");  
+    }  
+}
+public class Test {  
+  
+    public static void main(String[] args) {  
+        Mediator mediator = new MyMediator();  
+        mediator.createMediator();  
+        mediator.workAll();  
+    }  
+} 
+</code></pre>
+        <h3>解释器模式</h3>
+        <pre><code>public interface Expression {  
+    public int interpret(Context context);  
+}
+public class Plus implements Expression {  
+  
+    @Override  
+    public int interpret(Context context) {  
+        return context.getNum1()+context.getNum2();  
+    }  
+}
+public class Minus implements Expression {  
+  
+    @Override  
+    public int interpret(Context context) {  
+        return context.getNum1()-context.getNum2();  
+    }  
+}
+public class Context {  
+      
+    private int num1;  
+    private int num2;  
+      
+    public Context(int num1, int num2) {  
+        this.num1 = num1;  
+        this.num2 = num2;  
+    }  
+      
+    public int getNum1() {  
+        return num1;  
+    }  
+    public void setNum1(int num1) {  
+        this.num1 = num1;  
+    }  
+    public int getNum2() {  
+        return num2;  
+    }  
+    public void setNum2(int num2) {  
+        this.num2 = num2;  
+    }  
+      
+      
+} 
+public class Test {  
+  
+    public static void main(String[] args) {  
+  
+        // 计算9+2-8的值  
+        int result = new Minus().interpret((new Context(new Plus()  
+                .interpret(new Context(9, 2)), 8)));  
+        System.out.println(result);  
+    }  
+} 
+</code></pre>
+    </main>
+</body>
+
+</html>
