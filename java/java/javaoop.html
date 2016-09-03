@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>java oop</h1>
+
+        <h2>修饰符</h2>
+        <ul>访问
+            <li>public 可见：任何类 方法继承:pubilc</li>
+            <li>protected 可见：子类或同一个包 方法继承:protected或pubilc</li>
+            <li>默认 可见：同一个包 方法继承:默认或private</li>
+            <li>private 可见：同一个类 方法继承:不能继承</li>
+        </ul>
+        <ul>非访问
+            <li>static 类,方法,类变量</li>
+            <li>final 类,方法,变量,参数
+                <p>final修饰的类不能够被继承，修饰的方法不能被继承类重新定义，修饰的变量/参数为常量，不可修改</p>
+            </li>
+            <li>abstract 抽象类,抽象方法</li>
+            <li>synchronized 线程锁块</li>
+            <li>volatile 线程可变变量声明,读写强制使用共享内存</li>
+            <li>transient 不可序列化的类变量声明</li>
+        </ul>
+
+        <h2>类</h2>
+        <ul>
+            <li>数据私用 getter不要返回可变对象的引用</li>
+            <li>数据初始化</li>
+            <li>以类类型代替大量基本类型</li>
+            <li>职责分解</li>
+        </ul>
+        <h3>数据成员</h3>
+        <h3>初始化块</h3>
+        <ul>
+            <li>{......} 尽量放在域定义后</li>
+            <li>静态初始块 static{......}</li>
+        </ul>
+        <h3>构造器</h3>
+        <ul>
+            <li>以new操作符调用</li>
+            <li>隐式参数 this：所在类对象</li>
+            <li>调用同类其他构造器 this(...);</li>
+        </ul>
+        <h3>方法成员</h3>
+        <ul>
+            <li>参数传递
+                <p>所有参数都是值传递
+                    <br>基本类型传递值,修改不对原变量产生影响
+                    <br>类类型传递值(即所持有的引用),对参数引用的修改不改变原变量的引用,对参数引用指向对象的修改会被共享
+                    <br>String,修改不对原变量产生影响</p>
+            </li>
+            <li>不定个数参数
+                <p>Class...values
+                    <br>valuaes[n]</p>
+            </li>
+            <li>重载</li>
+        </ul>
+        <h3>main方法</h3>
+        <h3>析构 finalize()</h3>
+        <p>GC自动回收,时间不定,不能依赖finalize()回收资源</p>
+        <h3>包</h3>
+        <ul>
+            <li>静态导入 导入静态方法和静态类
+                <p>import static java.lang.System.*</p>
+            </li>
+        </ul>
+        <h2>继承</h2>
+        <ul>
+            <li>this:引用隐式参数,调用该类其他构造器</li>
+            <li>super:调用超类方法,调用超类构造器</li>
+        </ul>
+
+        <h2>接口</h2>
+        <h2>抽象类</h2> 
+
+        <h2>内部类</h2>
+        <h3>普通内部类</h3>
+        <h3>静态内部类:无需访问外围类对象</h3>
+        <h3>局部内部类</h3>
+        <h3>匿名内部类</h3>
+
+        <h2>泛型</h2>
+        <h3>类型参数</h3>
+        <h3>定义</h3>
+        <ul>
+            <li>public class ClassName&lt;T,U&gt;{...}</li>
+            <li>public static &lt;T&gt; void method()</li>
+            <li>类型变量的限定 &lt;T extends SupClass&amp;SupInterface,U&gt;
+                <p>限定中只可有一个类,必须为限定类别中的第一个
+                    <br>应将标签接口放在末尾</p>
+            </li>
+        </ul>
+        <h3>编译器实现:擦除</h3>
+        <ul>
+            <li>原始类型 T&gt;第一个限定类型/Object</li>
+            <li>返回的Object将强制转换</li>
+            <li>多态:桥方法</li>
+        </ul>
+        <h3>局限</h3>
+        <ul>
+            <li>不能有基本类型实例化类型参数</li>
+            <li>运行时查询只产生原始类型</li>
+            <li>不能创建参数化的类型数组</li>
+            <li>@SafeVarargs
+                <p>public &lt;T&gt; void max(T...ts)</p>
+            </li>
+            <li>不能实例化类型变量</li>
+            <li>不能在静态域或方法中引用类型变量</li>
+            <li>不能抛出或捕获泛型类对象</li>
+        </ul>
+        <h3>泛型类型继承规则</h3>
+        <h3>通配符 ?</h3>
+        <ul>限定<li>extends</li><li>super</li></ul>
+
+    </main>
+</body>
+
+</html>

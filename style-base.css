@@ -29,7 +29,14 @@ h3 {
     /* blue_400 */
 }
 p {
-    text-indent: 2em;
+    text-indent: 0em;
+    margin-top: 0em;
+}
+ul{
+    margin-top: 0.5em;
+}
+li{
+   margin-bottom: 0.5em;
 }
 input,
 select,

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>java 集合</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>java 集合</h1>
+
+        <img src="javacollection.png" />
+
+        <h2>Iterator</h2>
+        <pre><code>public interface Iterator&lt;E&gt;
+{    boolean hasNext();
+     E next();
+     void remove();
+}</code></pre>
+        <p>迭代器位于两个元素之间</p>
+
+        <h2>Collection</h2>
+        <ul>
+            <li>iterator toArray</li>
+            <li>size</li>
+            <li>isEmpty contains containsAll</li>
+            <li>add addAll</li>
+            <li>remove clear</li>
+            <li>equals hashCode</li>
+        </ul>
+
+        <h3>List</h3>
+        <ul>
+            <li>get set subList</li>
+            <li>indexOf lastIndexOf</li>
+        </ul>
+        <h3>Set</h3>
+        <h3>Queue</h3>
+
+        <h2>Map</h2>
+        <ul>
+            <li>containsKey containsValue</li>
+            <li>keySet values</li>
+        </ul>
+
+        <h2>List 查找元素效率高，插入删除元素效率低，会引起其他元素位置改变</h2>
+        <ul>
+            <li>ArrayList 索引序列 随机读取效率高 非同步</li>
+            <li>LinkedList 链表 插入和删除效率高</li>
+            <li>Vector 同步的ArrayList 多线程专用</li>
+            <li>Stack 后进先出的对象堆栈</li>
+        </ul>
+
+        <h2>检索元素效率低，删除插入效率高，插入和删除不会引起元素位置改变</h2>
+        <ul>
+            <li>HashSet 哈希散列集 插入删除速度快 无法控制元素出现的次序</li>
+            <li>LinkedHashSet 链接散列集</li>
+            <li>SortedSet 提供关于元素的总体排序</li>
+            <li>TreeSet 排序</li>
+        </ul>
+
+        <h2>Queue</h2>
+        <ul>
+            <li>ArrayDeque 大小可变数组队列</li>
+            <li>PriorityQueue 优先级队列 允许高效删除最小元素</li>
+        </ul>
+
+        <h2>Map</h2>
+        <ul>
+            <li>HashMap 映射表 无序 快 非同步</li>
+            <li>LinkedHashMap 链接散列映射表</li>
+            <li>SortedMap 提供关于键的总体排序</li>
+            <li>TreeMap 排序</li>
+            <li>Hashtable 同步</li>
+            <li>IdentityHashMap 标识散列映射表</li>
+            <li>WeakHashMap 弱散列映射表 自动删除无外引用键</li>
+        </ul>
+
+        <h2>工具类</h2>
+        <ul>
+            <li>Iterator 迭代器</li>
+            <li>Collections Arrays 集合算法</li>
+            <li>Navigable 导航</li>
+            <li>Comparable 比较</li>
+        </ul>
+
+
+    </main>
+</body>
+
+</html>

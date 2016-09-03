@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>java thread</title>
+    <link rel="stylesheet" href="/style-base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <main role="main">
+        <h1>java thread</h1>
+
+        <h2>创建</h2>
+        <ul>
+            <li>继承Thread类
+                <p>class MyThread extends Thread{public void run(){...}}
+                    <br>//Thread对象独立,不共享数据
+                    <br>new MyThread().start();
+                    <br>new MyThread().start();
+                </p>
+            </li>
+            <li>实现Runnable接口
+                <p>class MyThread implements Runnable{public void run(){...}}
+                    <br>两个Thread对象共享一个Runnable对象,共享数据
+                    <br>MyThread my = new MyThread(...);
+                    <br>new Thread(my).start();
+                    <br>new Thread(my).start();
+                    <br>两个Thread对象分别使用两个个Runnable对象,不共享数据
+                    <br>new Thread(new MyThread(...)).start();
+                    <br>new Thread(new MyThread(...)).start();
+                </p>
+            </li>
+        </ul>
+
+        <h2>api</h2>
+        <ul>
+            <li>Thread(ThreadGroup group, Runnable target, String name, long stackSize)
+                <br>target运行对象，name名称，作为group所引用的线程组的一员，stackSize堆栈大小</li>
+            <li>static Thread currentThread()
+                <br>返回对当前正在执行的线程对象的引用</li>
+            <li>set,getId() getName() getPriority() getState()</li>
+            <li>isAlive() isDaemon() isInterrupted()</li>
+            <li>setDaemon(boolean on) start()</li>
+            <li>static boolean interrupted()
+                <br>测试当前线程是否已经中断
+                <br><em>线程的 中断状态 由该方法清除</em>
+            </li>
+
+            <li>void interrupt()
+                <br>中断线程</li>
+            <li>void join(long millis, int nanos)
+                <br>等待该线程终止的时间最长为 millis 毫秒 + nanos 纳秒</li>
+            <li>static void sleep(long millis, int nanos)
+                <br>在指定的毫秒数加指定的纳秒数内让当前正在执行的线程休眠（暂停执行）</li>
+            <li>static void yield()
+                <br>暂停当前正在执行的线程对象，并执行其他线程</li>
+
+            <li>void Object.notify() void Object.notifyAll()
+                <br>唤醒在此对象监视器上等待的线程</li>
+            <li>void wait() void wait(long timeout, int nanos)
+                <br>在其他线程调用此对象的 notify()方法或 notifyAll()方法，
+                <br>或者其他某个线程中断当前线程，
+                <br>或者已超过某个实际时间量前，导致当前线程等待
+            </li>
+
+        </ul>
+
+        <h2>线程状态</h2>
+        <ul>
+            <li>new</li>
+            <li>runnable</li>
+            <li>blocked</li>
+            <li>waiting
+                <p>
+                    <ul>
+                        <li>不带超时值的 Object.wait</li>
+                        <li>不带超时值的 Thread.join</li>
+                        <li>LockSupport.park</li>
+                    </ul>
+                </p>
+            </li>
+            <li>timed_waiting
+                <p>
+                    <ul>
+                        <li>Thread.sleep()</li>
+                        <li>带有超时值的 Object.wait</li>
+                        <li>带有超时值的 Thread.join</li>
+                        <li>LockSupport.parkNanos</li>
+                        <li>LockSupport.parkUntil</li>
+                    </ul>
+                </p>
+            </li>
+            <li>terminated</li>
+        </ul>
+
+        <h2>中断</h2>
+
+        <h2>守护程序</h2>
+
+        <h2>优先级</h2>
+        <ul>
+            <li>新线程的初始优先级被设定为创建线程的优先级</li>
+        </ul>
+    </main>
+</body>
+
+</html>
