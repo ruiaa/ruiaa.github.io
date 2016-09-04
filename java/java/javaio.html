@@ -3,16 +3,113 @@
 
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>java io</title>
     <link rel="stylesheet" href="/style-base.css">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 
 <body>
     <main role="main">
-        <h1></h1>
-        
-        
+        <h1>java io</h1>
+        <h2>InputStream</h2>
+        <ul>
+            <li>available() read() close()</li>
+            <li>skip() markSupported() mark() reset()</li>
+        </ul>
+        <ul>
+            <li>FileInputStream
+                <p>文件 字节</p>
+            </li>
+            <li>DataInputstream
+                <p>数值</p>
+            </li>
+            <li>BufferedInputStream
+                <p>缓冲</p>
+            </li>
+            <li>PushbackInputStream
+                <p>可回推 unread()</p>
+            </li>
+        </ul>
+
+        <h2>OutputStream</h2>
+        <ul>
+            <li>write() flush() close()</li>
+        </ul>
+        <ul>
+            <li>FileOutputStream
+                <p>文件 字节</p>
+            </li>
+            <li>DataOutputstream
+                <p>数值</p>
+            </li>
+        </ul>
+        <h2>Reader</h2>
+        <ul>
+            <li>read() close()</li>
+            <li>skip() markSupported() mark() reset()</li>
+        </ul>
+        <ul>
+            <li>java.util.Scanner</li>
+        </ul>
+        <h2>Writer</h2>
+        <ul>
+            <li>append() write() flush() close()</li>
+        </ul>
+        <ul>
+            <li>PrintWriter
+                <p>字符输出 print() println() printf() checkError()</p>
+            </li>
+        </ul>
+
+        <h2>字符集 java.nio.Charset</h2>
+        <h2>格式化字符串</h2>
+        <h2>标准流 System.err System.in System.out</h2>
+        <h2>序列化</h2>
+        <ul>
+           <li>标记接口 implements Serializable</li>
+           <li>不可序列化(瞬态变量) transient</li>
+            <li>序列化
+                <pre><code>ObjectOutputStream out=
+        new ObjectOutputStream(new FileOutputStream("fileurl"));
+    out.writeObject(val1);
+    out.writeObject(val2);</code></pre>
+            </li>
+            <li>反序列化
+                <pre><code>ObjectInputStream in=
+        new ObjectInputStream(new FileInputStream("fileurl"));
+    TargetType val1=(TargetType)in.readObject();
+    TargetType val2=(TargetType)in.readObject();</code></pre>
+            </li>
+            <li>自定义读写<pre><code>private void whiteObject(ObjectOutputStream out)
+    throws IOException
+{    
+    out.defaultWriteObject();
+    oot.writeInt(...);
+    ...
+}
+private void readObject(ObjectInputStream in)
+    throws IOException
+{    
+    in.defaultReadObject();
+    int x=in.readInt();
+    ...
+}</code></pre></li>
+            <li>内部实现
+                <p>对象以序列号代替内存地址进行标记
+                    <br>对象引用关联序列号</p>
+            </li>
+        </ul>
+
+        <h2>文件操作</h2>
+        <h3>Paths</h3>
+        <h3>Path</h3>
+        <ul>
+            <li>根部件 / 或 C:\</li>
+            <li></li>
+        </ul>
+
+        <h2>java.nio</h2>
+
     </main>
 </body>
 
