@@ -2,6 +2,7 @@ function ulControl() {
     var sign = document.createElement("sign");
     sign.innerHTML = "+++";
     $("ul").before(sign);
+    $("ol").before(sign);
     $("pre").before(sign);
     $("sign").click(function () {
         $(this).next().toggle();

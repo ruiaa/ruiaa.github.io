@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android sharedPreferences</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android.content.SharedPreferences</h1>
+        <p>基于XML文件存储key-value键值对数据,存储位置在/data/data/&lt;包名&gt;/shared_prefs目录下</p>
+
+        <h2>使用</h2>
+        <ol>
+            <li>Context.getSharedPreferences()</li>
+            <li>contail() get()</li>
+            <li>监听registerOnSharedPreferenceChangeListener</li>
+            <li>abstract SharedPreferences.Editor edit()
+                <ul>
+                    <li>putXxx() remove()</li>
+                    <li>appiy()/commit()</li>
+                </ul>
+            </li>
+            <li>多进程MODE_MULTI_PROCESS 非同步</li>
+        </ol>
+
+
+        <h2>多进程安全 Tray</h2>
+        <ul><li>compile 'net.grandcentrix.tray:tray:0.10.0'</li></ul>
+
+    </main>
+</body>
+
+</html>

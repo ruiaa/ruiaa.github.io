@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android file</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android file</h1>
+
+        <h2>android 文件系统</h2>
+        <ul>
+            <li>system 系统目录 核心库</li>
+            <li>data 应用目录 应用及应用数据
+                <ul>
+                    <li>/data/app/ 应用安装包com.test.sample</li>
+                    <li>/data/data/com.test.sample/ 应用数据</li>
+                    <li>/data/data/com.test.sample/database/ 数据库文件</li>
+                    <li>/data/data/com.test.sample/shared_prefs/ SharedPreferences文件</li>
+                    <li>/data/data/com.test.sample/files/ 自定义的应用数据文件</li>
+                </ul>
+            </li>
+            <li>sdcard 扩展储存卡目录 共享数据</li>
+            <li>mnt 外部储存</li>
+        </ul>
+
+        <h2>/data/data/com.test.sample/files/ 使用context</h2>
+        <ul>
+            <li>fileList()</li>
+            <li>deleteFile()</li>
+            <li>openFileInput</li>
+            <li>openFileOutput</li>
+        </ul>
+
+
+        <h2>sdcard 使用java包</h2>
+    </main>
+</body>
+
+</html>

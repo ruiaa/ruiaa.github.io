@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android content provider</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android content provider</h1>
+
+        <h2>Uri类</h2>
+        <p>Uri uri = Uri.parse("content://com.example.provider.contactprovider/contact/11")</p>
+        <ul>
+            <li>content://
+                <p>Android内容URI,说明由ContentProvider控制数据,是固定形式</p>
+            </li>
+            <li>com.example.provider.contactprovider
+                <p>URI的授权部分authority,唯一标识符,用来定位ContentProvider.
+                    <br>格式一般是自定义ContentProvider类的完全限定名称，注册时需要用到</p>
+            </li>
+            <li>contact
+                <p>指向一个对象集合，一般用表的名字</p>
+            </li>
+            <li>11
+                <br>指向特定的记录，如果没有指定，则返回全部记录</li>
+        </ul>
+
+        <h2>UriMatcher 识别URi</h2>
+        <ol>
+            <li>UriMatcher uriMatcher=new UriMatcher(UriMatcher.NO_MATCH);
+                <p>匹配失败时返回UriMatcher.NO_MATCH</p>
+            </li>
+            <li>注册 uriMatcher.addURI("com.example.app.provider", "table1", number);
+                <p>权限(android:authorities) "com.example.app.provider"
+                    <br>路径 "table1" ,"table1/#" ,"table1/*"
+                    <br>匹配码 number</p>
+            </li>
+            <li>使用 uriMatcher.match(uri) 返回匹配码</li>
+            <li>通配符
+                <p>*：表示匹配任意长度的任意字符
+                    <br>#：表示匹配任意长度的数字</p>
+            </li>
+        </ol>
+
+        <h2>MIME 类型和子类型</h2>
+        <ul>
+            <li>text/html text/css text/xml application/pdf</li>
+            <li>访问单个资源的URI : vnd.android.cursor.item/vnd.[company name].[resource type]
+                <br>content://com.example.app.provider/table1/1
+                <br>vnd.android.cursor.item/vnd. com.example.app.provider.table1</li>
+            <li>访问多个资源的URI : vnd.android.cursor.dir/vnd.[company name].[resource type]
+                <br>content://com.example.app.provider/table1
+                <br>vnd.android.cursor.dir/vnd.com.example.app.provider.table1</li>
+        </ul>
+
+        <h2>读取数据  ContentResolver Content.getContentResolver()</h2>
+
+        <h2>Android附带的ContentProvider</h2>
+        <ul>
+            <li>Browser：存储如浏览器的信息</li>
+            <li>CallLog：存储通话记录等信息</li>
+            <li>Contacts：存储联系人等信息</li>
+            <li>MediaStore：存储媒体文件的信息</li>
+            <li>Settings：存储设备的设置和首选项信息</li>
+        </ul>
+
+
+        <h2>创建自定义的ContentProvider  extends ContentProvider</h2>
+        <ul>
+            <li>注册ContentProvider
+                <p>&lt;provider android:name="Provider" android:authorities="com.example.app.provider" /&gt;
+                </p>
+            </li>
+            <li>onCreate()
+                <p>初始化内容提供器的时候调用,通常会在这里完成对数据库的创建和升级等操作
+                    <br>只有当存在ContentResolver尝试访问时,才会被初始化</p>
+            </li>
+            <li>query()
+                <p>projection 参数用于确定查询哪些列</p>
+            </li>
+            <li>insert()</li>
+            <li>update()</li>
+            <li>delete()</li>
+            <li>getType()
+                <p>根据传入的内容URI 来返回相应的MIME 类型</p>
+            </li>
+        </ul>
+
+        <h2>访问权限</h2>
+        <ul>
+            <li>android:grantUriPermssions:临时许可标志</li>
+            <li>android:permission:Provider读写权限</li>
+            <li>android:readPermission:Provider的读权限</li>
+            <li>android:writePermission:Provider的写权限</li>
+            <li>android:enabled:标记允许系统启动Provider</li>
+            <li>android:exported:标记允许其他应用程序使用这个Provider</li>
+            <li>android:multiProcess:标记允许系统启动Provider相同的进程中调用客户端</li>
+        </ul>
+    </main>
+</body>
+
+</html>

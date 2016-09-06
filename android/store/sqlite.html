@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android SQLite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android SQLiteDatabase</h1>
+        <h2>数据类型</h2>
+        <p>null integer real text blob</p>
+
+        <h2>创建 extends SQLiteOpenHelper</h2>
+        <ul>
+            <li>构造器 SQLiteOpenHelper (Context context, String name, SQLiteDatabase.CursorFactory factory, int version)</li>
+            <li>第一次创建 onCreate(SQLiteDatabase db)
+                <p>String sql = "create table if not exists " + TABLE_NAME
+                    <br>+ " (Id integer primary key, CustomName text, OrderPrice integer, Country text)";
+                    <br>sqLiteDatabase.execSQL(sql);
+                </p>
+            </li>
+            <li>更新 onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)</li>
+            <li>每次成功打开 onOpen(SQLiteDatabase db)</li>
+            <br>
+            <li>getReadableDatabase() 　创建或者打开一个查询数据库</li>
+            <li>getWritableDatabase()　创建或者打开一个可写数据库</li>
+        </ul>
+
+        <h2>操作</h2>
+        <p>anroid.database.sqlite包，用于进行SQLite数据库的增，删，改，查工作</p>
+        <pre><code>db.beginTransaction();
+try {
+    ...
+    db.setTransactionSuccessful();
+} finally {
+    db.endTransaction();
+}</code></pre>
+        <ul>
+            <li>openOrCreateDatabase(String path, SQLiteDatabase.CursorFactory factory)</li>
+            <li>beginTransaction(): 开始一个事务</li>
+            <li>endTransaction(): 结束一个事务</li>
+            <li>execSQL(String sql): 执行给定SQL语句</li>
+            <li>close()</li>
+            <li>query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy)</li>
+            <li>rawQuery(String sql, String[] selectionArgs)</li>
+            <li>delete(String table, String whereClause, String[] whereArgs)</li>
+            <li>insert(String table, String nullColumnHack, ContentValues values)</li>
+            <li>update(String table, ContentValues values, String whereClause, String[] whereArgs):</li>
+        </ul>
+
+        <h2>Cursor</h2>
+        <ul>
+            <li>getCount()</li>
+            <li>moveToFirst(), moveToNext(), isAfterLast()</li>
+            <li>getColumnNames() getColumnIndex() getXxx()</li>
+            <li>requery() close()</li>
+            <pre><code> Cursor result=db.rawQuery("SELECT _id, username, password FROM user"); 
+result.moveToFirst(); 
+while (!result.isAfterLast()) { 
+    int id=result.getInt(0); 
+    String name=result.getString(1); 
+    String password =result.getString(2); 
+    // do something useful with these 
+    result.moveToNext(); 
+} 
+result.close();</code></pre>
+        </ul>
+
+    </main>
+</body>
+
+</html>
