@@ -4,9 +4,12 @@
 <head>
     <meta charset="utf-8" />
     <title>css学习</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <link rel="stylesheet" href="style-css.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
 </head>
 
 <body>
@@ -127,18 +130,14 @@
                         <br>&lt;link rel="stylesheet" href="url.css"/&gt;
                     </li>
                     <li>嵌入样式表
-                        <pre>
-                        <code>
-&lt;head&gt;
+                        <pre><code>&lt;head&gt;
     &lt;link rel="stylesheet" href="url.css">
     &lt;style&gt;
         selector {
             property: value;
         }
     &lt;/style&gt;
-&lt;/head&gt;
-                            </code>
-                        </pre>
+&lt;/head&gt;</code></pre>
                     </li>
                     <li>内联样式
                         <br>&lt;元素名 style="property:value;property:value"/&gt;
@@ -212,79 +211,79 @@
                 </ul>
             </section>
 
-<section>
-    <h2>文本样式</h2>
-    <ul>
-        <li>font:斜体 粗体 小型大写字母 <em>字体大小</em>/行高 <em>字体系列</em>
-            <ul>
-                <li>font-family 字体</li>
-                <li>font-style 斜体</li>
-                <li>font-weight 粗体</li>
-                <li>font-variant 小型大写字母</li>
-                <li>font-size 字体大小</li>
-                <li>line-height 行高</li>
-            </ul>
-        </li>
-        <li>text 文本
-            <ul>
-                <li>word-spacing 字间距</li>
-                <li>letter-spacing 字偶距</li>
-                <li>text-indent 缩进</li>
-                <li>text-align 对齐</li>
-                <li>text-transform 文本大小写</li>
-                <li>text-decoration 装饰线条</li>
-            </ul>
-        </li>
-        <li>white-space 空白属性</li>
-        <li>background 背景
-            <ul>
-                <li>background-color 背景颜色</li>
-                <li>background-image 背景图像 url(image.url)</li>
-                <li>background-repeat 重复背景图像的方向</li>
-                <li>background-attachment 图像随页面滚动</li>
-                <li>background-position 背景图像的位置</li>
-                <li>background-size 背景图像的显示尺寸</li>
-                <li>background-clip 背景显示的范围</li>
-                <li>background-origin 背景开始的位置</li>
-            </ul>
-        </li>
-        <li>color 颜色
-            <ul>
-                <li>colorname</li>
-                <li>#rrggbb rgb(r,g,b) rgb(r%,g%,b%)</li>
-                <li>hsl(h,s,l)</li>
-                <li>rgba(r,g,b,a)</li>
-                <li>hsla(h,s,l,a)</li>
-            </ul>
-        </li>
-    </ul>
-</section>
-            
-<section>
-    <h2>布局</h2>
-    <ul>
-        <li>兼容旧浏览器</li>
-        <li>重置浏览器默认样式</li>
-        <li>display 元素的显示方式
-            <ul>
-                <li>block 元素显示为块级元素</li>
-                <li>inline 元素显示为行内元素</li>
-                <li>inline-block 元素显示为行内元素，同时具有块级元素的特征</li>
-                <li>list-item 列表</li>
-                <li>none 隐藏元素，并将其从文档流中完全移除</li>
-            </ul>
-        </li>
-        <li>visibility 控制元素可见性</li>
-        <li>盒模型
-            <ul>
-                <li>默认
-                    <br>
-                    <img src="/picture/cssboxdefault.jpg">
-                </li>
-                <li>box-sizing:border-box;
-                    <br>
-                    <img src="/picture/cssboxborder.jpg">
-                    <pre>
+            <section>
+                <h2>文本样式</h2>
+                <ul>
+                    <li>font:斜体 粗体 小型大写字母 <em>字体大小</em>/行高 <em>字体系列</em>
+                        <ul>
+                            <li>font-family 字体</li>
+                            <li>font-style 斜体</li>
+                            <li>font-weight 粗体</li>
+                            <li>font-variant 小型大写字母</li>
+                            <li>font-size 字体大小</li>
+                            <li>line-height 行高</li>
+                        </ul>
+                    </li>
+                    <li>text 文本
+                        <ul>
+                            <li>word-spacing 字间距</li>
+                            <li>letter-spacing 字偶距</li>
+                            <li>text-indent 缩进</li>
+                            <li>text-align 对齐</li>
+                            <li>text-transform 文本大小写</li>
+                            <li>text-decoration 装饰线条</li>
+                        </ul>
+                    </li>
+                    <li>white-space 空白属性</li>
+                    <li>background 背景
+                        <ul>
+                            <li>background-color 背景颜色</li>
+                            <li>background-image 背景图像 url(image.url)</li>
+                            <li>background-repeat 重复背景图像的方向</li>
+                            <li>background-attachment 图像随页面滚动</li>
+                            <li>background-position 背景图像的位置</li>
+                            <li>background-size 背景图像的显示尺寸</li>
+                            <li>background-clip 背景显示的范围</li>
+                            <li>background-origin 背景开始的位置</li>
+                        </ul>
+                    </li>
+                    <li>color 颜色
+                        <ul>
+                            <li>colorname</li>
+                            <li>#rrggbb rgb(r,g,b) rgb(r%,g%,b%)</li>
+                            <li>hsl(h,s,l)</li>
+                            <li>rgba(r,g,b,a)</li>
+                            <li>hsla(h,s,l,a)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>布局</h2>
+                <ul>
+                    <li>兼容旧浏览器</li>
+                    <li>重置浏览器默认样式</li>
+                    <li>display 元素的显示方式
+                        <ul>
+                            <li>block 元素显示为块级元素</li>
+                            <li>inline 元素显示为行内元素</li>
+                            <li>inline-block 元素显示为行内元素，同时具有块级元素的特征</li>
+                            <li>list-item 列表</li>
+                            <li>none 隐藏元素，并将其从文档流中完全移除</li>
+                        </ul>
+                    </li>
+                    <li>visibility 控制元素可见性</li>
+                    <li>盒模型
+                        <ul>
+                            <li>默认
+                                <br>
+                                <img src="/picture/cssboxdefault.jpg">
+                            </li>
+                            <li>box-sizing:border-box;
+                                <br>
+                                <img src="/picture/cssboxborder.jpg">
+                                <pre>
                         <code>
 * {
     -webkit-box-sizing: border-box;
@@ -293,35 +292,35 @@
 }
                         </code>
                     </pre>
-                </li>
-                <li>width height</li>
-                <li>min-width min-height max-width max-height</li>
-                <li>padding 内边距
-                    <ul>
-                        <li>padding:a; 应用于四个边</li>
-                        <li>padding:a b; 前值应用于上下边，后值应用于左右两边</li>
-                        <li>padding:a b c; 第一个值用于上边，第二个值用于左右边，第三个值用于下边</li>
-                        <li>padding:a b c d; 依次应用于上、右、下、左四个边</li>
-                    </ul>
-                </li>
-                <li>border 边框
-                    <ul>
-                        <li><dt>border-style</dt>
-                            <dd>none,dotted点线,dashed虚线,solid实线,double双,groove槽线,ridge脊线,inset凹边,outset凸边</dd>
-                        </li>
-                        <li>border-width</li>
-                        <li>border-color</li>
-                        <li>border-image</li>
-                    </ul>
-                </li>
-                <li>margin 外边距</li>
-            </ul>
-        </li>
-        <li>float 浮动 下面的内容流动到周围
-        <br>浮动元素溢出父元素：overflow:auto;</li>
-        <li>clear 清除浮动
-            <br>
-            <pre>
+                            </li>
+                            <li>width height</li>
+                            <li>min-width min-height max-width max-height</li>
+                            <li>padding 内边距
+                                <ul>
+                                    <li>padding:a; 应用于四个边</li>
+                                    <li>padding:a b; 前值应用于上下边，后值应用于左右两边</li>
+                                    <li>padding:a b c; 第一个值用于上边，第二个值用于左右边，第三个值用于下边</li>
+                                    <li>padding:a b c d; 依次应用于上、右、下、左四个边</li>
+                                </ul>
+                            </li>
+                            <li>border 边框
+                                <ul>
+                                    <li><dt>border-style</dt>
+                                        <dd>none,dotted点线,dashed虚线,solid实线,double双,groove槽线,ridge脊线,inset凹边,outset凸边</dd>
+                                    </li>
+                                    <li>border-width</li>
+                                    <li>border-color</li>
+                                    <li>border-image</li>
+                                </ul>
+                            </li>
+                            <li>margin 外边距</li>
+                        </ul>
+                    </li>
+                    <li>float 浮动 下面的内容流动到周围
+                        <br>浮动元素溢出父元素：overflow:auto;</li>
+                    <li>clear 清除浮动
+                        <br>
+                        <pre>
                 <code>
 .clearfix:before,
 .clearfix:after {
@@ -336,12 +335,12 @@
 }
                 </code>
             </pre>
-        </li>
-        <li>position 元素定位
-            <ul>
-                <li>默认 position:static;</li>
-                <li>相对 元素从它的自然位置偏移
-                    <pre>
+                    </li>
+                    <li>position 元素定位
+                        <ul>
+                            <li>默认 position:static;</li>
+                            <li>相对 元素从它的自然位置偏移
+                                <pre>
 <code>
 * {
     position:relative;
@@ -352,10 +351,10 @@
 }
 </code>
     </pre>
-                </li>
-                <li>绝对 元素相对于其祖先元素(position:relative;)或body偏移
-                    <br>
-                    <pre>
+                            </li>
+                            <li>绝对 元素相对于其祖先元素(position:relative;)或body偏移
+                                <br>
+                                <pre>
 <code>
 * {
     position:absolute;
@@ -366,73 +365,73 @@
 }
 </code>
     </pre>
-                </li>
-                <li>固定在窗口 position:fixed;</li>
-                <li>z-index:n;
-                    <br>元素在定位过的对象堆中的层级
-                    <br>不作用于position:static;
-                </li>
-            </ul>
-        </li>
-        <li>overflow 元素溢出盒模型</li>
-        <li>vertical-align 垂直对齐
-            <ul>
-                <li>数值偏移</li>
-                <li>baseline 元素的基准线对齐父元素的基准线</li>
-                <li>middle 元素位于父元素中央</li>
-                <li>text-top 元素的顶部对齐父元素的顶部</li>
-                <li>text-bottom 元素的底部对齐父元素的底部</li>
-                <li>top 元素的顶部对齐当前行里最高元素的顶部</li>
-                <li>bottom 元素的底部对齐当前行里最低元素的底部</li>
-                <li>sub 元素成为父元素的下标</li>
-                <li>super 元素成为父元素的上标</li>
-            </ul>
-        </li>
-        <li>cursor 鼠标指针</li>
-    </ul>
-</section>
-        
-<section>
-    <h2>响应式页面</h2>
-    <ul>
-        <li>可伸缩的图像与多媒体 max-width: 100%;</li>
-        <li>弹性布局</li>
-        <li>媒体查询
-    <ul>
-        <li>媒体特性
-            <ul>
-                <li>width height device-width device-height</li>
-                <li>aspect-ratio高宽比 device-aspect-ratio</li>
-                <li>orientation 方向</li>
-                <li>color color-index monochrom单色</li>
-                <li>resolution 分辨率</li>
-                <li>scan 扫描</li>
-                <li>grid 栅格</li>
-                <li>-webkit-device-pixel-ratio WebKit设备像素比</li>
-                <li>-moz-device-pixel-ratio Mozilla设备像素比</li>
-            </ul>
-        </li>
-        <li>媒体查询语法
-            <ul>
-                <li>指向外部样式表的链接
-                    <br>&nbsp;media="logic type and (feature: value) and (feature: value)"
-                </li>
-                <li>位于样式表中
-                    <br>&nbsp;@media logic type and (feature:value)
-                </li>
-                <li>logic:only或not</li>
-                <li>type:screen,print</li>
-                <li>feature:预定义的媒体特性</li>
-            </ul>
-        </li>
-        <li>&lt;meta name="viewport" content="width=device-width, initial-scale=1"/&gt;
-            <br>视觉区域的宽度会被设成与设备宽度相同的值
-        </li>
-    </ul>
-</li>
-    </ul>
-</section>
-        
+                            </li>
+                            <li>固定在窗口 position:fixed;</li>
+                            <li>z-index:n;
+                                <br>元素在定位过的对象堆中的层级
+                                <br>不作用于position:static;
+                            </li>
+                        </ul>
+                    </li>
+                    <li>overflow 元素溢出盒模型</li>
+                    <li>vertical-align 垂直对齐
+                        <ul>
+                            <li>数值偏移</li>
+                            <li>baseline 元素的基准线对齐父元素的基准线</li>
+                            <li>middle 元素位于父元素中央</li>
+                            <li>text-top 元素的顶部对齐父元素的顶部</li>
+                            <li>text-bottom 元素的底部对齐父元素的底部</li>
+                            <li>top 元素的顶部对齐当前行里最高元素的顶部</li>
+                            <li>bottom 元素的底部对齐当前行里最低元素的底部</li>
+                            <li>sub 元素成为父元素的下标</li>
+                            <li>super 元素成为父元素的上标</li>
+                        </ul>
+                    </li>
+                    <li>cursor 鼠标指针</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>响应式页面</h2>
+                <ul>
+                    <li>可伸缩的图像与多媒体 max-width: 100%;</li>
+                    <li>弹性布局</li>
+                    <li>媒体查询
+                        <ul>
+                            <li>媒体特性
+                                <ul>
+                                    <li>width height device-width device-height</li>
+                                    <li>aspect-ratio高宽比 device-aspect-ratio</li>
+                                    <li>orientation 方向</li>
+                                    <li>color color-index monochrom单色</li>
+                                    <li>resolution 分辨率</li>
+                                    <li>scan 扫描</li>
+                                    <li>grid 栅格</li>
+                                    <li>-webkit-device-pixel-ratio WebKit设备像素比</li>
+                                    <li>-moz-device-pixel-ratio Mozilla设备像素比</li>
+                                </ul>
+                            </li>
+                            <li>媒体查询语法
+                                <ul>
+                                    <li>指向外部样式表的链接
+                                        <br>&nbsp;media="logic type and (feature: value) and (feature: value)"
+                                    </li>
+                                    <li>位于样式表中
+                                        <br>&nbsp;@media logic type and (feature:value)
+                                    </li>
+                                    <li>logic:only或not</li>
+                                    <li>type:screen,print</li>
+                                    <li>feature:预定义的媒体特性</li>
+                                </ul>
+                            </li>
+                            <li>&lt;meta name="viewport" content="width=device-width, initial-scale=1"/&gt;
+                                <br>视觉区域的宽度会被设成与设备宽度相同的值
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
         </article>
     </main>
 </body>
