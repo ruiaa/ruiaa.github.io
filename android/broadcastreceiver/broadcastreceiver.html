@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>BroadcastReceiver</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>BroadcastReceiver</h1>
+
+        <h2>标准广播与有序广播</h2>
+        <ul>
+            <li>标准广播 Normal broadcasts 完全异步执行
+                <p>在广播发出之后,所有的广播接收器几乎都会在同一时刻接收到这条广播消息,因此它们之间没有任何先后顺序可言。这种广播的效率会比较高,但同时也意味着它是无法被截断的。</p>
+            </li>
+            <li>有序广播 Ordered broadcasts 同步执行
+                <p>在广播发出之后，同一时刻只会有一个广播接收器能够收到这条广播消息，当这个广播接收器中的逻辑执行完毕后，广播才会继续传递。所以此时的广播接收器是有先后顺序的，优先级高的广播接收器就可以先收到广播消息，并且前面的广播接收器还可以截断正在传递的广播，这样后面的广播接收器就无法收到广播消息了。</p>
+            </li>
+        </ul>
+
+        <h2>创建广播接收器</h2>
+        <pre><code>class MyReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        //.......
+        abortBroadcast();//截断有序广播
+    }
+}</code></pre>
+
+
+        <h2>注册广播接收器</h2>
+        <ul>
+            <li>静态注册
+                <p>AndroidManifest.xml
+                    <pre><code>&lt;application&gt;
+&lt;receiver android:name=".MyReceiver"&gt;
+&lt;intent-filter android:priority="100" &gt;
+&lt;action android:name="android.intent.action.BOOT_COMPLETED" /&gt;
+&lt;/intent-filter&gt;
+&lt;/receiver&gt;</code></pre>
+                </p>
+            </li>
+            <li>动态注册 必须要在程序启动之后才能接收到广播
+                <pre><code>IntentFilter  intentFilter = new IntentFilter();
+intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+MyReceiver myReceiver=new MyReceiver();
+registerReceiver(myReceiver, intentFilter);</code></pre>
+            </li>
+            <li>取消注册<pre><code>@Override
+protected void onDestroy() {
+    //activity
+    super.onDestroy();
+    unregisterReceiver(myReceiver);
+}</code></pre>
+            </li>
+        </ul>
+
+        <h2>发送广播</h2>
+        <ul>
+            <li>标准广播
+                <pre><code>Intent intent = new Intent("com.example.broadcasttest.MY_BROADCAST");
+sendBroadcast(intent);</code></pre>
+            </li>
+            <li>有序广播
+                <pre><code>Intent intent = new Intent("com.example.broadcasttest.MY_BROADCAST");
+sendOrderedBroadcast(intent, null);//null权限</code></pre>
+            </li>
+            <li>本地广播
+                <pre><code>private LocalBroadcastManager localBroadcastManager;
+localBroadcastManager = LocalBroadcastManager.getInstance(this);
+
+//发送本地广播
+Intent intent = new Intent("com.example.broadcasttest.MY_LOCAL_BROADCAST");
+localBroadcastManager.sendBroadcast(intent);
+
+//注册本地广播
+localBroadcastManager.registerReceiver(myReceiver, intentFilter);</code></pre>
+            </li>
+        </ul>
+
+
+    </main>
+</body>
+
+</html>

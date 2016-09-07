@@ -100,6 +100,129 @@
         </ul>
 
         <h2>中断</h2>
+        <ul>
+            <li>没有强制线程终止的方法,只能请求其终止</li>
+            <li>线程应在适当时检查中断请求,选择是否中断自身</li>
+            <li>targetThread.interrupt();
+                <p>中断请求被置位
+                    <br>如果线程阻塞(wait sleep),中断请求被清除,抛出InterruptedException
+                </p>
+            </li>
+            <li>Thread.currentThread().isInterrupted()
+                <p>测试线程是否被中断</p>
+            </li>
+            <li>Thread.interrupted()
+                <p>清除中断请求
+                    <br>测试线程是否被中断</p>
+            </li>
+        </ul>
+
+        <h2>同步</h2>
+        <ul>
+            <li>ReentrantLock() 可重入锁 Condition 条件对象
+                <pre><code>Lock lock=new ReentrantLock();
+Condition condition=new Condition();
+
+void method(){
+    //进入锁
+    lock.lock();
+    try{
+        while(...){
+            //线程放弃锁,进入该条件对象的等待集
+            condition.await();
+            //被signalAll() signal()唤醒,从退出处继续执行
+        }
+        ...
+        ...
+        //可能有线程满足条件对象
+        condition.signalAll();
+        ...
+    }
+    finally{
+        //解锁
+        lock.unlock();
+    }
+}</code></pre>
+            </li>
+            <li>synchronized
+                <p>隐式内部对象锁 this.intrinsicLock
+                    <br>隐式内部条件对象
+                    <pre><code>synchronized void method(){
+    while(...){
+        wait();
+    }
+    ...
+    ...
+    notifyAll()
+}</code></pre>
+                </p>
+            </li>
+            <li>不建议使用客户端锁定
+                <pre><code>private Object obj=new Object();
+void method(){
+    ...
+    synchronized(obj){
+    //使用obj的锁实现额外的原子操作
+    //客户端锁定
+    ...
+    }
+    ...
+}</code></pre>
+            </li>
+            <li>volatile 强制从内存读取</li>
+            <li>监视器</li>
+        </ul>
+
+
+        <h2>线程池</h2>
+        <ul>
+            <li>Executors
+                <ul>
+                    <li>static ExecutorService newCachedThreadPool()
+                        <p>必要时创建新线程,空闲线程保留60秒</p>
+                    </li>
+                    <li>static ExecutorService newFixedThreadPool(int nThreads)
+                        <p>可重用固定线程数的线程池</p>
+                    </li>
+                    <li>static ExecutorService newSingleThreadExecutor()
+                        <p>使用单个 worker 线程的 Executor</p>
+                    </li>
+                    <li>static ScheduledExecutorService newScheduledThreadPool(int corePoolSize)
+                        <p>创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行</p>
+                    </li>
+                    <li>static ScheduledExecutorService newSingleThreadScheduledExecutor()
+                        <p>创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行</p>
+                    </li>
+                </ul>
+            </li>
+            <li>ExecutorService
+                <ul>
+                    <li>Future &lt;T&gt; submit(Callable &lt;T&gt;task)
+                        <br>Future &lt;?&gt; submit(Runnable task)
+                        <br>Future &lt;T&gt; submit(Runnable task, T result)
+                    </li>
+                    <li>shutdown() shutdownNow()返回等待执行的任务列表</li>
+                    <li>isShutdown() isTerminated()</li>
+                </ul>
+            </li>
+            <li>ScheduledExecutorService
+                <ul>
+                    <li>schedule(Callable &lt;V&gt;callable, long delay, TimeUnit unit)
+                        <br>schedule(Runnable command, long delay, TimeUnit unit)
+                    </li>
+                    <li>scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)
+                        <br>两次开始 period</li>
+                    <li>scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit)
+                        <br>结束&gt;开始 delay</li>
+                </ul>
+            </li>
+            <li>Future&lt;V&gt;
+                <ul>
+                    <li>cancel(), isCancelled() </li>
+                    <li> V get(), isDone() </li>
+                </ul>
+            </li>
+        </ul>
 
         <h2>守护程序</h2>
 

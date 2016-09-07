@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>java 异常</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
@@ -14,9 +14,48 @@
 
 <body>
     <main role="main">
-        <h1></h1>
+        <h1>java 异常</h1>
+
+        <h2>implement AutoCloseable资源回收</h2>
+        <pre><code>try(Resource res=...;Resource res2=...)
+{
+    ...
+}</code></pre>
+        <p>try块退出时,会自动调用res.close()</p>
         
-        
+        <h2>Throwable</h2>
+        <h3>unchecked</h3>
+        <ul>
+            <li>Error</li>
+            <li>RunntimeException</li>
+        </ul>
+        <h3>checked</h3>
+
+        <h2>throws throw</h2>
+        <p>方法应在参数表后声明所有可能抛出的异常</p>
+
+        <h2>catch</h2>
+        <ul>
+            <li>捕获多个异常</li>
+            <li>重新抛出异常
+                <p>抛出 mException.initCause(e); throw mException;
+                    <br>取出原始异常 e=mException.getCause();
+                </p>
+            </li>
+        </ul>
+        <h2>finally</h2>
+
+        <h2>return finally throw 冲突</h2>
+        <ul>
+            <li>finally优先级最高,只要进入try,软件没挂,都会执行</li>
+            <li>方法中断覆盖 return和throw相续入栈,后发生者生效</li>
+            <li>try中throw后,跳到catch,catch中throw后,跳到finally</li>
+            <li>try和catch中的return执行完计算部分,并将其值保存入栈,跳到finally</li>
+            <li>finally内对已入栈的返回变量的值的修改不会对返回值产生影响</li>
+            <li>finally内无return,再执行try或catch中的return</li>
+            <li>finally中的return会覆盖try或catch中的return</li>
+        </ul>
+
     </main>
 </body>
 

@@ -8,17 +8,20 @@ html {
     /* 16px */
 }
 body {
-    font-family: cursive;
-    line-height: 2.0;
+    font-family: Georgia, serif;
+    letter-spacing: -0.01em;
+    word-spacing: 0.2em;
+    line-height: 1.8em;
+    width: 98%;
 }
 h1 {
-    font-size: 2.1875rem;
+    font-size: 1.75rem;
     /* 35px/16px */
     color: black;
     /* purple_400 */
 }
 h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     /* 28px/16px */
     color: black;
     /* red_400 */
