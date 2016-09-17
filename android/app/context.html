@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android context</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android context</h1>
+        
+        <pre><code>
+++++Context
+    ++++ContextIml api的通用实现 
+    ++++ContextWrapper
+        ++++ContextThemeWrapper
+            ++++Activity
+        ++++Service
+        ++++Application
+        </code></pre>
+
+        <h2>注意</h2>
+        <ul>
+            <li>长期存在的对象不要持有activity的context引用</li>
+            <li>凡是跟UI相关的，都应该使用Activity做为Context来处理</li>
+            <li>application的context不能用于：
+                <ul>
+                    <li>Dialog</li>
+                    <li>start Activity 这需要创建一个新的task</li>
+                    <li>Layout Inflation 会使用系统默认的主题样式</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h2>关键函数</h2>
+        <pre><code>public abstract class Context {
+
+// 获取应用程序包的AssetManager实例
+public abstract AssetManager getAssets();
+
+// 获取应用程序包的Resources实例
+public abstract Resources getResources();
+
+// 获取PackageManager实例，以查看全局package信息
+public abstract PackageManager getPackageManager();
+
+// 获取应用程序包的ContentResolver实例
+public abstract ContentResolver getContentResolver();
+
+// 它返回当前进程的主线程的Looper，此线程分发调用给应用组件(activities, services等)
+public abstract Looper getMainLooper();
+
+// 返回当前进程的单实例全局Application对象的Context
+public abstract Context getApplicationContext();
+
+// 从string表中获取本地化的、格式化的字符序列
+public final CharSequence getText(int resId) {
+return getResources().getText(resId);
+}
+
+// 从string表中获取本地化的字符串
+public final String getString(int resId) {
+return getResources().getString(resId);
+}
+
+public final String getString(int resId, Object... formatArgs) {
+return getResources().getString(resId, formatArgs);
+}
+
+// 返回一个可用于获取包中类信息的class loader
+public abstract ClassLoader getClassLoader();
+
+// 返回应用程序包名
+public abstract String getPackageName();
+
+// 返回应用程序信息
+public abstract ApplicationInfo getApplicationInfo();
+
+// 根据文件名获取SharedPreferences
+public abstract SharedPreferences getSharedPreferences(String name,
+int mode);
+
+// 其根目录为: Environment.getExternalStorageDirectory()
+/*
+* @param type The type of files directory to return.  May be null for
+* the root of the files directory or one of
+* the following Environment constants for a subdirectory:
+* {@link android.os.Environment#DIRECTORY_MUSIC},
+* {@link android.os.Environment#DIRECTORY_PODCASTS},
+* {@link android.os.Environment#DIRECTORY_RINGTONES},
+* {@link android.os.Environment#DIRECTORY_ALARMS},
+* {@link android.os.Environment#DIRECTORY_NOTIFICATIONS},
+* {@link android.os.Environment#DIRECTORY_PICTURES}, or
+* {@link android.os.Environment#DIRECTORY_MOVIES}.
+*/
+public abstract File getExternalFilesDir(String type);
+
+// 返回应用程序obb文件路径
+public abstract File getObbDir();
+
+// 启动一个新的activity
+public abstract void startActivity(Intent intent);
+
+// 启动一个新的activity
+public void startActivityAsUser(Intent intent, UserHandle user) {
+throw new RuntimeException("Not implemented. Must override in a subclass.");
+}
+
+// 启动一个新的activity
+// intent: 将被启动的activity的描述信息
+// options: 描述activity将如何被启动
+public abstract void startActivity(Intent intent, Bundle options);
+
+// 启动多个新的activity
+public abstract void startActivities(Intent[] intents);
+
+// 启动多个新的activity
+public abstract void startActivities(Intent[] intents, Bundle options);
+
+// 广播一个intent给所有感兴趣的接收者，异步机制
+public abstract void sendBroadcast(Intent intent);
+
+// 广播一个intent给所有感兴趣的接收者，异步机制
+public abstract void sendBroadcast(Intent intent,String receiverPermission);
+
+public abstract void sendOrderedBroadcast(Intent intent,String receiverPermission);
+
+public abstract void sendOrderedBroadcast(Intent intent,
+String receiverPermission, BroadcastReceiver resultReceiver,
+Handler scheduler, int initialCode, String initialData,
+Bundle initialExtras);
+
+public abstract void sendBroadcastAsUser(Intent intent, UserHandle user);
+
+public abstract void sendBroadcastAsUser(Intent intent, UserHandle user,
+String receiverPermission);
+
+// 注册一个BroadcastReceiver，且它将在主activity线程中运行
+public abstract Intent registerReceiver(BroadcastReceiver receiver,
+IntentFilter filter);
+
+public abstract Intent registerReceiver(BroadcastReceiver receiver,
+IntentFilter filter, String broadcastPermission, Handler scheduler);
+
+public abstract void unregisterReceiver(BroadcastReceiver receiver);
+
+// 请求启动一个application service
+public abstract ComponentName startService(Intent service);
+
+// 请求停止一个application service
+public abstract boolean stopService(Intent service);
+
+// 连接一个应用服务，它定义了application和service间的依赖关系
+public abstract boolean bindService(Intent service, ServiceConnection conn,
+int flags);
+
+// 断开一个应用服务，当服务重新开始时，将不再接收到调用，
+// 且服务允许随时停止
+public abstract void unbindService(ServiceConnection conn);
+
+// 返回系统级service句柄
+/*
+* @see #WINDOW_SERVICE
+* @see android.view.WindowManager
+* @see #LAYOUT_INFLATER_SERVICE
+* @see android.view.LayoutInflater
+* @see #ACTIVITY_SERVICE
+* @see android.app.ActivityManager
+* @see #POWER_SERVICE
+* @see android.os.PowerManager
+* @see #ALARM_SERVICE
+* @see android.app.AlarmManager
+* @see #NOTIFICATION_SERVICE
+* @see android.app.NotificationManager
+* @see #KEYGUARD_SERVICE
+* @see android.app.KeyguardManager
+* @see #LOCATION_SERVICE
+* @see android.location.LocationManager
+* @see #SEARCH_SERVICE
+* @see android.app.SearchManager
+* @see #SENSOR_SERVICE
+* @see android.hardware.SensorManager
+* @see #STORAGE_SERVICE
+* @see android.os.storage.StorageManager
+* @see #VIBRATOR_SERVICE
+* @see android.os.Vibrator
+* @see #CONNECTIVITY_SERVICE
+* @see android.net.ConnectivityManager
+* @see #WIFI_SERVICE
+* @see android.net.wifi.WifiManager
+* @see #AUDIO_SERVICE
+* @see android.media.AudioManager
+* @see #MEDIA_ROUTER_SERVICE
+* @see android.media.MediaRouter
+* @see #TELEPHONY_SERVICE
+* @see android.telephony.TelephonyManager
+* @see #INPUT_METHOD_SERVICE
+* @see android.view.inputmethod.InputMethodManager
+* @see #UI_MODE_SERVICE
+* @see android.app.UiModeManager
+* @see #DOWNLOAD_SERVICE
+* @see android.app.DownloadManager
+*/
+public abstract Object getSystemService(String name);
+
+public abstract int checkPermission(String permission, int pid, int uid);
+
+// 返回一个新的与application name对应的Context对象
+public abstract Context createPackageContext(String packageName,
+int flags) throws PackageManager.NameNotFoundException;
+
+// 返回基于当前Context对象的新对象，其资源与display相匹配
+public abstract Context createDisplayContext(Display display);
+}</code></pre>
+
+    <h2>ContextImpl关键成员和函数</h2>
+    <pre><code>/**
+* Common implementation of Context API, which provides the base
+* context object for Activity and other application components.
+*/
+class ContextImpl extends Context {
+private final static String TAG = "ContextImpl";
+private final static boolean DEBUG = false;
+
+private static final HashMap<String, SharedPreferencesImpl> sSharedPrefs =
+new HashMap<String, SharedPreferencesImpl>();
+
+/*package*/ LoadedApk mPackageInfo; // 关键数据成员
+private String mBasePackageName;
+private Resources mResources;
+/*package*/ ActivityThread mMainThread; // 主线程
+
+@Override
+public AssetManager getAssets() {
+return getResources().getAssets();
+}
+
+@Override
+public Looper getMainLooper() {
+return mMainThread.getLooper();
+}
+
+@Override
+public Object getSystemService(String name) {
+ServiceFetcher fetcher = SYSTEM_SERVICE_MAP.get(name);
+return fetcher == null ? null : fetcher.getService(this);
+}
+
+@Override
+public void startActivity(Intent intent, Bundle options) {
+warnIfCallingFromSystemProcess();
+if ((intent.getFlags()&Intent.FLAG_ACTIVITY_NEW_TASK) == 0) {
+throw new AndroidRuntimeException(
+"Calling startActivity() from outside of an Activity "
++ " context requires the FLAG_ACTIVITY_NEW_TASK flag."
++ " Is this really what you want?");
+}
+mMainThread.getInstrumentation().execStartActivity(
+getOuterContext(), mMainThread.getApplicationThread(), null,
+(Activity)null, intent, -1, options);
+}
+}</code></pre>
+    
+    <h2>ContextWrapper</h2>
+    <pre><code>/**
+* Proxying implementation of Context that simply delegates all of its calls to
+* another Context.  Can be subclassed to modify behavior without changing
+* the original Context.
+*/
+public class ContextWrapper extends Context {
+Context mBase; //该属性指向一个ContextIml实例
+
+public ContextWrapper(Context base) {
+mBase = base;
+}
+
+/**
+* Set the base context for this ContextWrapper.  All calls will then be
+* delegated to the base context.  Throws
+* IllegalStateException if a base context has already been set.
+*
+* @param base The new base context for this wrapper.
+* 创建Application、Service、Activity，会调用该方法给mBase属性赋值
+*/
+protected void attachBaseContext(Context base) {
+if (mBase != null) {
+throw new IllegalStateException("Base context already set");
+}
+mBase = base;
+}
+
+@Override
+public Looper getMainLooper() {
+return mBase.getMainLooper();
+}
+
+@Override
+public Object getSystemService(String name) {
+return mBase.getSystemService(name);
+}
+
+@Override
+public void startActivity(Intent intent) {
+mBase.startActivity(intent);
+}
+}</code></pre>
+    
+    <h2>ContextThemeWrapper 包含主题(Theme)相关的接口,android:theme</h2>
+    <pre><code>/**
+* A ContextWrapper that allows you to modify the theme from what is in the
+* wrapped context.
+*/
+public class ContextThemeWrapper extends ContextWrapper {
+private Context mBase;
+private int mThemeResource;
+private Resources.Theme mTheme;
+private LayoutInflater mInflater;
+private Configuration mOverrideConfiguration;
+private Resources mResources;
+
+public ContextThemeWrapper() {
+super(null);
+}
+
+public ContextThemeWrapper(Context base, int themeres) {
+super(base);
+mBase = base;
+mThemeResource = themeres;
+}
+
+@Override protected void attachBaseContext(Context newBase) {
+super.attachBaseContext(newBase);
+mBase = newBase;
+}
+
+@Override public void setTheme(int resid) {
+mThemeResource = resid;
+initializeTheme();
+}
+
+@Override public Resources.Theme getTheme() {
+if (mTheme != null) {
+return mTheme;
+}
+
+mThemeResource = Resources.selectDefaultTheme(mThemeResource,
+getApplicationInfo().targetSdkVersion);
+initializeTheme();
+
+return mTheme;
+}
+}</code></pre>
+
+    </main>
+</body>
+
+</html>

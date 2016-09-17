@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android activity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android activity</h1>
+
+        <h2>生命周期</h2>
+        <img src="/picture/activitylifecycle.png" />
+        <h3>正常周期</h3>
+        <ul>
+            <li>完整生存期 内存管理
+                <p>onCreate()方法和onDestroy()方法之间
+                    <br>一般情况下，一个活动会在onCreate()方法中完成各种初始化操作，而在onDestroy()方法中完成释放内存的操作。
+                </p>
+            </li>
+            <li>可见生存期 资源管理
+                <p>onStart()方法和onStop()方法之间
+                    <br>在可见生存期内，活动对于用户总是可见的，即便有可能无法和用户进行交互。通过这两个方法，合理地管理那些对用户可见的资源，在onStart()方法中对资源进行加载， 而在onStop()方法中对资源进行释放，从而保证处于停止状态的活动不会占用过多内存。
+                </p>
+            </li>
+            <li>前台生存期
+                <p>onResume()方法和onPause()方法之间
+                    <br>在前台生存期内，活动总是处于运行状态的，此时的活动是可以和用户进行相互的
+                </p>
+            </li>
+        </ul>
+        <h3>异常周期</h3>
+        <h4>异常销毁 非BACK,finish()</h4>
+        <ul>>
+            <li>onSaveInstanceState()</li>
+            <li>onCreate()</li>
+            <li>onRestoreInstanceState()</li>
+        </ul>
+
+        <h2>启动与关闭</h2>
+        <h3>无返回</h3>
+        <pre><code>//打开
+Intent  intent=new  Intent(MainActivity.this, otherActivity.class);
+startActivity(Intent intent);
+
+//关闭
+finish();</code></pre>
+        <h3>有返回</h3>
+        <pre><code>//MainActivity 打开 
+Intent  intent=new  Intent(MainActivity.this, OtherActivity.class);
+startActivityForResult(Intent intent,int requestCode);
+//OtherActivity 返回
+finishActivity(int requestCode);
+//MainActivity 处理返回
+onActivityResult(int requestCode, int resultCode, Intent data)s
+ </code></pre>
+
+        <h2>启动模式 android:launchMode="standard"</h2>
+        <p>需要新建栈的：android:taskAffinity=""</p>
+        <ul>
+            <li>standard
+                <p>每当有一次Intent请求，就会创建一个新的Activity实例
+                    <br>Android 5.0之前
+                    <br>新生成的实例会放入发送Intent的Task的栈的顶部,尽管它们可能属于不同的应用。
+                    <br>Android 5.0及之后
+                    <br>跨应用之间启动Activity，会创建一个新的Task，新生成的Activity就会放入刚创建的Task中
+                </p>
+            </li>
+            <li>singleTop
+                <p>类似standard,但如果调用的目标Activity已经位于调用者的Task的栈顶，则不创建新实例，而是使用当前的这个Activity实例，并调用这个实例的<em>onNewIntent()</em>
+                    <br>如果是外部程序启动singleTop的Activity，在Android 5.0之前新创建的Activity会位于调用者的Task中，5.0及以后会放入新的Task中
+                </p>
+            </li>
+            <li>singleTask
+                <p>使用singleTask启动模式的Activity在系统中只会存在一个实例。
+                    <br>如果这个实例已经存在，在Activity回退栈中，所有位于该Activity上面的Activity实例都将被销毁掉（销毁过程会调用Activity生命周期回调）,intent通过onNewIntent传递到这个Activity。<br>如果这个实例不存在,新的Activity实例被创建。</p>
+            </li>
+            <li>singleInstance<p>在系统中只有一份实例,存放singleInstance Activity实例的Task只能存放一个该模式的Activity实例。如果从singleInstance Activity实例启动另一个Activity，那么这个Activity实例会放入其他的Task中。如果singleInstance Activity被别的Activity启动，它也会放入不同于调用者的Task中。</p></li>
+        </ul>
+
+
+    </main>
+</body>
+
+</html>

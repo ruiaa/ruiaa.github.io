@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android Intent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android Intent</h1>
+
+        <h2>结构</h2>
+        <ul>
+            <li>componentName 组件</li>
+            <li>action</li>
+            <li>category 类别</li>
+            <li>Data Uri对象和数据的MIME类型,对应着Intent Filter中的data标签</li>
+            <li>type</li>
+            <li>extras 附加信息</li>
+            <li>Flags 标记 启动Activity的方式</li>
+        </ul>
+
+        <h2>Intent的类型</h2>
+        <ul>
+            <li>explicit(显式)
+                <ul>
+                    <li>Intent(Context packageContext, Class&lt;?&gt;cls)
+                    </li>
+                    <li>ComponentName(Context pkg, Class&lt;?&gt; cls)
+                        <br>public Intent setComponent (ComponentName component)
+                    </li>
+                </ul>
+            </li>
+            <li>implict(隐式)
+                <p>解析机制 : 目标组件的IntentFilter
+                    <ul>
+                        <li>action : action列表中必须包含相应action</li>
+                        <li>category : category列表中必须包含相应category</li>
+                        <li>type或data&gt;type : data列表中必须包含相应type</li>
+                        <li>没有指定type : data列表中必须包含Intent的scheme</li>
+                    </ul>
+                    <pre><code>&lt;action android:name="com.example.project.SHOW_CURRENT" /&gt;
+&lt;category android:name="android.intent.category.DEFAULT" /&gt;
+&lt;data android:mimeType="video/mpeg" android:scheme="http" . . . /&gt; 
+&lt;data android:mimeType="image/*" /&gt;
+&lt;data android:scheme="http" android:type="video/*" /&gt;
+               
+               
+//先判断,再发出
+// 获取包管理器
+PackageManager pm = getPackageManager();
+// 判断系统中有没有潜在的App的Activity支持对该sendIntent的接收与处理
+if (pm.resolveActivity(sendIntent, 0) != null) {
+    startActivity(sendIntent);
+}</code></pre>
+                </p>
+            </li>
+        </ul>
+
+        <h2>使用</h2>
+        <ul>
+            <li>传递数据
+                <pre><code>Bundle bundle=new Bundle();
+bundle.putString("key", "This is from MainActivity!");
+intent.putExtras(bundle);
+
+//取出
+Bundle bundle=getIntent().getExtras();
+String name=bundle.getString("key");
+</code></pre>
+            </li>
+            <li>启动activity
+                <pre><code>
+Intent intent = new Intent(MainActivity.this, Activity2.class);
+//无返回
+startActivity(intent);
+//有返回
+startActivityForResult(intent,REQUEST_CODE) 
+
+//Activity2 设置返回结果
+Intent intent=getIntent();
+Bundle bundle2=new Bundle();
+bundle2.putString("key", "This is from ShowMsg!");
+intent.putExtras(bundle2);
+setResult(RESULT_OK, intent);
+
+
+//MainActivity 处理返回结果
+//回调上一个Activity的结果处理函数
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    // TODO Auto-generated method stub
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode==REQUEST_CODE){
+        if(resultCode==RESULT_CANCELED){
+                setTitle("cancle");
+        }
+        else if (resultCode==RESULT_OK) {
+                String temp=null;
+                Bundle bundle=data.getExtras();
+                if(bundle!=null)   temp=bundle.getString("key");
+                setTitle(temp);
+        }
+    }
+}</code></pre>
+            </li>
+            <li>启动service</li>
+        </ul>
+
+
+
+        <h2>action</h2>
+        <ul>
+            <li>intent最多只能定义1个action
+                <br>filter可以定义1个或多个action</li>
+            <li>Intent.ACTION_VIEW</li>
+            <li>Intent.ACTION_SEND</li>
+        </ul>
+
+        <h2>data</h2>
+        <ul>
+            <li>setData()方法和setType()互斥</li>
+            <li>setDataAndType()</li>
+        </ul>
+
+        <h2>category</h2>
+        <ul>
+            <li>
+                <p>以startActivity(intent)方式启动一个activity时, 系统为会intent增加一个值为"android.intent.category.DEFAULT"的category, 这就意味着每一个期望通过category测试的activity, 都要在其filter中定义"android.intent.category.DEFAULT"(除了作为程序入口的activity).</p>
+            </li>
+            <li>CATEGORY_LAUNCHER 用于标识Activity是某个App的入口Activity</li>
+            <li>CATEGORY_BROWSABLE 通过一个链接被一个Web浏览器启动</li>
+        </ul>
+
+        <h2>Extras</h2>
+        <ul>
+            <li>intent.putExtra(key, value)</li>
+            <li>intent.putExtras(Bundle)</li>
+        </ul>
+
+        <h2>Flags</h2>
+        <ul>
+            <li>FLAG_ACTIVITY_NEW_TASK
+                <br>通知系统将目标activity作为一个新task的初始activity
+            </li>
+            <li>FLAG_ACTIVITY_NO_HISTORY
+                <br>通知系统在目标activity退出栈顶时,不要保存在栈中
+            </li>
+            <li>FLAG_FROM_BACKGROUND
+                <br>通知系统这个Intent来源于后台操作, 而非用户的直接选择
+            </li>
+        </ul>
+
+
+        <h2>使用</h2>
+        <ul>
+            <li>显示网页
+                <pre><code>Uri uri = Uri.parse("http://google.com");  
+Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+startActivity(it);</code></pre>
+            </li>
+            <li>显示地图
+                <pre><code>Uri uri = Uri.parse("geo:38.899533,-77.036476");  
+Intent it = new Intent(Intent.ACTION_VIEW, uri);   
+startActivity(it);</code></pre>
+            </li>
+            <li>路径规划
+                <pre><code>Uri uri = Uri.parse("http://maps.google.com/maps?f=d&saddr=startLat%20startLng&daddr=endLat%20endLng&hl=en");  
+Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+startActivity(it);  
+//startLat, startLng, endLat, endLng are a long with 6 decimals</code></pre>
+            </li>
+            <li>打电话
+                <pre><code> //唤出拨号程序 
+Uri uri = Uri.parse("tel:0800000123");  
+Intent it = new Intent(Intent.ACTION_DIAL, uri);  
+startActivity(it);  
+//直接打电话出去  
+Uri uri = Uri.parse("tel:0800000123");  
+Intent it = new Intent(Intent.ACTION_CALL, uri);  
+startActivity(it);  
+//&lt;uses-permission id="android.permission.CALL_PHONE" /&gt; </code></pre>
+            </li>
+            <li>传送SMS/MMS
+                <pre><code>//调用短信程序 
+Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+it.putExtra("sms_body", "The SMS text");   
+it.setType("vnd.android-dir/mms-sms");  
+startActivity(it); 
+//传送消息 
+Uri uri = Uri.parse("smsto://0800000123");  
+Intent it = new Intent(Intent.ACTION_SENDTO, uri);  
+it.putExtra("sms_body", "The SMS text");  
+startActivity(it); 
+//传送 MMS  
+Uri uri = Uri.parse("content://media/external/images/media/23");  
+Intent it = new Intent(Intent.ACTION_SEND);   
+it.putExtra("sms_body", "some text");   
+it.putExtra(Intent.EXTRA_STREAM, uri);  
+it.setType("image/png");   
+startActivity(it); </code></pre>
+            </li>
+            <li>Email
+                <pre><code>Uri uri = Uri.parse("mailto:xxx@abc.com");  
+Intent it = new Intent(Intent.ACTION_SENDTO, uri);  
+startActivity(it); 
+
+
+Intent it = new Intent(Intent.ACTION_SEND);  
+it.putExtra(Intent.EXTRA_EMAIL, "me@abc.com");  
+it.putExtra(Intent.EXTRA_TEXT, "The email body text");  
+it.setType("text/plain");  
+startActivity(Intent.createChooser(it, "Choose Email Client")); 
+
+
+Intent it=new Intent(Intent.ACTION_SEND);    
+String[] tos={"me@abc.com"};    
+String[] ccs={"you@abc.com"};    
+it.putExtra(Intent.EXTRA_EMAIL, tos);    
+it.putExtra(Intent.EXTRA_CC, ccs);    
+it.putExtra(Intent.EXTRA_TEXT, "The email body text");    
+it.putExtra(Intent.EXTRA_SUBJECT, "The email subject text");    
+it.setType("message/rfc822");    
+startActivity(Intent.createChooser(it, "Choose Email Client"));
+
+
+//传送附件
+Intent it = new Intent(Intent.ACTION_SEND);  
+it.putExtra(Intent.EXTRA_SUBJECT, "The email subject text");  
+it.putExtra(Intent.EXTRA_STREAM, "file:///sdcard/mysong.mp3");  
+sendIntent.setType("audio/mp3");  
+startActivity(Intent.createChooser(it, "Choose Email Client"));</code></pre>
+            </li>
+            <li>多媒体
+                <pre><code>Uri uri = Uri.parse("file:///sdcard/song.mp3");  
+Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+it.setType("audio/mp3");  
+startActivity(it); 
+      
+      
+Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, "1");  
+Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+startActivity(it);</code></pre>
+            </li>
+            <li>market
+                <pre><code>//寻找某个应用 
+Uri uri = Uri.parse("market://search?q=pname:pkg_name"); 
+Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+startActivity(it);  
+//where pkg_name is the full package path for an application 
+//显示某个应用的相关信息 
+Uri uri = Uri.parse("market://details?id=app_id");  
+Intent it = new Intent(Intent.ACTION_VIEW, uri); 
+startActivity(it);  
+//where app_id is the application ID, find the ID   
+//by clicking on your application on Market home   
+//page, and notice the ID from the address bar</code></pre>
+            </li>
+            <li>Uninstall
+                <pre><code>Uri uri = Uri.fromParts("package", strPackageName, null); 
+Intent it = new Intent(Intent.ACTION_DELETE, uri);   
+startActivity(it); </code></pre>
+            </li>
+        </ul>
+
+    </main>
+</body>
+
+</html>

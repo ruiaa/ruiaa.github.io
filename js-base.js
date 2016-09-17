@@ -1,6 +1,6 @@
 function ulControl() {
     var sign = document.createElement("sign");
-    sign.innerHTML = "+++";
+    sign.innerHTML = "++++++";
     $("ul").before(sign);
     $("ol").before(sign);
     $("pre").before(sign);

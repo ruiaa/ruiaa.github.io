@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android AIDL/title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android AIDL</h1>
+        <p>Android Interface Definition Language : Android接口定义语言</p>
+        <ul><li>新建一个AIDL文件，在这个文件中定义好Activity需要与Service进行通信的方法</li></ul>
+        
+        <h2>新建MyAIDLService.aidl文件</h2>
+        <pre><code>package com.example.servicetest;  
+interface MyAIDLService {  
+    int plus(int a, int b);  
+    String toUpperCase(String str);  
+} </code></pre>
+       
+       <h2>实现</h2>
+       <pre><code>public class MyService extends Service {  
+  
+    ......  
+  
+    @Override  
+    public IBinder onBind(Intent intent) {  
+        return mBinder;  
+    }  
+  
+    MyAIDLService.Stub mBinder = new Stub() {  
+  
+        @Override  
+        public String toUpperCase(String str) throws RemoteException {  
+            if (str != null) {  
+                return str.toUpperCase();  
+            }  
+            return null;  
+        }  
+  
+        @Override  
+        public int plus(int a, int b) throws RemoteException {  
+            return a + b;  
+        }  
+    };  
+  
+}</code></pre>
+        
+        <h2>跨进程调用</h2>
+        <pre><code>public class MainActivity extends Activity{ 
+      
+    private MyAIDLService myAIDLService;  
+  
+    private ServiceConnection connection = new ServiceConnection() {  
+  
+        @Override  
+        public void onServiceDisconnected(ComponentName name) {  
+        }  
+  
+        @Override  
+        public void onServiceConnected(ComponentName name, IBinder service) {  
+            myAIDLService = MyAIDLService.Stub.asInterface(service);  
+            try {  
+                int result = myAIDLService.plus(3, 5);  
+                String upperStr = myAIDLService.toUpperCase("hello world");  
+            } catch (RemoteException e) {  
+                e.printStackTrace();  
+            }  
+        }  
+    };  
+  
+    ......  
+  
+}</code></pre>
+    </main>
+</body>
+
+</html>
