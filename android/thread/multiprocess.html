@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android multiprocess</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android multiprocess</h1>
+        <a href="http://mrpeak.cn/blog/android-threading/">总纲：Android线程的正确使用姿势</a>
+        <p>android:process=":xxxxx"</p>
+        <h2>进程优先级（Process Priority）</h2>
+        <p>Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);</p>
+        <ul>
+            <li>前台进程
+                <p>与用户正在交互的Activity或者Activity用到的Service等，如果系统内存不足时前台进程是最后被杀死的；</p>
+            </li>
+            <li>可见进程
+                <p>可以是处于暂停状态（onPause）的Activity或者绑定在其上的Service，即被用户可见，但由于失去了焦点而不能与用户交互；</p>
+            </li>
+            <li>服务进程
+                <p>其中运行着使用startService方法启动的Service，虽然不被用户可见，但是却是用户关系的，例如用户正在非音乐界面听的音乐或者正在非下载页面自己下载的文件等；当系统要用空间运行前两者进程时才会被终止；</p>
+            </li>
+            <li>后台进程
+                <p>其中运行着执行onStop方法而停止的程序，但是却不是用户当前关心的，例如后台挂着的QQ，这样的进程系统一旦没有内存就首先被杀死；</p>
+            </li>
+            <li>空进程
+                <p>不包含任何应用程序的程序组件的进程，这样的进程系统是一般不会让他存在的；</p>
+            </li>
+        </ul>
+
+        <h2>线程调度（Thread Scheduling）</h2>
+        <ul>
+            <li>CFS（completely fair scheduler）策略
+                <p>不但会参考单个线程的优先级，还会追踪每个线程已经获取到的time slice数量，如果高优先级的线程已经执行了很长时间，但低优先级的线程一直在等待，后续系统会保证低优先级的线程也能获取更多的CPU时间</p>
+            </li>
+            <li>android 线程组
+                <p>default group : UI线程,新建线程默认组
+                    <br>background group ： 5～10%的time slice,需要显式的将工作线程归于background group run() { Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);}</p>
+            </li>
+            <li>当一个App进入后台的时候，该App所属的整个进程都将进入background group</li>
+        </ul>
+
+    </main>
+</body>
+
+</html>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>android AIDL/title>
+    <title>android AIDL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
@@ -16,17 +16,31 @@
     <main role="main">
         <h1>android AIDL</h1>
         <p>Android Interface Definition Language : Android接口定义语言</p>
-        <ul><li>新建一个AIDL文件，在这个文件中定义好Activity需要与Service进行通信的方法</li></ul>
-        
-        <h2>新建MyAIDLService.aidl文件</h2>
+        <ul>
+            <li>新建一个AIDL文件，在这个文件中定义好Activity需要与Service进行通信的方法</li>
+        </ul>
+
+        <h2>定义接口 </h2>
+        <p>MyAIDLService.aidl</p>
+        <p>无访问修饰符</p>
         <pre><code>package com.example.servicetest;  
 interface MyAIDLService {  
     int plus(int a, int b);  
     String toUpperCase(String str);  
 } </code></pre>
-       
-       <h2>实现</h2>
-       <pre><code>public class MyService extends Service {  
+        <h3>支持的数据类型</h3>
+        <ul>
+            <li>基本数据类型</li>
+            <li>String和CharSequence</li>
+            <li>List:只支持ArrayList,里面的元素都必须被AIDL支持</li>
+            <li>Map:只支持HashMap,里面的元素必须被AIDL 支持</li>
+            <li>实现Parcelable接口的对象</li>
+            <li>所有AIDL接口</li>
+        </ul>
+
+        <h2>实现</h2>
+        <p>return new MyAIDLService.Stub(){};</p>
+        <pre><code>public class MyService extends Service {  
   
     ......  
   
@@ -35,7 +49,7 @@ interface MyAIDLService {
         return mBinder;  
     }  
   
-    MyAIDLService.Stub mBinder = new Stub() {  
+    private Binder mBinder = new MyAIDLService.Stub() {  
   
         @Override  
         public String toUpperCase(String str) throws RemoteException {  
@@ -52,8 +66,9 @@ interface MyAIDLService {
     };  
   
 }</code></pre>
-        
+
         <h2>跨进程调用</h2>
+        <p>myAIDLService = MyAIDLService.Stub.asInterface(service);</p>
         <pre><code>public class MainActivity extends Activity{ 
       
     private MyAIDLService myAIDLService;  
@@ -79,6 +94,8 @@ interface MyAIDLService {
     ......  
   
 }</code></pre>
+   
+   <h2>Parcelable接口</h2>
     </main>
 </body>
 

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android HandlerThread</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android HandlerThread 循环线程</h1>
+        <p>工作线程<em>串行</em>执行</p>
+        <li>Looper
+            <br>能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行</li>
+        <li>Handler
+            <br>能够帮助实现队列任务的管理，不仅仅能够把任务插入到队列的头部，尾部，还可以按照一定的时间延迟来确保任务从队列中能够来得及被取消掉</li>
+        <li>MessageQueue
+            <br>使用 Intent，Message，Runnable 作为任务的载体在不同的线程之间进行传递。</li>
+
+
+
+        <h2>使用</h2>
+        <pre><code>//1.创建实例对象
+HandlerThread handlerThread = new HandlerThread("handlerThread");
+//2.启动HandlerThread线程,构建完一个循环线程
+handlerThread.start();
+//3.构建循环消息处理机制 Handler
+Handler subHandler = new Handler(handlerThread.getLooper(), new Handler.Callback() {
+    @Override
+    public boolean handleMessage(Message msg) {
+        //实现自己的消息处理
+        return true;
+    }
+});
+</code></pre>
+
+        <h2>HandlerThread</h2>
+        <pre><code>public class HandlerThread extends Thread {
+    //线程优先级
+    int mPriority;
+    //当前线程id
+    int mTid = -1;
+    //当前线程持有的Looper对象
+    Looper mLooper;
+
+    //构造方法
+    public HandlerThread(String name) {
+        //调用父类默认的方法创建线程
+        super(name);
+        mPriority = Process.THREAD_PRIORITY_DEFAULT;
+    }
+   //带优先级参数的构造方法
+    public HandlerThread(String name, int priority) {
+        super(name);
+        mPriority = priority;
+    }
+
+    protected void onLooperPrepared() {
+    
+    }
+
+    @Override
+    public void run() {
+        //获得当前线程的id
+        mTid = Process.myTid();
+        //准备循环条件
+        Looper.prepare();
+        //持有锁机制来获得当前线程的Looper对象
+        synchronized (this) {
+            mLooper = Looper.myLooper();
+            //发出通知，当前线程已经创建mLooper对象成功，这里主要是通知getLooper方法中的wait
+            notifyAll();
+        }
+        //设置当前线程的优先级
+        Process.setThreadPriority(mPriority);
+        //该方法实现体是空的，子类可以实现该方法，作用就是在线程循环之前做一些准备工作，当然子类也可以不实现。
+        onLooperPrepared();
+        //启动loop
+        Looper.loop();
+        mTid = -1;
+    }
+    
+    public Looper getLooper() {
+        //如果线程不是存活的，则直接返回null
+        if (!isAlive()) {
+            return null;
+        }
+
+        // If the thread has been started, wait until the looper has been created.
+        //如果线程已经启动，但是Looper还未创建的话，就等待，知道Looper创建成功
+        synchronized (this) {
+            while (isAlive() && mLooper == null) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+        return mLooper;
+    }
+    
+    public boolean quit() {
+        Looper looper = getLooper();
+        if (looper != null) {
+            looper.quit();
+            return true;
+        }
+        return false;
+    }
+    
+    //安全退出循环
+    public boolean quitSafely() {
+        Looper looper = getLooper();
+        if (looper != null) {
+            looper.quitSafely();
+            return true;
+        }
+        return false;
+    }
+}</code></pre>
+
+        <h2>Looper</h2>
+        <ul>
+            <li>与当前线程绑定，保证一个线程只会有一个Looper实例，同时一个Looper实例也只有一个MessageQueue</li>
+            <li>loop()方法，不断从MessageQueue中去取消息，交给消息的target属性的dispatchMessage去处理</li>
+            <li>prepare()
+                <pre><code>public static final void prepare() {  
+        if (sThreadLocal.get() != null) {  
+            throw new RuntimeException("Only one Looper may be created per thread");  
+        }  
+        sThreadLocal.set(new Looper(true));  
+}</code></pre>
+            </li>
+            <li>Looper()
+                <pre><code>private Looper(boolean quitAllowed) {  
+        mQueue = new MessageQueue(quitAllowed);  
+        mRun = true;  
+        mThread = Thread.currentThread();  
+} </code></pre>
+            </li>
+            <li>loop()
+                <pre><code>public static void loop() {  
+        final Looper me = myLooper();  
+        if (me == null) {  
+            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");  
+        }  
+        final MessageQueue queue = me.mQueue;  
+  
+        // Make sure the identity of this thread is that of the local process,  
+        // and keep track of what that identity token actually is.  
+        Binder.clearCallingIdentity();  
+        final long ident = Binder.clearCallingIdentity();  
+  
+        for (;;) {  
+            Message msg = queue.next(); // might block  
+            if (msg == null) {  
+                // No message indicates that the message queue is quitting.  
+                return;  
+            }  
+  
+            // This must be in a local variable, in case a UI event sets the logger  
+            Printer logging = me.mLogging;  
+            if (logging != null) {  
+                logging.println(" Dispatching to " + msg.target + " " +  
+                        msg.callback + ": " + msg.what);  
+            }  
+  
+            msg.target.dispatchMessage(msg);  
+  
+            if (logging != null) {  
+                logging.println("Finished to " + msg.target + " " + msg.callback);  
+            }  
+  
+            // Make sure that during the course of dispatching the  
+            // identity of the thread wasn't corrupted.  
+            final long newIdent = Binder.clearCallingIdentity();  
+            if (ident != newIdent) {  
+                Log.wtf(TAG, "Thread identity changed from 0x"  
+                        + Long.toHexString(ident) + " to 0x"  
+                        + Long.toHexString(newIdent) + " while dispatching to "  
+                        + msg.target.getClass().getName() + " "  
+                        + msg.callback + " what=" + msg.what);  
+            }  
+  
+            msg.recycle();  
+        }  
+}</code></pre>
+            </li>
+        </ul>
+
+        <h2>Handler</h2>
+        <p>其他线程(发送) --->> 绑定线程(执行)</p>
+        <ul>
+            <li>new Handler(); new Handler(callback);
+                <br>自动绑定到所在线程 UI线程定义Handler
+                <p>过调用Looper.myLooper()获取当前线程绑定的Looper对象，然后将该Looper对象保存到名为mLooper的成员字段中。</p>
+                <pre><code> 
+//uiHandler在主线程中创建时自动绑定主线程
+private Handler uiHandler = new Handler();
+
+//使用sendMessage(Message)方式
+Handler uiHandler2 = new Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+        super.handleMessage(msg);
+        switch (msg.what) {
+            case 0:
+                {
+                 //拿到数据,完成主界面更新
+                 String data = (String) msg.obj;
+                 textView.setText(data);
+                 break;
+                }
+            default:
+                break;
+        }
+    }
+};
+//
+Handler uiHandler3 = new Handler(new Handler.Callback(){
+    @Override
+    public boolean handleMessage(Message msg) {
+        //实现自己的消息处理
+        return true;
+    }
+});</code></pre>
+            </li>
+            <li>new Handler(looper); new Handler(looper,callback)</li>
+            <li>post(Runnable) -->Runnable.run()
+                <br>无须实现handleMessage(Message msg)
+                <pre><code>post(Runnable);//提交计划任务马上执行
+postAtTime(Runnable, long);//提交计划任务在未来的时间点执行
+postDelayed(Runnable, long);//提交计划任务延时Nms执行</code></pre>
+            </li>
+            <li>sendMessage(Message) -->handleMessage(Message)
+                <pre><code>sendEmptyMessage(int);//发送一个空的消息
+sendMessage(Message);//发送消息，消息中可以携带参数
+sendMessageAtTime(Message, long);//未来某一时间点发送消息
+sendMessageDelayed(Message, long);//延时Nms发送消息
+           
+//最终都调用了sendMessageAtTime(Message, long)
+public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+    MessageQueue queue = mQueue;
+    if (queue == null) {
+        RuntimeException e = new RuntimeException(
+            this + " sendMessageAtTime() called with no mQueue");
+        Log.w("Looper", e.getMessage(), e);
+        return false;
+    }
+    //注意下面这行代码
+    return enqueueMessage(queue, msg, uptimeMillis);
+}</code></pre>
+            </li>
+            <li>handleMessage(Message msg)
+            </li>
+        </ul>
+
+        <h2>Handler机制扩展</h2>
+        <p>其他线程(发送) --->> UI线程(执行)</p>
+        <ul>
+            <li>Activity.runOnUiThread(Runnable)</li>
+            <li>View.post(Runnable)</li>
+        </ul>
+
+        <h2>Message</h2>
+        <a href="http://www.cnblogs.com/over140/archive/2011/06/24/2088637.html">api</a>
+        <ul>
+            <li>Message msg =new Message(); //不建议
+                <br>Message msg =Message.obtain(myHandler);
+                <br>Message msg =myHandler.obtainMessage();
+            </li>
+            <li>public int arg1;
+                <br>public int arg2;
+                <br>public Object obj;
+                <br>public int what;   //用户自定义的消息代码
+            </li>
+            <li>public void setData (Bundle data)
+                <br>public Bundle getData ()
+            </li>
+        </ul>
+
+        <h2>MessageQueue</h2>
+    </main>
+</body>
+
+</html>

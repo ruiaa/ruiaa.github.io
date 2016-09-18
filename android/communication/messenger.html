@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android Messenger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android Messenger</h1>
+        
+        <h2>服务端</h2>
+        <pre><code>package com.imooc.messenger_server;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+
+public class MessengerService extends Service
+{
+
+    private static final int MSG_SUM = 0x110;
+
+    //最好换成HandlerThread的形式
+    private Messenger mMessenger = new Messenger(new Handler()
+    {
+        @Override
+        public void handleMessage(Message msgfromClient)
+        {
+            Message msgToClient = Message.obtain(msgfromClient);//返回给客户端的消息
+            switch (msgfromClient.what)
+            {
+                //msg 客户端传来的消息
+                case MSG_SUM:
+                    msgToClient.what = MSG_SUM;
+                    try
+                    {
+                        //模拟耗时
+                        Thread.sleep(2000);
+                        msgToClient.arg2 = msgfromClient.arg1 + msgfromClient.arg2;
+                        //返回给客户端
+                        msgfromClient.replyTo.send(msgToClient);
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    } catch (RemoteException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+
+            super.handleMessage(msgfromClient);
+        }
+    });
+
+    @Override
+    public IBinder onBind(Intent intent)
+    {
+        return mMessenger.getBinder();
+    }
+}</code></pre>
+       
+       <h2>客户端</h2>
+       <pre><code>public class MainActivity extends AppCompatActivity
+{
+    private static final int MSG_SUM = 0x110;
+
+    private Messenger mService;
+
+    private Messenger mMessenger = new Messenger(new Handler()
+    {
+        @Override
+        public void handleMessage(Message msgFromServer)
+        {
+            switch (msgFromServer.what)
+            {
+                case MSG_SUM:
+                    break;
+            }
+            super.handleMessage(msgFromServer);
+        }
+    });
+
+
+    private ServiceConnection mConnection = new ServiceConnection()
+    {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service)
+        {
+            mService = new Messenger(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name)
+        {
+            mService = null;
+        }
+    };
+
+    private int mA;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //开始绑定服务
+        Intent intent = new Intent();
+        intent.setAction("com.zhy.aidl.calc");
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+        try
+        {
+            Message msgFromClient = Message.obtain(null, MSG_SUM);
+            msgFromClient.replyTo = mMessenger;
+            //往服务端发送消息
+            mService.send(msgFromClient);
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        unbindService(mConnection);
+    }
+
+
+}</code></pre>
+        
+        
+    </main>
+</body>
+
+</html>
