@@ -16,10 +16,15 @@
     <main role="main">
         <h1>设计模式学习</h1>
         <a href="http://www.cnblogs.com/beijiguangyong/archive/2010/11/15/2302807.html">郗晓勇 23种设计模式 使用性分析</a>
+        <br>
         <a href="http://www.cnblogs.com/meet/p/5116504.html">Java23种设计模式学习笔记</a>
+        <br>
         <a href="http://blog.csdn.net/longyulu/article/details/9159589"> 23种设计模式全解析</a>
+        <br>
         <a href="http://blog.csdn.net/lovelion/article/details/17517213">刘伟技术博客 史上最全设计模式导学目录（完整版）</a>
-        
+        <br>
+        <a href="http://blog.csdn.net/huachao1001/article/details/51536074"> 从Android代码中来记忆23种设计模式</a>
+
         <h2>原则</h2>
         <ol>
             <li>单一职责原则
@@ -37,10 +42,10 @@
                 <br>尽量首先使用合成/聚合的方式，而不是使用继承
             </li>
         </ol>
-        
-        
+
+
         <h2>创建型</h2>
-        
+
         <h3>简单工厂模式 功能接口+多实现&gt;工厂:静态方法&gt;创建</h3>
         <pre><code>//接口
 public interface Sender {  
@@ -753,7 +758,7 @@ public class Plus extends AbstractCalculator {
         return num1 + num2;  
     }  
 }       </code></pre>
-        
+
         <h3>职责链模式 每个对象持有对下一个对象的引用,请求命令在该链/树上传递</h3>
         <pre><code>public interface Handler {  
     public void operator();  
@@ -998,7 +1003,7 @@ public class MySubject extends AbstractSubject {
           
         sub.operation();
 </code></pre>
-        
+
         <h3>备忘录模式 保存一个对象的某个状态,以便在适当的时候恢复</h3>
         <pre><code>public class Original {  
       

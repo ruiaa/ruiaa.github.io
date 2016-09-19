@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android View事件体系</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android View事件体系</h1>
+
+        <h2>参考</h2>
+        <a href="http://blog.csdn.net/huachao1001/article/details/51766225">huachao1001:彻底理解View事件体系！</a>
+        <br>
+
+        <h2>坐标</h2>
+        <ul>
+            <li>位置
+                <p>top、left、right、bottom</p>
+            </li>
+            <li>平移量 android3.0
+                <p>x = left + translationX;
+                    <br>y = top + translationY;</p>
+            </li>
+            <li>
+                <img src="/picture/android_view_coodinate.jpg" />
+            </li>
+        </ul>
+
+        <h2>MotionEvent事件对象</h2>
+        <ul>
+            <li>系列事件
+                <p>ACTION_UP、ACTION_DOWN、ACTION_MOVE</p>
+            </li>
+            <li>坐标
+                <p>getX(),getY():相对于当前view左上角的x和y坐标
+                    <br>getRawX(),getRawY():相对于手机屏幕左上角的x和y坐标</p>
+            </li>
+        </ul>
+
+
+        <h2>VelocityTracker 速度追踪</h2>
+        <pre><code>//获取实例 享元模式
+VelocityTracker vt=VelocityTracker.obtain();
+vt.addMovement(event);
+//设定计算速度的时间间隔
+vt.computeCurrentVelocity(1000);
+int xv=(int) vt.getXVelocity();
+int yv=(int) vt.getYVelocity();
+//回收
+vt.clear();//一般在MotionEvent.ACTION_UP的时候调用
+vt.recycle();//一般在onDetachedFromWindow中调用</code></pre>
+
+        <h2>GestureDetector手势检测</h2>
+        <pre><code>//监听器
+GestureDetector.OnGestureListener listener=new GestureDetector.OnGestureListener() {
+    @Override
+    public boolean onDown(MotionEvent e) {
+        //手指按下的瞬间
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        //手指触摸屏幕，并且尚未松开或拖动。与onDown的区别是，onShowPress强调没用松开和没有拖动
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        //手指离开屏幕（单击）
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        //手指按下并拖动，当前正在拖动
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        //手指长按事件
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        //手指快速滑动
+        return false;
+    }
+};
+
+//设置监听器
+GestureDetector mGestureDetector = new GestureDetector(this,listener);
+//双击 OnDoubleTapListener
+//mGestureDetector.setOnDoubleTapListener(onDoubleTapListener);
+
+//防止长按后无法拖动的问题
+mGestureDetector.setIsLongpressEnabled(false);
+
+//事件托管
+View.OnTouchEvent(){return mGestureDetector.onTouchEvent(event);}</code></pre>
+
+        <h2>事件分发机制</h2>
+        <ul>
+            <li>
+                <img src="/picture/android_view_event.jpg" />
+            </li>
+        </ul>
+        <h3>事件对象产生</h3>
+        <ul>
+            <li>Activity-->PhoneWindow-->DecorView-->(遍历)ViewGroup</li>
+            <li>Activity获取事件对象
+                <br><a href="http://blog.csdn.net/singwhatiwanna/article/details/50775201">Android中MotionEvent的来源和ViewRootImpl</a>
+            </li>
+        </ul>
+        <h3>系列事件对象下发</h3>
+        <ul>
+            <li>系列事件:down-->move-->...-->up</li>
+            <li>ViewGroup.dispatchTouchEvent()</li>
+            <li>ViewGroup.onInterceptTouchEvent
+                <p>return true; 拦截 不下发
+                    <br>return false; 不拦截 下发
+                </p>
+            </li>
+            <li>拦截 ViewGroup.onTouchEvent()</li>
+            <li>不拦截 View.dispatchTouchEvent()</li>
+        </ul>
+        <h3>事件对象处理</h3>
+        <ol>
+            <li>OnTouch() View.setOnTouchListener(new View.OnTouchListener() {});
+                <br>return false; 转发View.OnTouchEvent()
+                <br>return true; 消耗
+            </li>
+            <li>View.onTouchEvent()
+                <br>判断单击/双击...事件,显式调用OnClick(),OnLongClick()
+                <br>retrun super.onTouchEvent(event);
+            </li>
+        </ol>
+        <h3>系列事件对象回传</h3>
+        <ul>
+            <li>View.onTouchEvent()
+                <br>return true; 系列事件被消耗,不回传
+                <br>return false; -->ViewGroup.onTouchEvent()
+            </li>
+        </ul>
+        <h3>细节</h3>
+        <ul>
+            <li>一个事件序列只能被一个view拦截并消耗</li>
+            <li>ViewGroup默认不拦截事件，即onInterceptTouchEvent默认返回false。</li>
+            <li>如果ViewGroup拦截down，那么这个系列事件都只能由它处理，并且onInterceptTouchEvent不会再被调用。</li>
+            <li>View的onTouchEvent默认返回false，即不消耗事件。</li>
+            <li>View的onTouchEvent
+                <br>消耗down 接下来的该系列所有的事件都会交给这个View
+                <br>不消耗down 接下来的事件系列都不会交给这个View</li>
+            <li>View没有onInterceptTouchEvent方法</li>
+            <li>View的onTouchEvent默认都会消耗事件(返回true)，除非它是不可点击的(clickable和longClickable都为false)。view的longClickable默认是false的，clickable则不一定，Button默认是true，而TextView默认是false。</li>
+            <li>View的enable属性不影响onTouchEvent的默认返回值。哪怕一个view是disable状态，只要它的clickable或者longClickable有一个是true，那么它的onTouchEvent就会返回true。</li>
+        </ul>
+
+
+    </main>
+</body>
+
+</html>

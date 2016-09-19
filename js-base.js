@@ -7,6 +7,15 @@ function ulControl() {
     $("sign").click(function () {
         $(this).next().toggle();
     });
+    $("ul").dblclick(function () {
+        $(this).toggle();
+    });
+    $("ol").dblclick(function () {
+        $(this).toggle();
+    });
+    $("pre").dblclick(function () {
+        $(this).toggle();
+    });
     $("sign").next().hide();
     $("sign").css("display", "block");
 
