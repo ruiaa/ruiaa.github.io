@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android drawable</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android drawable</h1>
+
+        <h2>原始图片资源</h2>
+        <ul>
+            <li>.png, .9.png, .jpg, .gif</li>
+        </ul>
+
+        <h2>statelist drawable</h2>
+        <pre><code>
+//定义  /res/drawable/xxx.xml
+&lr;selector&gt;
+  &lr;item   android:state_xxx=”true|false”
+          android:color|drawable="..."/&gt;
+&lr;/selector&gt;
+
+//使用
+listview android:listSelector="@drawable/xxx"
+item android：background="@drawable/xxx"
+//
+android:cacheColorHint="@android:color/transparent"
+Drawable drawable = getResources().getDrawable(R.drawable.xxx); 
+listView.setSelector(drawable);
+
+//
+android:drawable 
+drawable资源
+
+android:state_selected
+选中
+
+android:state_focused
+获得焦点
+
+android:state_pressed
+点击
+
+android:state_enabled
+设置是否响应事件,指所有事件
+
+android:state_pressed 
+是否按下，如一个按钮触摸或者点击。
+
+android:state_focused 
+是否取得焦点，比如用户选择了一个文本框。
+
+android:state_hovered 
+光标是否悬停，通常与focused state相同，它是4.0的新特性
+
+android:state_checkable 
+组件是否能被check。如：RadioButton是可以被check的。
+
+android:state_checked 
+被checked了，如：一个RadioButton可以被check了。
+
+android:state_activated 
+被激活
+
+android:state_window_focused 
+应用程序是否在前台，当有通知栏被拉下来或者一个对话框弹出的时候应用程序就不在前台了
+</code></pre>
+
+        <h2>gradient drawable</h2>
+        <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape=["rectangle" | "oval" | "line" | "ring"] &gt;
+    &lt;corners
+        android:radius="integer"
+        android:topLeftRadius="integer"
+        android:topRightRadius="integer"
+        android:bottomLeftRadius="integer"
+        android:bottomRightRadius="integer" /&gt;
+    &lt;gradient
+        android:angle="integer"
+        android:centerX="integer"
+        android:centerY="integer"
+        android:centerColor="integer"
+        android:endColor="color"
+        android:gradientRadius="integer"
+        android:startColor="color"
+        android:type=["linear" | "radial" | "sweep"]
+        android:useLevel=["true" | "false"] /&gt;
+    &lt;padding
+        android:left="integer"
+        android:top="integer"
+        android:right="integer"
+        android:bottom="integer" /&gt;
+    &lt;size
+        android:width="integer"
+        android:height="integer" /&gt;
+    &lt;solid
+        android:color="color" /&gt;
+    &lt;stroke
+        android:width="integer"
+        android:color="color"
+        android:dashWidth="integer"
+        android:dashGap="integer" /&gt;
+&lt;/shape&gt;
+</code></pre>
+
+        <h2>layer drawable</h2>
+        <pre><code>
+&lt;layer-list&gt;
+  &lt;item  android /&gt; 
+&lt;/layer-list&gt;
+</code></pre>
+
+<h2>shape drawable</h2>
+<pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android" 
+       android:shape="oval"&gt;
+    &lt;!-- 定义填充渐变颜色 --&gt;
+    &lt;gradient 
+        android:startColor="#00f" 
+        android:endColor="#00f" 
+        android:angle="45"
+        android:type="sweep"/&gt; 
+    &lt;!-- 设置内填充 --&gt;
+    &lt;padding android:left="7dp" 
+        android:top="7dp" 
+        android:right="7dp" 
+        android:bottom="7dp" /&gt;
+    &lt;!-- 设置圆角矩形 --&gt;
+    &lt;corners android:radius="8dp" /&gt; 
+&lt;/shape&gt;
+</code></pre>
+
+
+<h2>clip drawable</h2>
+
+
+
+
+
+
+
+    </main>
+</body>
+
+</html>

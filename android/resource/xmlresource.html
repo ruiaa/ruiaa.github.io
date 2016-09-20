@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android xml资源</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android xml 资源</h1>
+        
+        <h2>文件结构</h2>
+        <pre><code>
+/res/anim/
+
+/res/color/
+
+/res/drawable/
+
+/res/layout/
+
+/res/menu/
+
+/res/values/
+        styles.xml
+        themes.xml
+        strings.xml
+        colors.xml
+        dimen.xml
+        arrays.xml
+        bools.xml
+        integers.xml
+        
+/res/xml/
+
+/assets/
+
+
+</code></pre>
+        
+        <h2>/res/color/</h2>
+        <pre><code>
+//定义 /res/color/colorstatefile.xml
+&lt;?xml version="1.0"encoding="utf-8"?&gt;
+&lt;selectorxmlns:android="http://schemas.android.com/apk/res/android" &gt;
+    &lt;item android:color="hex_color"
+        android:state_pressed=["true" | "false"]
+        android:state_focused=["true" | "false"]
+        android:state_selected=["true" | "false"]
+        android:state_checkable=["true" | "false"]
+        android:state_checked=["true" | "false"]
+        android:state_enabled=["true" | "false"]
+        android:state_window_focused=["true" | "false"]
+        /&gt;
+        
+    &lt;item android:state_pressed="true" android:color="#ffff0000"/&gt;
+    
+     &lt;!-- default --&gt;
+    &lt;item android:color="#ff000000"/&gt;
+    
+&lt;/selector&gt;
+
+//使用
+@color/colorstatefile
+R.Color.colorstatefile
+</code></pre>
+        
+        <h2>/res/values/</h2>
+        <pre><code>
+&lt;?xml version="1.0"encoding="utf-8"?&gt;
+&lt;resources&gt;
+    //格式
+    &lt;type_name  name="res_name"&gt;the_resoure&lt;/type_name&gt;
+    
+    //单个
+    &lt;string name="str_name">text_string&lt;/string&gt;
+    //String string = getString(R.String.str_name);
+    //@string/str_name
+    //假如有特殊字符，而没有用到转义字符，就必须用双引号将字符串完全包住
+    //"text_'string"
+    
+    //数组
+    &lt;string-array name="planets_array"&gt;
+        &lt;item&gt;Mercury&lt;/item&gt;
+        &lt;item&gt;Venus&lt;/item&gt;
+        &lt;item&gt;Earth&lt;/item&gt;
+        &lt;item&gt;Mars&lt;/item&gt;
+    &lt;/string-array&gt;
+    //@array/planets_array
+    //Resources res = getResources();
+    //String[] planets = res.getStringArray(R.array.planets_array);
+    
+    
+    //无类型数组
+    &lt;array name="planets_array"&gt;
+        &lt;item&gt;Mercury&lt;/item&gt;
+        &lt;item&gt;Venus&lt;/item&gt;
+        &lt;item&gt;Earth&lt;/item&gt;
+        &lt;item&gt;Mars&lt;/item&gt;
+    &lt;/array&gt;
+    //Resources res = getResources();
+    //TypedArray planetsArray = res.obtainTypedArray(R.array.planets_array);
+    //String str= planetsArray.getString(0);
+    
+&lt;/resources&gt;
+        </code></pre>
+        
+        <h2></h2>
+        
+        
+        <h2>@、@android:type、@*、？、@+</h2>
+        <ul>
+            <li>@ 引用资源
+                <p>引用自定义资源。格式：@[package:]type/name  R.string.hello
+                    <br>引用系统资源。格式：@android:type/name  android.R.drawable.dialog_frame
+                    <br>系统资源platforms\android-8\data\res\values\public.xml
+                </p>
+            </li>
+            <li>@* 引用系统的非public资源
+                <p>格式：@*android:type/name</p>
+            </li>
+            <li>？ 引用当前主题属性
+                <p>格式： ?android:[attr/]android:attrNameInTheme
+                    <br>例：android:textColor="?android:textDisabledColor"
+                </p>
+            </li>
+            <li>@+ 创建或引用资源
+                <p>格式：@+type/name
+                    <br>android:id="@+id/selectdlg"     @+id/资源ID名 新建一个资源ID
+                    <br>android:id="@id/button3"        @id/资源ID名  应用现有已定义的资源ID，包括系统ID
+                    <br>android:id="@android:id/text1"  @android:id/资源ID名   引用系统ID，其等效于@id/资源ID名
+                </p>
+            </li>
+        </ul>
+
+
+    </main>
+</body>
+
+</html>

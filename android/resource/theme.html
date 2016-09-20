@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android theme</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android theme</h1>
+        
+        <h2>style</h2>
+        <pre><code>
+//定义  /res/values/styles.xml
+&lt;style name="mystyle" parent="AppBaseTheme"&gt;
+    &lt;item name="android:textSize"&gt;18sp&lt;/item&gt;
+    &lt;item name="android:textColor"&gt;#ff0000&lt;/item&gt;
+&lt;/style&gt;
+
+//使用
+//&lrm;TextView style="@style/mystyle" /&gt;
+//text.setTextAppearance(this, R.style.mystyle);
+</code></pre>
+       
+       <h2>theme</h2>
+       <pre><code>
+//定义 /res/values/themes.xml
+&lt;style name="myTheme" parent="AppBaseTheme"&gt;
+    &lt;item name="android:windowNoTitle"&gt;true&lt;/item&gt;
+    &lt;item name="android:windowFullscreen"&gt;?android:windowNoTitle&lt;/item&gt;
+&lt;/style&gt;
+
+//使用 application activity
+//android:theme="@style/myTheme"
+
+//super.onCreate(savedInstanceState);
+//setTheme(R.style.myTheme); 
+</code></pre>
+        
+        <h2>系统样式</h2>
+        <p>/base/core/res/res/values/</p>
+        <pre><code>•android:theme="@android:style/Theme.Dialog"   
+将一个Activity显示为对话框模式
+
+•android:theme="@android:style/Theme.NoTitleBar"  
+不显示应用程序标题栏
+
+•android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  
+不显示应用程序标题栏，并全屏
+
+•android:theme="@android:style/Theme.Light"  
+背景为白色
+
+•android:theme="@android:style/Theme.Light.NoTitleBar"  
+白色背景并无标题栏
+
+•android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"  
+白色背景，无标题栏，全屏
+
+•android:theme="@android:style/Theme.Black"  
+背景黑色
+
+•android:theme="@android:style/Theme.Black.NoTitleBar"  
+黑色背景并无标题栏
+
+•android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"    
+黑色背景，无标题栏，全屏
+
+•android:theme="@android:style/Theme.Wallpaper"  
+用系统桌面为应用程序背景
+
+•android:theme="@android:style/Theme.Wallpaper.NoTitleBar"  
+用系统桌面为应用程序背景，且无标题栏
+
+•android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen"  
+用系统桌面为应用程序背景，无标题栏，全屏
+
+•android:theme="@android:style/Translucent" 
+半透明效果
+
+•android:theme="@android:style/Theme.Translucent.NoTitleBar"  
+半透明并无标题栏
+
+•android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"  
+半透明效果，无标题栏，全屏
+
+•android:theme="@android:style/Theme.Panel"
+内容容器
+
+•android:theme="@android:style/Theme.Light.Panel"
+背景为白色的内容容器
+</code></pre>
+        
+        
+
+        
+    </main>
+</body>
+
+</html>
