@@ -15,21 +15,28 @@
 <body>
     <main role="main">
         <h1>android xml 资源</h1>
-        
+
         <h2>文件结构</h2>
         <pre><code>
-/res/anim/
+/res/anim/                R.anim
+        tween_animations 
 
+/res/animator             R.animator
+        property_animations
+        
 /res/color/
 
-/res/drawable/
+/res/drawable/            R.drawable
+        bitmaps
+        xml_drawable
+        frame_animations 
 
-/res/layout/
+/res/layout/              R.layout
 
-/res/menu/
+/res/menu/                R.menu
 
 /res/values/
-        styles.xml
+        styles.xml        R.string
         themes.xml
         strings.xml
         colors.xml
@@ -44,7 +51,24 @@
 
 
 </code></pre>
-        
+
+
+        <h2>资源类</h2>
+        <pre><code>int getColor(int id)  //对应res/values/colors.xml 
+ 
+    Drawable getDrawable(int id) //对应res/drawable/
+ 
+    XmlResourceParser getLayout(int id) //对应res/layout/
+ 
+    String getString(int id) 和CharSequence getText(int id) //对应res/values/strings.xml
+ 
+    InputStream openRawResource(int id) //对应res/raw/
+ 
+    void parseBundleExtra (String tagName, AttributeSet attrs, Bundle outBundle) //对应res/xml/
+ 
+    String[] getStringArray(int id) //对应res/values/arrays.xml
+ 
+    float getDimension(int id) //对应res/values/dimens.xml</code></pre>
         <h2>/res/color/</h2>
         <pre><code>
 //定义 /res/color/colorstatefile.xml
@@ -71,7 +95,7 @@
 @color/colorstatefile
 R.Color.colorstatefile
 </code></pre>
-        
+
         <h2>/res/values/</h2>
         <pre><code>
 &lt;?xml version="1.0"encoding="utf-8"?&gt;
@@ -111,15 +135,15 @@ R.Color.colorstatefile
     
 &lt;/resources&gt;
         </code></pre>
-        
+
         <h2></h2>
-        
-        
+
+
         <h2>@、@android:type、@*、？、@+</h2>
         <ul>
             <li>@ 引用资源
-                <p>引用自定义资源。格式：@[package:]type/name  R.string.hello
-                    <br>引用系统资源。格式：@android:type/name  android.R.drawable.dialog_frame
+                <p>引用自定义资源。格式：@[package:]type/name R.string.hello
+                    <br>引用系统资源。格式：@android:type/name android.R.drawable.dialog_frame
                     <br>系统资源platforms\android-8\data\res\values\public.xml
                 </p>
             </li>
@@ -133,9 +157,9 @@ R.Color.colorstatefile
             </li>
             <li>@+ 创建或引用资源
                 <p>格式：@+type/name
-                    <br>android:id="@+id/selectdlg"     @+id/资源ID名 新建一个资源ID
-                    <br>android:id="@id/button3"        @id/资源ID名  应用现有已定义的资源ID，包括系统ID
-                    <br>android:id="@android:id/text1"  @android:id/资源ID名   引用系统ID，其等效于@id/资源ID名
+                    <br>android:id="@+id/selectdlg" @+id/资源ID名 新建一个资源ID
+                    <br>android:id="@id/button3" @id/资源ID名 应用现有已定义的资源ID，包括系统ID
+                    <br>android:id="@android:id/text1" @android:id/资源ID名 引用系统ID，其等效于@id/资源ID名
                 </p>
             </li>
         </ul>

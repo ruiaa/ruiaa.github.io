@@ -15,68 +15,128 @@
 <body>
     <main role="main">
         <h1>android drawable</h1>
+        <a href="file:///E:/androidstudio/SDK/docs/guide/topics/resources/drawable-resource.html">my sdk url</a>
+        <a href="http://keeganlee.me/post/android/20150916">Keegan小钢 : Android样式的开发</a>
+        <br>
 
         <h2>原始图片资源</h2>
         <ul>
             <li>.png, .9.png, .jpg, .gif</li>
         </ul>
 
-        <h2>statelist drawable</h2>
-        <pre><code>
-//定义  /res/drawable/xxx.xml
-&lr;selector&gt;
-  &lr;item   android:state_xxx=”true|false”
-          android:color|drawable="..."/&gt;
-&lr;/selector&gt;
-
-//使用
-listview android:listSelector="@drawable/xxx"
-item android：background="@drawable/xxx"
-//
-android:cacheColorHint="@android:color/transparent"
-Drawable drawable = getResources().getDrawable(R.drawable.xxx); 
-listView.setSelector(drawable);
-
-//
-android:drawable 
-drawable资源
-
-android:state_selected
-选中
-
-android:state_focused
-获得焦点
-
-android:state_pressed
-点击
-
-android:state_enabled
-设置是否响应事件,指所有事件
-
-android:state_pressed 
-是否按下，如一个按钮触摸或者点击。
-
-android:state_focused 
-是否取得焦点，比如用户选择了一个文本框。
-
-android:state_hovered 
-光标是否悬停，通常与focused state相同，它是4.0的新特性
-
-android:state_checkable 
-组件是否能被check。如：RadioButton是可以被check的。
-
-android:state_checked 
-被checked了，如：一个RadioButton可以被check了。
-
-android:state_activated 
-被激活
-
-android:state_window_focused 
-应用程序是否在前台，当有通知栏被拉下来或者一个对话框弹出的时候应用程序就不在前台了
+        <h2>bitmap  BitmapDrawable</h2>
+        <ul>
+            <li>BitmapDrawable
+                <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@[package:]drawable/drawable_resource"
+    &lt;!--反锯齿--&gt;
+    android:antialias=["true" | "false"] 
+    android:dither=["true" | "false"]
+    android:filter=["true" | "false"]
+    android:gravity=["top" | "bottom" | "left" | "right" | "center_vertical" |
+                      "fill_vertical" | "center_horizontal" | "fill_horizontal" |
+                      "center" | "fill" | "clip_vertical" | "clip_horizontal"]
+    android:mipMap=["true" | "false"]
+    android:tileMode=["disabled" | "clamp" | "repeat" | "mirror"] /&gt;
 </code></pre>
+            </li>
+            <li>属性
+                <ul>
+                    <li>android:src 必填项，指定图片资源，只能是图片，不能是xml定义的drawable资源</li>
+                    <li>
+                        <p>android:gravity 设置图片的对齐方式，比如在layer-list中，默认会尽量填满整个视图，导致图片可能会被拉伸，为了避免被拉伸，就可以设置对齐方式，可取值为下面的值，多个取值可以用 | 分隔：</p>
 
-        <h2>gradient drawable</h2>
-        <pre><code>
+                        <ul>
+                            <li>top 图片放于容器顶部，不改变图片大小</li>
+                            <li>bottom图片放于容器底部，不改变图片大小</li>
+                            <li>left 图片放于容器左边，不改变图片大小</li>
+                            <li>right 图片放于容器右边，不改变图片大小</li>
+                            <li>center图片放于容器中心位置，包括水平和垂直方向，不改变图片大小</li>
+                            <li>fill 拉伸整张图片以填满容器的整个高度和宽度，默认值</li>
+                            <li>center_vertical 图片放于容器垂直方向的中心位置，不改变图片大小</li>
+                            <li>center_horizontal图片放于容器水平方向的中心位置，不改变图片大小</li>
+                            <li>fill_vertical 在垂直方向上拉伸图片以填满容器的整个高度</li>
+                            <li>fill_horizontal 在水平方向上拉伸图片以填满容器的整个宽度</li>
+                            <li>clip_vertical 附加选项，裁剪基于垂直方向的gravity设置，设置top时会裁剪底部，设置bottom时会裁剪顶部，其他情况会同时裁剪顶部和底部</li>
+                            <li>clip_horizontal 附加选项，裁剪基于水平方向的gravity设置，设置left时会裁剪右侧，设置right时会裁剪左侧，其他情况会同时裁剪左右两侧</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>android:antialias 设置是否开启抗锯齿</p>
+                    </li>
+                    <li>
+                        <p>android:dither 设置是否抖动，图片与屏幕的像素配置不同时会用到，比如图片是ARGB 8888的，而屏幕是RGB565</p>
+                    </li>
+                    <li>
+                        <p>android:filter 设置是否允许对图片进行滤波，对图片进行收缩或者延展使用滤波可以获得平滑的外观效果</p>
+                    </li>
+                    <li>
+                        <p>android:tint 给图片着色，比如图片本来是黑色的，着色后可以变成白色</p>
+                    </li>
+                    <li>
+                        <p>android:tileMode 设置图片平铺的方式，取值为下面四种之一：</p>
+
+                        <ul>
+                            <li>disable不做任何平铺，默认设置</li>
+                            <li>repeat图片重复铺满</li>
+                            <li>mirror使用交替镜像的方式重复图片的绘制</li>
+                            <li>clamp复制图片边缘的颜色来填充容器剩下的空白部分，比如引入的图片如果是白色的边缘，那么图片所在的容器里除了图片，剩下的空间都会被填充成白色</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>android:alpha 设置图片的透明度，取值范围为0.0~1.0之间，0.0为全透明，1.0为全不透明，API Level最低要求是11，即Android 3.0</p>
+                    </li>
+                    <li>
+                        <p>android:mipMap 设置是否可以使用mipmap，但API Level最低要求是17，即Android 4.2</p>
+                    </li>
+                    <li>
+                        <p>android:autoMirrored 设置图片是否需要镜像反转，当布局方向是RTL，即从右到左布局时才有用，API Level 19(Android 4.4)才添加的属性</p>
+                    </li>
+                    <li>
+                        <p>android:tileModeX 和tileMode一样设置图片的平铺方式，只是这个属性只设置水平方向的平铺方式，这是API Level 21(Android 5.0)才添加的属性</p>
+                    </li>
+                    <li>
+                        <p>android:tileModeY 和tileMode一样设置图片的平铺方式，只是这个属性只设置垂直方向的平铺方式，这是API Level 21(Android 5.0)才添加的属性</p>
+                    </li>
+                    <li>
+                        <p>android:tintMode 着色模式，也是API Level 21(Android 5.0)才添加的属性</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>nine-patch NinePatchDrawable</h2>
+        <ul>
+            <li>nine-patch
+                <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;nine-patch
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@[package:]drawable/drawable_resource"
+    android:dither=["true" | "false"] /&gt;</code></pre>
+            </li>
+            <li>
+                <img src="/picture/android_ninepatch.jpg" />
+                <p>拉伸区域就是图片会被拉伸的部分，可以为1个点，也可以为一条线，甚至也可以为断开的几个点或几条线，总之，有黑点的地方就会被拉伸，没有黑点的地方就不会被拉伸。而显示内容区域其实就等于默认给使用的控件设置了padding，控件的内容只能显示在内容区域内。</p>
+            </li>
+            <li>属性
+                <ul>
+                    <li>android:src 必填项，必须指定点九类型的图片</li>
+                    <li>android:dither 设置是否抖动，图片与屏幕的像素配置不同时会用到，比如图片是ARGB 8888的，而屏幕是RGB565</li>
+                    <li>android:tint 给图片着色，比如图片本来是黑色的，着色后可以变成白色</li>
+                    <li>android:tintMode 着色模式，API Level 21(Android 5.0)才添加的属性</li>
+                    <li>android:alpha 设置图片的透明度，取值范围为0.0~1.0之间，0.0为全透明，1.0为全不透明，API Level最低要求是11</li>
+                    <li>android:autoMirrored 设置图片是否需要镜像反转，当布局方向是RTL，即从右到左布局时才有用，API Level 19(Android 4.4)才添加的属性</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>shape ShapeDrawable GradientDrawable</h2>
+        <ul>
+            <li>shape drawable
+                <pre><code>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;shape
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -113,17 +173,8 @@ android:state_window_focused
         android:dashWidth="integer"
         android:dashGap="integer" /&gt;
 &lt;/shape&gt;
-</code></pre>
 
-        <h2>layer drawable</h2>
-        <pre><code>
-&lt;layer-list&gt;
-  &lt;item  android /&gt; 
-&lt;/layer-list&gt;
-</code></pre>
 
-<h2>shape drawable</h2>
-<pre><code>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;shape xmlns:android="http://schemas.android.com/apk/res/android" 
        android:shape="oval"&gt;
@@ -142,9 +193,332 @@ android:state_window_focused
     &lt;corners android:radius="8dp" /&gt; 
 &lt;/shape&gt;
 </code></pre>
+            </li>
+            <li>android:shape 自定义形状
+                <ul>
+                    <li>rectangle: 矩形，默认的形状，可以画出直角矩形、圆角矩形、弧形等</li>
+                    <li>oval: 椭圆形，用得比较多的是画正圆</li>
+                    <li>line: 线形，可以画实线和虚线</li>
+                    <li>ring: 环形，可以画环形进度条</li>
+                </ul>
+            </li>
+            <li>size: 设置形状默认的大小，可设置宽度和高度
+                <ul>
+                    <li>android:width 宽度</li>
+                    <li>android:height 高度</li>
+                </ul>
+            </li>
+            <li>solid: 设置形状填充的颜色
+                <ul>
+                    <li>android:color 填充的颜色</li>
+                </ul>
+            </li>
+            <li>padding: 设置内容与形状边界的内间距
+                <ul>
+                    <li>android:left 左内间距</li>
+                    <li>android:right 右内间距</li>
+                    <li>android:top 上内间距</li>
+                    <li>android:bottom 下内间距</li>
+                </ul>
+            </li>
+            <li>gradient: 设置形状的颜色渐变
+                <ul>
+                    <li>android:type 渐变的类型
+                        <ul>
+                            <li>linear 线性渐变，默认的渐变类型</li>
+                            <li>radial 放射渐变，设置该项时，android:gradientRadius也必须设置</li>
+                            <li>sweep 扫描性渐变</li>
+                        </ul>
+                    </li>
+                    <li>android:startColor 渐变开始的颜色</li>
+                    <li>android:endColor 渐变结束的颜色</li>
+                    <li>android:centerColor 渐变中间的颜色</li>
+                    <li>android:angle 渐变的角度，linear使用，必须是45的倍数，0表示从左到右，90表示从下到上</li>
+                    <li>android:centerX 渐变中心的相对X坐标，radial使用，在0.0到1.0之间，默认为0.5</li>
+                    <li>android:centerY 渐变中心的相对Y坐标，radial使用，在0.0到1.0之间，默认为0.5</li>
+                    <li>android:gradientRadius 渐变的半径，radial使用</li>
+                    <li>android:useLevel 如果为true，则可在LevelListDrawable中使用</li>
+                </ul>
+            </li>
+            <li>corners: 设置圆角，只适用于rectangle类型，当设置的圆角半径很大时，比如200dp，就可变成弧形边
+                <ul>
+                    <li>android:radius 圆角半径，会被下面每个特定的圆角属性重写</li>
+                    <li>android:topLeftRadius 左上角的半径</li>
+                    <li>android:topRightRadius 右上角的半径</li>
+                    <li>android:bottomLeftRadius 左下角的半径</li>
+                    <li>android:bottomRightRadius 右下角的半径</li>
+                </ul>
+            </li>
+            <li>stroke: 设置描边，可描成实线或虚线
+                <ul>
+
+                    <li>android:color 描边的颜色</li>
+                    <li>android:width 描边的宽度</li>
+                    <li>android:dashWidth 设置虚线时的横线长度</li>
+                    <li>android:dashGap 设置虚线时的横线之间的距离</li>
+                    <li>引用虚线的view需要添加属性android:layerType，值设为"software"，否则显示不了虚线。</li>
+                    <li>只能画水平线，画不了竖线；</li>
+                    <li>线的高度是通过stroke的android:width属性设置的；</li>
+                    <li>size的android:height属性定义的是整个形状区域的高度；</li>
+                    <li>size的height必须大于stroke的width，否则，线无法显示；</li>
+                    <li>线在整个形状区域中是居中显示的；</li>
+                    <li>线左右两边会留有空白间距，线越粗，空白越大；</li>
+                </ul>
+            </li>
+
+            <li>android:ring 专用shape属性
+                <ul>
+                    <li>android:innerRadius 内环的半径</li>
+                    <li>android:innerRadiusRatio 浮点型，以环的宽度比率来表示内环的半径，默认为3，表示内环半径为环的宽度除以3，该值会被android:innerRadius覆盖</li>
+                    <li>android:thickness 环的厚度</li>
+                    <li>android:thicknessRatio 浮点型，以环的宽度比率来表示环的厚度，默认为9，表示环的厚度为环的宽度除以9，该值会被android:thickness覆盖</li>
+                    <li>android:useLevel 一般为false，否则可能环形无法显示，只有作为LevelListDrawable使用时才设为true</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>selector StatelistDrawable 可做drawable和color资源</h2>
+        <ul>
+            <li>statelist drawable
+                <pre><code>
+//定义  /res/drawable/xxx.xml
+&lr;selector
+    android:constantSize=["true" | "false"]
+    android:dither=["true" | "false"]
+    android:variablePadding=["true" | "false"] 
+&gt;
+    &lr;item   
+        android:state_xxx=”true|false”
+        android:color|drawable="..."
+    /&gt;
+&lr;/selector&gt;
+
+//使用
+listview android:listSelector="@drawable/xxx"
+item android：background="@drawable/xxx"
+//
+android:cacheColorHint="@android:color/transparent"
+Drawable drawable = getResources().getDrawable(R.drawable.xxx); 
+listView.setSelector(drawable);
+</code></pre>
+            </li>
+            <li>item 状态
+                <ul>
+                    <li>android:state_enabled: 设置触摸或点击事件是否可用状态，一般只在false时设置该属性，表示不可用状态</li>
+                    <li>android:state_pressed: 设置是否按压状态，一般在true时设置该属性，表示已按压状态，默认为false</li>
+                    <li>android:state_selected: 设置是否选中状态，true表示已选中，false表示未选中</li>
+                    <li>android:state_checked: 设置是否勾选状态，主要用于CheckBox和RadioButton，true表示已被勾选，false表示未被勾选</li>
+                    <li>android:state_checkable: 设置勾选是否可用状态，类似state_enabled，只是state_enabled会影响触摸或点击事件，而state_checkable影响勾选事件</li>
+                    <li>android:state_focused: 设置是否获得焦点状态，true表示获得焦点，默认为false，表示未获得焦点</li>
+                    <li>android:state_window_focused: 设置当前窗口是否获得焦点状态，true表示获得焦点，false表示未获得焦点，例如拉下通知栏或弹出对话框时，当前界面就会失去焦点；另外，ListView的ListItem获得焦点时也会触发true状态，可以理解为当前窗口就是ListItem本身</li>
+                    <li>android:state_activated: 设置是否被激活状态，true表示被激活，false表示未激活，API Level 11及以上才支持，可通过代码调用控件的setActivated(boolean)方法设置是否激活该控件</li>
+                    <li>android:state_hovered: 设置是否鼠标在上面滑动的状态，true表示鼠标在上面滑动，默认为false，API Level 14及以上才支持</li>
+                </ul>
+            </li>
+            <li>注意
+                <ul>
+                    <li>selector作为drawable资源时，item指定android:drawable属性，并放于drawable目录下；</li>
+                    <li>selector作为color资源时，item指定android:color属性，并放于color目录下；</li>
+
+                    <li>android:drawable属性除了引用@drawable资源，也可以引用@color颜色值;但android:color只能引用@color；</li>
+                    <li>item是从上往下匹配的，如果匹配到一个item那它就将采用这个item;所以设置默认的状态，一定要写在最后</li>
+                </ul>
+            </li>
+            <li>属性
+                <ul>
+                    <li>android:enterFadeDuration状态改变时，新状态展示时的淡入时间，以毫秒为单位</li>
+                    <li>android:exitFadeDuration状态改变时，旧状态消失时的淡出时间，以毫秒为单位</li>
+                </ul>
+            </li>
+            <li>ListItem
+                <p>最后，关于ListView的ListItem样式，有两种设置方式，一种是在ListView标签里设置android:listSelector属性，另一种是在ListItem的布局layout里设置android:background。但是，这两种设置的结果却有着不同。同时，使用ListView时也有些其他需要注意的地方，总结如下：</p>
+
+                <ul>
+                    <li>android:listSelector设置的ListItem默认背景是透明的，不管你在selector里怎么设置都无法改变它的背景。所以，如果想改ListItem的默认背景，只能通过第二种方式，在ListItem的布局layout里设置android:background。</li>
+                    <li>当触摸点击ListItem时，第一种设置方式下，state_pressed、state_focused和state_window_focused设为true时都会触发，而第二种设置方式下，只有state_pressed会触发。</li>
+                    <li>
+                        <p>当ListItem里有Button或CheckBox之类的控件时，会抢占ListItem本身的焦点，导致ListItem本身的触摸点击事件会无效。那么，要解决此问题，有三种解决方案：</p>
+
+                        <ul>
+                            <li>将Button或CheckBox换成TextView或ImageView之类的控件</li>
+                            <li>设置Button或CheckBox之类的控件设置focusable属性为false</li>
+                            <li>设置ListItem的根布局属性android:descendantFocusability="blocksDescendants"</li>
+                        </ul>
+
+                        <p>第三种是最方便，也是推荐的方式，它会将ListItem根布局下的所有子控件都设置为不能获取焦点。android:descendantFocusability属性的值有三种，其中，ViewGroup是指设置该属性的View，本例中就是ListItem的根布局：</p>
+
+                        <ul>
+                            <li>beforeDescendants：ViewGroup会优先其子类控件而获取到焦点</li>
+                            <li>afterDescendants：ViewGroup只有当其子类控件不需要获取焦点时才获取焦点</li>
+                            <li>blocksDescendants：ViewGroup会覆盖子类控件而直接获得焦点</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>layer-list LayerDrawable</h2>
+        <ul>
+            <li>LayerDrawable<pre><code>
+&lt;layer-list
+ xmlns:android="http://schemas.android.com/apk/res/android" &gt;
+    &lt;item
+        android:drawable="@[package:]drawable/drawable_resource"
+        android:id="@[+][package:]id/resource_name"
+        android:top="dimension"
+        android:right="dimension"
+        android:bottom="dimension"
+        android:left="dimension" /&gt;
+  &lt;item &gt; 
+      &lt;color android:color="#E4007F" /&gt;
+  &lt;/item &gt; 
+  &lt;item android:bottom="4dp" 
+      android:drawable="@android:color/white" /&gt;
+&lt;/layer-list&gt;
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>level-list LevelListDrawable</h2>
+        <ul>
+            <li>level-list<pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;level-list
+    xmlns:android="http://schemas.android.com/apk/res/android" &gt;
+    &lt;item
+        android:drawable="@drawable/drawable_resource"
+        android:maxLevel="integer"
+        android:minLevel="integer" /&gt;
+&lt;/level-list&gt;
+</code></pre>
+            </li>
+            <li>drawable.setLevel(10);
+                <p>当需要在一个View中显示不同图片的时候，比如手机剩余电量不同时显示的图片不同，level-list就可以派上用场了。level-list可以管理一组drawable，每个drawable设置一组level范围，最终会根据level值选取对应的drawable绘制出来。item的匹配规则是从上到下的，当设置的level值与前面的item的level范围匹配，则采用。一般item的添加按maxLevel从小到大排序下来，此时minLevel可以不用指定也能匹配到。</p>
+            </li>
+        </ul>
+
+        <h2>transition TransitionDrawable</h2>
+        <ul>
+            <li>transition<pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;transition
+xmlns:android="http://schemas.android.com/apk/res/android" &gt;
+    &lt;item
+        android:drawable="@[package:]drawable/drawable_resource"
+        android:id="@[+][package:]id/resource_name"
+        android:top="dimension"
+        android:right="dimension"
+        android:bottom="dimension"
+        android:left="dimension" /&gt;
+&lt;/transition&gt;
+        </code></pre>
+            </li>
+            <li>
+                <p>transition其实是继承自layer-list的，只是，transition只能管理两层drawable，另外提供了两层drawable之间切换的方法，切换时还会有淡入淡出的动画效果</p>
+            </li>
+            <li>使用
+                <p>((TransitionDrawable)drawable).startTransition(500); //正向切换，即从第一个drawable切换到第二个
+                    <br>((TransitionDrawable)drawable).reverseTransition(500); //逆向切换，即从第二个drawable切换回第一个</p>
+            </li>
+        </ul>
+
+        <h2>inset InsetDrawable</h2>
+        <ul>
+            <li>inset<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;inset
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/drawable_resource"
+    android:insetTop="dimension"
+    android:insetRight="dimension"
+    android:insetBottom="dimension"
+    android:insetLeft="dimension" /&gt;</code></pre>
+            </li>
+            <li>
+                <p>使用inset标签可以对drawable设置边距，其用法和View的padding类似，只不过padding是设置内容与边界的距离，而inset则可以设置背景drawable与View边界的距离</p>
+            </li>
+            <li>属性
+                <ul>
+                    <li>android:drawable 指定drawable资源，如果不设置该属性，也可以定义drawable类型的子标签</li>
+                    <li>android:visible 设置初始的可见性状态，默认为false</li>
+                    <li>android:insetLeft 左边距</li>
+                    <li>android:insetRight 右边距</li>
+                    <li>android:insetTop 顶部边距</li>
+                    <li>android:insetBottom 底部边距</li>
+                    <li>android:inset 设置统一边距，会覆盖上面四个属性，但API Level要求为21，即Android 5.0</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>clip ClipDrawable</h2>
+        <ul>
+            <li><pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;clip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/drawable_resource"
+    android:clipOrientation=["horizontal" | "vertical"]
+    android:gravity=["top" | "bottom" | "left" | "right" | "center_vertical" |
+                     "fill_vertical" | "center_horizontal" | "fill_horizontal" |
+                     "center" | "fill" | "clip_vertical" | "clip_horizontal"] 
+/&gt;
+</code></pre>
+            </li>
+            <li>使用
+                <p>drawable.setLevel(drawable.getLevel() + 1000);
+                    <br>使用clip标签可以对drawable进行裁剪，在做进度条时很有用。通过设置level值控制裁剪多少，level取值范围为0~10000，默认为0，表示完全裁剪，图片将不可见；10000则完全不裁剪，可见完整图片。</p>
+            </li>
+            <li>属性
+                <ul>
+                    <li>android:drawable 指定drawable资源，如果不设置该属性，也可以定义drawable类型的子标签</li>
+                    <li>
+                        <p>android:clipOrientation 设置裁剪的方向，取值为以下两个值之一：</p>
+
+                        <ul>
+                            <li>horizontal 在水平方向上进行裁剪，条状的进度条就是水平方向的裁剪</li>
+                            <li>vertical 在垂直方向上进行裁剪</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>android:gravity 设置裁剪的位置，可取值如下，多个取值用 | 分隔：</p>
+
+                        <ul>
+                            <li>top 图片放于容器顶部，不改变图片大小。当裁剪方向为vertical时，会裁掉图片底部</li>
+                            <li>bottom 图片放于容器底部，不改变图片大小。当裁剪方向为vertical时，会裁掉图片顶部</li>
+                            <li>left 图片放于容器左边，不改变图片大小，默认值。当裁剪方向为horizontal，会裁掉图片右边部分</li>
+                            <li>right 图片放于容器右边，不改变图片大小。当裁剪方向为horizontal，会裁掉图片左边部分</li>
+                            <li>center 图片放于容器中心位置，包括水平和垂直方向，不改变图片大小。当裁剪方向为horizontal时，会裁掉图片左右部分；当裁剪方向为vertical时，会裁掉图片上下部分</li>
+                            <li>fill 拉伸整张图片以填满容器的整个高度和宽度。这时候图片不会被裁剪，除非level设为了0，此时图片不可见</li>
+                            <li>center_vertical 图片放于容器垂直方向的中心位置，不改变图片大小。裁剪和center时一样</li>
+                            <li>center_horizontal 图片放于容器水平方向的中心位置，不改变图片大小。裁剪和center时一样</li>
+                            <li>fill_vertical 在垂直方向上拉伸图片以填满容器的整个高度。当裁剪方向为vertical时，图片不会被裁剪，除非level设为了0，此时图片不可见</li>
+                            <li>fill_horizontal 在水平方向上拉伸图片以填满容器的整个宽度。当裁剪方向为horizontal时，图片不会被裁剪，除非level设为了0，此时图片不可见</li>
+                            <li>clip_vertical 附加选项，裁剪基于垂直方向的gravity设置，设置top时会裁剪底部，设置bottom时会裁剪顶部，其他情况会同时裁剪顶部和底部</li>
+                            <li>clip_horizontal 附加选项，裁剪基于水平方向的gravity设置，设置left时会裁剪右侧，设置right时会裁剪左侧，其他情况会同时裁剪左右两侧</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>scale ScaleDrawable</h2>
+        <ul>
+            <li><pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;scale
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/drawable_resource"
+    android:scaleGravity=["top" | "bottom" | "left" | "right" | "center_vertical" |
+                          "fill_vertical" | "center_horizontal" | "fill_horizontal" |
+                          "center" | "fill" | "clip_vertical" | "clip_horizontal"]
+    android:scaleHeight="percentage"
+    android:scaleWidth="percentage" 
+/&gt;</code></pre>
+            </li>
+        </ul>
 
 
-<h2>clip drawable</h2>
+
+        <h2>clip drawable</h2>
 
 
 

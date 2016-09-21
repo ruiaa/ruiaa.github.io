@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android /res/anim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android  /res/anim</h1>
+
+        
+        <h2>frame animations    AnimationDrawable</h2>
+        <ul><li><pre><code>
+&gt;?xml version="1.0" encoding="utf-8"?&gt;
+&gt;animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot=["true" | "false"] &gt;
+    &gt;item
+        android:drawable="@[package:]drawable/drawable_resource_name"
+        android:duration="integer" /&gt;
+&gt;/animation-list&gt;
+
+android:oneshot  true代表只执行一次，false循环执行
+
+
+ImageView rocketImage = (ImageView) findViewById(R.id.rocket_image);
+rocketImage.setBackgroundResource(R.drawable.rocket_thrust);
+
+rocketAnimation = (AnimationDrawable) rocketImage.getBackground();
+rocketAnimation.start();
+</code></pre></li></ul>
+        <h2>tween animation     Animation</h2>
+        <ul>
+            <li>
+                <p>视图动画只能作用于View，而且视图动画改变的只是View的绘制效果，View真正的属性并没有改变。比如，一个按钮做平移的动画，虽然按钮的确做了平移，但按钮可点击的区域并没随着平移而改变，还是在原来的位置。</p>
+                <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@[package:]anim/interpolator_resource"
+    android:shareInterpolator=["true" | "false"] &gt;
+    &lt;alpha
+        android:fromAlpha="float"
+        android:toAlpha="float" /&gt;
+    &lt;scale
+        android:fromXScale="float"
+        android:toXScale="float"
+        android:fromYScale="float"
+        android:toYScale="float"
+        android:pivotX="float"
+        android:pivotY="float" /&gt;
+    &lt;translate
+        android:fromXDelta="float"
+        android:toXDelta="float"
+        android:fromYDelta="float"
+        android:toYDelta="float" /&gt;
+    &lt;rotate
+        android:fromDegrees="float"
+        android:toDegrees="float"
+        android:pivotX="float"
+        android:pivotY="float" /&gt;
+    &lt;set>
+        ...
+    &lt;/set&gt;
+&lt;/set&gt;
+</code></pre>
+            </li>
+            <li>属性
+                <ul>
+                    <li>android:duration 动画从开始到结束持续的时长，单位为毫秒</li>
+                    <li>android:detachWallpaper 设置是否在壁纸上运行，只对设置了壁纸背景的窗口动画(window animation)有效。设为true，则动画只在窗口运行，壁纸背景保持不变</li>
+                    <li>android:fillAfter 设置为true时，动画执行完后，View会停留在动画的最后一帧；默认为false；如果是动画集，需在&lt;set&gt;标签中设置该属性才有效</li>
+                    <li>android:fillBefore 设置为true时，动画执行完后，View回到动画执行前的状态，默认即为true</li>
+                    <li>android:fillEnabled 设置为true时，android:fillBefore的值才有效，否则android:fillBefore会被忽略</li>
+                    <li>android:repeatCount 设置动画重复执行的次数，默认为0，即不重复；可设为-1或infinite，表示无限重复</li>
+                    <li>android:repeatMode 设置动画重复执行的模式，可设为以下两个值其中之一：
+
+                        <ul>
+                            <li>restart 动画重复执行时从起点开始，默认为该值</li>
+                            <li>reverse 动画会反方向执行</li>
+                        </ul>
+                    </li>
+                    <li>android:startOffset 设置动画执行之前的等待时长，毫秒为单位；重复执行时，每次执行前同样也会等待一段时间
+                    </li>
+                    <li>android:zAdjustment 表示被设置动画的内容在动画运行时在Z轴上的位置，取值为以下三个值之一：
+
+                        <ul>
+                            <li>normal 默认值，保持内容在Z轴上的位置不变</li>
+                            <li>top 保持在Z周最上层</li>
+                            <li>bottom 保持在Z轴最下层</li>
+                        </ul>
+                    </li>
+                    <li>android:interpolator 设置动画速率的变化，比如加速、减速、匀速等，需要指定Interpolator资源</li>
+                </ul>
+            </li>
+            <li>使用
+                <pre><code>
+view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.tween_name));
+
+//或者
+AlphaAnimation fadeInAnimation = (AlphaAnimation) AnimationUtils.loadAnimation(this, R.anim.tween_name);
+view.startAnimation(fadeInAnimation);
+</code></pre>
+            </li>
+            <li>alpha AlphaAnimation
+                <ul>
+                    <li>android:duration 动画从开始到结束持续的时长，单位为毫秒</li>
+                    <li>android:fromAlpha 动画开始时的透明度，0.0为全透明，1.0为不透明，默认为1.0</li>
+                    <li>android:toAlpha 动画结束时的透明度，0.0为全透明，1.0为不透明，默认为1.0</li>
+                </ul>
+            </li>
+            <li>scale ScaleAnimation
+                <ul>
+                    <li>android:duration 动画从开始到结束持续的时长，单位为毫秒</li>
+                    <li>android:fromXScale 动画开始时X坐标上的缩放尺寸</li>
+                    <li>android:toXScale 动画结束时X坐标上的缩放尺寸</li>
+                    <li>android:fromYScale 动画开始时Y坐标上的缩放尺寸</li>
+                    <li>
+                        android:toYScale 动画结束时Y坐标上的缩放尺寸
+                        <br />PS：以上四个属性，0.0表示缩放到没有，1.0表示正常无缩放，小于1.0表示收缩，大于1.0表示放大
+                    </li>
+                    <li>
+                        android:pivotX 缩放时的固定不变的X坐标，一般用百分比表示，0%表示左边缘，100%表示右边缘
+                    </li>
+                    <li>
+                        android:pivotY 缩放时的固定不变的Y坐标，一般用百分比表示，0%表示顶部边缘，100%表示底部边缘
+                    </li>
+                </ul>
+            </li>
+            <li>translate TranslateAnimation
+                <ul>
+                    <li>android:duration 动画从开始到结束持续的时长，单位为毫秒</li>
+                    <li>android:fromXDelta 起始位置的X坐标的偏移量</li>
+                    <li>android:toXDelta 结束位置的X坐标的偏移量</li>
+                    <li>android:fromYDelta 起始位置的Y坐标的偏移量</li>
+                    <li>android:toYDelta 结束位置的Y坐标的偏移量</li>
+                </ul>
+            </li>
+            <li>rotate RotateAnimation
+                <ul>
+                    <li>android:duration 动画从开始到结束持续的时长，单位为毫秒</li>
+                    <li>android:fromDegrees 旋转开始的角度</li>
+                    <li>android:toDegrees 旋转结束的角度</li>
+                    <li>android:pivotX 旋转中心点的X坐标，纯数字表示相对于View本身左边缘的像素偏移量；带&quot;%&quot;后缀时表示相对于View本身左边缘的百分比偏移量；带&quot;%p&quot;后缀时表示相对于父View左边缘的百分比偏移量</li>
+                    <li>android:pivotY 旋转中心点的Y坐标，纯数字表示相对于View本身顶部边缘的像素偏移量；带&quot;%&quot;后缀时表示相对于View本身顶部边缘的百分比偏移量；带&quot;%p&quot;后缀时表示相对于父View顶部边缘的百分比偏移量</li>
+                </ul>
+            </li>
+            <li>set
+                <ul>
+                    <li>android:shareInterpolator 设置为true时则可将interpolator应用到所有子元素中</li>
+                </ul>
+            </li>
+            <li>Interpolator
+                <br>属性
+                <ul>
+                    <li>&lt;accelerateDecelerateInterpolator&gt; 在动画开始与结束时速率改变比较慢，在中间的时候加速。没有可更改设置的属性，所以设置的效果和系统提供的一样</li>
+                    <li>&lt;accelerateInterpolator&gt; 在动画开始时速率改变比较慢，然后开始加速。有一个属性可以设置加速的速率
+                        <ul>
+                            <li>android:factor 浮点值，加速的速率，默认为1</li>
+                        </ul>
+                    </li>
+                    <li>&lt;anticipateInterpolator&gt; 动画开始的时候向后然后往前抛。有一个属性设置向后拉的值
+
+                        <ul>
+                            <li>android:tension 浮点值，向后的拉力，默认为2，当设为0时，则不会有向后的动画了</li>
+                        </ul>
+                    </li>
+                    <li>&lt;anticipateOvershootInterpolator&gt; 动画开始的时候向后然后向前抛，会抛超过目标值后再返回到最后的值。可设置两个属性
+
+                        <ul>
+                            <li>android:tension 浮点值，向后的拉力，默认为2，当设为0时，则不会有向后的动画了</li>
+                            <li>android:extraTension 浮点值，拉力的倍数，默认为1.5(2*1.5)，当设为0时，则不会有拉力了</li>
+                        </ul>
+                    </li>
+                    <li>&lt;bounceInterpolator&gt; 动画结束的时候会弹跳。
+                    </li>
+                    <li>&lt;cycleInterpolator&gt; 动画循环做周期运动，速率改变沿着正弦曲线。有一个属性设置循环次数
+
+                        <ul>
+                            <li>android:cycles 整数值，循环的次数，默认为1</li>
+                        </ul>
+                    </li>
+                    <li>&lt;decelerateInterpolator&gt; 在动画开始时速率改变比较快，然后开始减速。有一个属性设置减速的速率
+
+                        <ul>
+                            <li>android:factor 浮点值，减速的速率，默认为1</li>
+                        </ul>
+                    </li>
+                    <li>&lt;linearInterpolator&gt; 动画匀速播放
+                    </li>
+                    <li>&lt;overshootInterpolator&gt; 动画向前抛，会抛超过最后值，然后再返回
+                        <ul>
+                            <li>android:tension 浮点值，超出终点后的拉力，默认为2</li>
+                        </ul>
+                    </li>
+                </ul>
+                <br>系统资源
+
+                <ul>
+                    <li>
+                        AccelerateDecelerateInterpolator
+                        <br>@android:anim/accelerate_decelerate_interpolator
+                        <br>在动画开始与结束时速率改变比较慢，在中间的时候加速
+                    </li>
+                    <li>
+                        AccelerateInterpolator
+                        <br>@android:anim/accelerate_interpolator
+                        <br>在动画开始时速率改变比较慢，然后开始加速
+                    </li>
+                    <li>
+                        AnticipateInterpolator
+                        <br>@android:anim/anticipate_interpolator
+                        <br>动画开始的时候向后然后往前抛
+                    </li>
+                    <li>
+                        AnticipateOvershootInterpolator
+                        <br>@android:anim/anticipate_overshoot_interpolator
+                        <br>动画开始的时候向后然后向前抛，会抛超过目标值后再返回到最后的值
+                    </li>
+                    <li>
+                        BounceInterpolator
+                        <br>@android:anim/bounce_interpolator
+                        <br>动画结束的时候会弹跳
+                    </li>
+                    <li>
+                        CycleInterpolator
+                        <br>@android:anim/bounce_interpolator
+                        <br>动画循环做周期运动，速率改变沿着正弦曲线
+                    </li>
+                    <li>
+                        DecelerateInterpolator
+                        <br>@android:anim/decelerate_interpolator
+                        <br>在动画开始时速率改变比较快，然后开始减速
+                    </li>
+                    <li>
+                        LinearInterpolator
+                        <br>@android:anim/decelerate_interpolator
+                        <br>动画匀速播放
+                    </li>
+                    <li>
+                        OvershootInterpolator
+                        <br>@android:anim/overshoot_interpolator
+                        <br>动画向前抛，会抛超过最后值，然后再返回
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <h2>Animation</h2>
+        <ul><li>start()	<br/>开始Animation动画</li>
+           <li>reset()	<br/>重置Animation的初始化</li>
+            <li>cancel()	<br/>取消Animation动画</li>
+            <li>setAnimationListener(AnimationListener listener)	<br/>给当前Animation设置动画监听</li>
+            <li>hasStarted()	<br/>判断当前Animation是否开始</li>
+            <li>hasEnded()	<br/>判断当前Animation是否结束</li>
+            <li>View.startAnimation(Animation animation)	<br/>对当前View开始设置的Animation动画</li>
+            <li>View.clearAnimation()	<br/>取消当View在执行的Animation动画</li></ul>
+        <h2>property animation  Animator</h2>
+        <ul>
+            <li>
+                <pre><code>
+&lt;set
+  android:ordering=["together" | "sequentially"]&gt;
+
+    &lt;objectAnimator
+        android:propertyName="string"
+        android:duration="int"
+        android:valueFrom="float | int | color"
+        android:valueTo="float | int | color"
+        android:startOffset="int"
+        android:repeatCount="int"
+        android:repeatMode=["repeat" | "reverse"]
+        android:valueType=["intType" | "floatType"]/&gt;
+
+    &lt;animator
+        android:duration="int"
+        android:valueFrom="float | int | color"
+        android:valueTo="float | int | color"
+        android:startOffset="int"
+        android:repeatCount="int"
+        android:repeatMode=["repeat" | "reverse"]
+        android:valueType=["intType" | "floatType"]/&gt;
+
+    &lt;set&gt;
+        ...
+    &lt;/set&gt;
+&lt;/set&gt;
+
+
+AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(myContext,
+    R.anim.property_animator);
+set.setTarget(myObject);
+set.start();
+</code></pre>
+            </li>
+            <li>animator ValueAnimator
+                <p>ValuAnimiator只完成计算动画值，即只计算值，要将动画值应用到对象和属性上则需要在值变化的监听器里自行更新对象属性。</p>
+                <br>属性
+                <ul>
+                    <li>android:duration 动画从开始到结束持续的时长，单位为毫秒</li>
+                    <li>android:startOffset 设置动画执行之前的等待时长，单位为毫秒</li>
+                    <li>android:repeatCount 设置动画重复执行的次数，默认为0，即不重复；可设为-1或infinite，表示无限重复</li>
+                    <li>
+                        android:repeatMode 设置动画重复执行的模式，可设为以下两个值其中之一：
+
+                        <ul>
+                            <li>restart 动画重复执行时从起点开始，默认为该值</li>
+                            <li>reverse 动画会反方向执行</li>
+                        </ul>
+                    </li>
+                    <li>android:valueFrom 动画开始的值，可以为int值、float值或color值
+                    </li>
+                    <li>
+                        android:valueTo 动画结束的值，可以为int值、float值或color值
+                    </li>
+                    <li>
+                        android:valueType 动画值类型，若为color值，则无需设置该属性
+
+                        <ul>
+                            <li>intType 指定动画值，即以上两个value属性的值为整型</li>
+                            <li>floatType 指定动画值，即以上两个value属性的值为浮点型，默认值</li>
+                        </ul>
+                    </li>
+                    <li>
+                        android:interpolator 设置动画速率的变化，比如加速、减速、匀速等，需要指定Interpolator资源
+                    </li>
+                </ul>
+                <br>使用
+                <pre><code>    
+&lt;?xml version="1.0" encoding="utf-8"?&lt;
+&lt;animator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="3000"
+    android:valueFrom="100"
+    android:valueTo="20"
+    android:valueType="intType" /&lt;
+
+ValueAnimator valueAnimator = (ValueAnimator) AnimatorInflater.loadAnimator(this, R.animator.value_animator);
+valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    @Override
+    public void onAnimationUpdate(ValueAnimator animator) {
+        // 当前动画值，即为当前宽度比例值
+        int currentValue = (Integer) animator.getAnimatedValue();
+        // 根据比例更改目标view的宽度
+        view.getLayoutParams().width = maxWidth * currentValue / 100;
+        view.requestLayout();
+    }
+});
+
+valueAnimator.start();</code></pre>
+            </li>
+            <li>objectAnimator ObjectAnimator
+                <pre><code>
+//属性绑定
+android:propertyName
+目标对象的属性名，要求目标对象必须提供该属性的setter方法，getter方法
+
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="3000"
+    android:propertyName="width"
+    android:valueFrom="100"
+    android:valueTo="20"
+    android:valueType="intType" 
+/&gt;
+
+// 将xml转化为ObjectAnimator对象
+ObjectAnimator objectAnimator = 
+       (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.object_animator);
+// 设置动画的目标对象
+objectAnimator.setTarget(object);
+// 启动动画
+objectAnimator.start();
+</code></pre>
+            </li>
+            <li>set AnimatorSet
+                <pre><code>
+android:ordering 设置动画的时序关系，取值可为以下两个值之一：
+            together 动画同时执行，默认值
+            sequentially 动画按顺序执行
+            
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together"&gt;
+    &lt;objectAnimator... /&gt;
+    &lt;objectAnimator... /&gt;
+&lt;/set&gt;
+
+// 将xml转化为ObjectAnimator对象
+AnimatorSet animatorSet = 
+        (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.animator_set);
+// 设置动画的目标对象
+animatorSet.setTarget(view);
+// 启动动画
+animatorSet.start();
+</code></pre>
+            </li>
+            <li>方法<pre><code>
+ValueAnimator anim = ValueAnimator.ofFloat(float...);
+ValueAnimator anim = ValueAnimator.ofInt(int...);
+
+ObjectAnimator anim = ObjectAnimator.ofFloat(object,"attr_name",float...);
+ObjectAnimator anim = ObjectAnimator.ofInt(object,"attr_name",int...);
+
+组合
+AnimatorSet.play(Animator)返回 AnimatorSet.Builder：
+                    after(Animator anim)   将现有动画插入到传入的动画之后执行
+                    after(long delay)   将现有动画延迟指定毫秒后执行
+                    before(Animator anim)   将现有动画插入到传入的动画之前执行
+                    with(Animator anim)   将现有动画和传入的动画同时执行
+
+ObjectAnimator moveIn = ObjectAnimator.ofFloat(textview, "translationX", -500f, 0f);  
+ObjectAnimator rotate = ObjectAnimator.ofFloat(textview, "rotation", 0f, 360f);  
+ObjectAnimator fadeInOut = ObjectAnimator.ofFloat(textview, "alpha", 1f, 0f, 1f);  
+AnimatorSet animSet = new AnimatorSet();  
+animSet.play(rotate).with(fadeInOut).after(moveIn);  
+animSet.setDuration(5000);  
+animSet.start(); 
+
+
+监听器
+anim.addListener(new AnimatorListener() {  
+    @Override  
+    public void onAnimationStart(Animator animation) {  
+    }  
+  
+    @Override  
+    public void onAnimationRepeat(Animator animation) {  
+    }  
+  
+    @Override  
+    public void onAnimationEnd(Animator animation) {  
+    }  
+  
+    @Override  
+    public void onAnimationCancel(Animator animation) {  
+    }  
+}); 
+//
+anim.addListener(new AnimatorListenerAdapter() {  
+});  
+</code></pre>
+            <li>View的属性
+                <ul>
+                    <li>alpha：透明度，默认为1，表示不透明，0表示完全透明</li>
+                    <li>pivotX 和 pivotY：旋转的轴点和缩放的基准点，默认是View的中心点</li>
+                    <li>scaleX 和 scaleY：基于pivotX和pivotY的缩放，1表示无缩放，小于1表示收缩，大于1则放大</li>
+                    <li>rotation、rotationX 和 rotationY：基于轴点(pivotX和pivotY)的旋转，rotation为平面的旋转，rotationX和rotationY为立体的旋转</li>
+                    <li>translationX 和 translationY：View的屏幕位置坐标变化量，以layout容器的左上角为坐标原点</li>
+                    <li>x 和 y：View在父容器内的最终位置，是左上角坐标和偏移量（translationX，translationY）的和</li>
+                </ul>
+            </li>
+        </ul>
+
+
+
+    </main>
+</body>
+
+</html>
