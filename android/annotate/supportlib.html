@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Android Support Annotations Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>Android Support Annotations Library</h1>
+
+        <h2>配置</h2>
+        <ul>
+            <li>compile 'com.android.support:support-annotations:22.2.0'</li>
+        </ul>
+
+        <h2>Nullness Annotations</h2>
+        <ul>
+            <li>@Nullable 标注给定的参数或者返回值可以为null</li>
+            <li>@NonNull 标注给定的参数或者返回值不能为null</li>
+        </ul>
+
+        <h2>资源类型注解 @XxxRes int resId</h2>
+        <ul>
+            <li>@StringRes, @DrawableRes, @ColorRes, @InterpolatorRes ...</li>
+            <li>@AnyRes 标注一个未知的特殊类型的资源，但是它必须是一个资源类型</li>
+            <li>使用多个注解来支持多个资源类型</li>
+        </ul>
+
+        <h2>IntDef/StringDef: 类型定义注解</h2>
+
+        <h2>线程注解 </h2>
+        <ul>
+            <li>标记的方法只能在指定的线程类型中被调用</li>
+            <li>注解类本身 所有方法都有相同的线程要求</li>
+            <li>@UiThread</li>
+            <li>@MainThread</li>
+            <li>@WorkerThread</li>
+            <li>@BinderThread</li>
+        </ul>
+
+        <h2>RGB颜色整型</h2>
+        <ul>
+            <li>@ColorRes 颜色资源</li>
+            <li>@ColorInt 代表颜色的整数值</li>
+        </ul>
+
+        <h2>值约束</h2>
+        <ul>
+            <li>@Size()
+                <p>@Size(min=2)
+                    <br>@Size(max=2)
+                    <br>@Size(2)
+                    <br>@Size(multiple=2) 倍数
+                </p>
+            </li>
+            <li>@IntRange(from=0,to=255)</li>
+            <li>@FloatRange(from=0.0, to=1.0)</li>
+        </ul>
+
+        <h2>权限注解</h2>
+        <ul>
+            <li>@RequiresPermission(Manifest.permission.SET_WALLPAPER)
+                <p>方法的调用需要调用者有特定的权限</p>
+            </li>
+            <li>@RequiresPermission(anyOf = {......})
+                <p>至少需要权限集合中的一个</p>
+            </li>
+            <li>@RequiresPermission(allOf = {.....})
+                <p>同时需要多个权限</p>
+            </li>
+            <li>对于intents的权限
+                <pre><code>
+@RequiresPermission(android.Manifest.permission.BLUETOOTH)
+public static final String ACTION_REQUEST_DISCOVERABLE =
+        "android.bluetooth.adapter.action.REQUEST_DISCOVERABLE";
+                </code></pre>
+            </li>
+            <li>对于content providers的权限
+                <pre><code>
+@RequiresPermission.Read(@RequiresPermission(READ_HISTORY_BOOKMARKS))
+@RequiresPermission.Write(@RequiresPermission(WRITE_HISTORY_BOOKMARKS))
+public static final Uri BOOKMARKS_URI = Uri.parse("content://browser/bookmarks");
+                    </code></pre>
+            </li>
+
+        </ul>
+
+        <h2>方法重写</h2>
+        <ul>
+            <li>@CallSuper
+                <p>父方法被标记时,要求重写方法调用父方法</p>
+            </li>
+        </ul>
+
+        <h2>返回值处理</h2>
+        <ul>
+            <li>@CheckResult
+                <p>调用者要使用方法返回值</p>
+            </li>
+        </ul>
+        
+        <li>@VisibleForTesting</li>
+        <li>@Keep 不会被混淆</li>
+    </main>
+</body>
+
+</html>

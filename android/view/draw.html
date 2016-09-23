@@ -20,6 +20,7 @@
         <br>
         <a href="http://blog.csdn.net/yanbober/article/details/46128379">工匠若水 : Android应用层View绘制流程与源码分析</a>
         <br>
+        <a href="http://blog.csdn.net/lmj623565791/article/details/38339817">Android 手把手教您自定义ViewGroup（一）</a>
 
         <h2>绘制流程</h2>
         <ul>
@@ -121,10 +122,64 @@ mainLayout.addView(buttonLayout);
 }</code></pre>
 
         <h2>onMeasure()</h2>
-        <ul><li>onMeasure()<pre><code>    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
-                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
-    }</code></pre></li>
+        <ul><li>onMeasure()<pre><code>    
+//super
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    setMeasuredDimension(
+            getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
+            getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec)
+    );
+}
+
+//重写 支持wrap_content
+//match_parent,wrap_content  由系统测量并传入match_parent值
+//exactly 设置明确的宽度和高度时,传入设置的值
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)  
+{  
+    int widthMode = MeasureSpec.getMode(widthMeasureSpec);  
+    int widthSize = MeasureSpec.getSize(widthMeasureSpec);  
+    int heightMode = MeasureSpec.getMode(heightMeasureSpec);  
+    int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+      
+    int width;  
+    int height;
+    
+     
+    if (widthMode == MeasureSpec.EXACTLY)  
+    {  
+        //传入准确值 
+        width = widthSize;  
+    } else  
+    {  
+        mPaint.setTextSize(mTitleTextSize);  
+        mPaint.getTextBounds(mTitle, 0, mTitle.length(), mBounds);
+        
+        //内容大小  
+        float textWidth = mBounds.width();
+        //内容+边距  
+        int desired = (int) (getPaddingLeft() + textWidth + getPaddingRight());
+          
+        width = desired;  
+    }  
+  
+    if (heightMode == MeasureSpec.EXACTLY)  
+    {  
+        //传入准确值 
+        height = heightSize;  
+    } else  
+    {  
+        mPaint.setTextSize(mTitleTextSize);  
+        mPaint.getTextBounds(mTitle, 0, mTitle.length(), mBounds);  
+        float textHeight = mBounds.height();  
+        int desired = (int) (getPaddingTop() + textHeight + getPaddingBottom());  
+        height = desired;  
+    }  
+      
+    //调用设置大小的接口
+    setMeasuredDimension(width, height); 
+     
+}
+</code></pre></li>
             <li>getDefaultSize()<pre><code>public static int getDefaultSize(int size, int measureSpec) {  
     int result = size;  
     int specMode = MeasureSpec.getMode(measureSpec);  

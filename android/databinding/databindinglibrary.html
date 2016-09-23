@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android Data Binding Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android Data Binding Library</h1>
+        
+        <h2>配置环境</h2>
+        <pre><code>
+ Android 2.1 (API level 7+)
+ 
+//app build.gradle
+android {
+    ....
+    dataBinding {
+        enabled = true
+    }
+}
+
+</code></pre>
+        
+        <h2>使用</h2>
+        <pre><code>
+//1,定义属性
+public class User{
+   private final String firstName;
+   private final String lastName;
+   public User(String firstName, String lastName) {
+       this.firstName = firstName;
+       this.lastName = lastName;
+   }
+   public String getFirstName() {
+       return this.firstName;
+   }
+   public String getLastName() {
+       return this.lastName;
+   }
+}
+
+
+//2,xml
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;layout xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+    &lt;data&gt;
+        &lt;variable name="user" type="com.test.User"/&gt;
+    &lt;/data&gt;
+    &lt;LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"&gt;
+
+        &lt;TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.firstName}"/&gt;
+
+    &lt;/LinearLayout&gt;
+&lt;/layout&gt;
+
+
+//Activity
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+   super.onCreate(savedInstanceState);
+   MainActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
+   User user = new User("Test", "User");
+   binding.setUser(user);
+}
+
+// ListView or RecyclerView adapter
+ListItemBinding binding = ListItemBinding.inflate(layoutInflater, viewGroup, false);
+//or
+ListItemBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item, viewGroup, false);
+</code></pre>
+    </main>
+</body>
+
+</html>

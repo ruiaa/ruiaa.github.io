@@ -15,9 +15,103 @@
 <body>
     <main role="main">
         <h1>android resource attrs</h1>
-        
+
         <a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/attrs.xml"><em>系统 属性</em></a>
+
+        <h2>xml定义</h2>
+        <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+    &lt;resources&gt;  
+  
+        &lt;attr name="test1" format="string" /&gt;    
+  
+        &lt;declare-styleable name="MyView"&gt;  
+              &lt;attr name="textColor" format="color" /&gt;    
+              &lt;attr name="textSize" format="dimension" /&gt;    
+              &lt;attr name="text" format="string" /&gt;  
+        &lt;/declare-styleable&gt;    
         
+&lt;/resources&gt;  
+
+
+attr子元素:  定义具体的属性
+
+format表示这个属性的值的类型
+     1.reference:引用指定Theme中资源ID 
+     2.string:字符串
+             既能直接写值也可以用"@string/str_name"引用资源,可以写成format="string|reference" 
+     3.Color：颜色  
+     4.boolean：布尔值  
+     5.dimension：尺寸值  
+     6.float：浮点型  
+     7.integer：整型  
+     8.fraction：百分数  
+     9.enum：枚举 ,如果提供的属性只能选择,不能随便传入,就可以写成这样  
+            &lt;attr name="language"&gt;  
+                &lt;enum name="Chinese" value="1"/&gt;  
+                &lt;enum name="English" value="2"/&gt;  
+            &lt;/attr&gt;  
+     10.flag：位或运算  
+  
+  
+declare-styleable子元素:  
+  
+定义一个styleable对象,每个styleable对象就是一组attr属性的集合
+注意:这里的name属性并不是一定要和自定义类名相同,只是为了好区分对应类的属性而已  
+</code></pre>
+    
+    <h2>xml+java使用 自定义View</h2>
+    <pre><code>
+//定义命名空间
+xmlns:app="http://schemas.android.com/apk/res/com.test" 
+
+//使用
+&lt;com.test.MyView  
+         app:textColor="#ff0000"
+         /&gt; 
+         
+//自定义View
+public MyView(Context context,AttributeSet attrs, int defStyle)    
+{    
+    super(context,attrs); 
+    
+    /*这里取得declare-styleable集合*/  
+    TypedArray typeArray = context.
+            obtainStyledAttributes(attrs,R.styleable.MyView); 
+    //TypedArray typeArray = context.getTheme().
+    //      obtainStyledAttributes(attrs,R.styleable.MyView, defStyle, 0); 
+        
+    /*这里从集合里取出相对应的属性值,第二参数是如果使用者没用配置该属性时所用的默认值*/  
+    int textColor = typeArray.getColor(R.styleable.MyView_textColor,0XFFFFFFFF);    
+    float textSize = typeArray.getDimension(R.styleable.MyView_textSize, 36); 
+    //
+    int n = typeArray.getIndexCount();  
+    for (int i = 0; i &lt; n; i++)  
+    {  
+        int attr = typeArray.getIndex(i);  
+        switch (attr)  
+        {  
+            case R.styleable.MyView_textSize: 
+                { 
+                    textSize = a.Dimension(attr);  
+                    break;
+                }
+        }  
+  
+    }
+    
+    /*关闭资源*/  
+    typeArray.recycle();    
+}    
+</code></pre>
+   
+   
+   
+    <h2>TypedArray</h2>
+    <pre><code>
+ 
+    </code></pre>
+
     </main>
 </body>
 

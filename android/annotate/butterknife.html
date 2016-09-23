@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Butter Knife</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>Butter Knife</h1>
+
+        <a href="https://github.com/JakeWharton/butterknife">github Butter Knife</a>
+
+        <h2>配置</h2>
+        <pre><code>
+compile 'com.jakewharton:butterknife:8.4.0'
+
+在build.gradle中取消lint警告：
+
+lintOptions {
+  disable 'InvalidPackage'
+}
+
+
+ProGuard
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* &lt;fields&gt;;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* &lt;methods&gt;;
+}
+</code></pre>
+
+        <h2>使用</h2>
+        <ul>
+            <li>@BindView findViewById()
+                <br>ButterKnife.bind(this, view);
+                <br>@BindView(R.id.user) EditText username;
+                <pre><code>
+//activity
+class ExampleActivity extends Activity {
+  @BindView(R.id.title) TextView title;
+  @BindView(R.id.subtitle) TextView subtitle;
+  @BindView(R.id.footer) TextView footer;
+
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.simple_activity);
+    ButterKnife.bind(this);
+    // TODO Use fields...
+  }
+}
+               
+//non-activity
+public class FancyFragment extends Fragment {
+  @BindView(R.id.button1) Button button1;
+  @BindView(R.id.button2) Button button2;
+
+  @Override 
+  public View onCreateView(
+                LayoutInflater inflater, 
+                ViewGroup container, 
+                Bundle savedInstanceState) 
+  {
+    View view = inflater.inflate(R.layout.frag, container, false);
+    ButterKnife.bind(this, view);
+    // TODO Use fields...
+    return view;
+  }
+  
+    @Override 
+    public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
+  }
+}
+
+static class ViewHolder {
+    @BindView(R.id.title) TextView name;
+    @BindView(R.id.job_title) TextView jobTitle;
+
+    public ViewHolder(View view) {
+      ButterKnife.bind(this, view);
+    }
+  }
+  
+  
+//Controller
+ButterKnife.bind(this, activity)
+
+//
+merge inflate之后 或 onFinishInflate()
+</code></pre>
+            </li>
+            <li>@BindString 资源
+                <br>@BindString(R.string.login_error) String loginErrorMessage;
+                <br>@BindBool、@BindColor、@BindDimen、@BindDrawable、@BindInt、@BindString
+            </li>
+            <li>@BindViews 将多个views绑定到数组
+                <pre><code>
+@BindViews({ R.id.first_name, R.id.middle_name, R.id.last_name }) 
+List&lt;EditText&gt; nameViews;    
+
+//在这个列表中每一个元素上进行调用
+ButterKnife.apply(nameViews, DISABLE);
+ButterKnife.apply(nameViews, ENABLED, false);
+ButterKnife.apply(nameViews, View.ALPHA, 0.0f);
+
+static final ButterKnife.Action&lt;View&gt; DISABLE = new ButterKnife.Action&lt;View&gt;() {
+  @Override public void apply(View view, int index) {
+    view.setEnabled(false);
+  }
+};
+static final ButterKnife.Setter&lt;View, Boolean&gt; ENABLED = new ButterKnife.Setter&lt;View, Boolean&gt;() {
+  @Override public void set(View view, Boolean value, int index) {
+    view.setEnabled(value);
+  }
+};
+</code></pre>
+            </li>
+            <li>@OnClick 监听器绑定
+                <pre><code>
+@OnClick(R.id.submit)
+public void submit(View view) {
+  // TODO submit data to server...
+}
+
+
+//All arguments to the listener method are optional.
+//参数可选
+@OnClick(R.id.submit)
+public void submit() {
+  // TODO submit data to server...
+}
+
+
+//Define a specific type and it will automatically be cast.
+//参数类型识别
+@OnClick(R.id.submit)
+public void sayHi(Button button) {
+  button.setText("Hello!");
+}    
+
+
+//Specify multiple IDs in a single binding for common event handling.
+//绑定多个id控件到同一个监听器上
+@OnClick({ R.id.door1, R.id.door2, R.id.door3 })
+public void pickDoor(DoorView door) {
+  if (door.hasPrizeBehind()) {
+    Toast.makeText(this, "You win!", LENGTH_SHORT).show();
+  } else {
+    Toast.makeText(this, "Try again", LENGTH_SHORT).show();
+  }
+}
+
+
+
+//Custom views can bind to their own listeners by not specifying an ID.
+//自定义View绑定事件监听时无需ID：
+public class FancyButton extends Button {
+  @OnClick
+  public void onClick() {
+    // TODO do something!
+  }
+}
+</code></pre>
+            </li>
+            <li>unbind Fragments
+                <pre><code>
+@Override 
+public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
+}
+</code></pre>
+            </li>
+            <li>多回调方法<pre><code>
+//能够对监听器任何一个函数进行绑定
+@OnItemSelected(R.id.list_view)
+void onItemSelected(int position) {
+  // TODO ...
+}
+
+//每一个注解都会绑定到一个默认的回调。可以指定callback参数
+@OnItemSelected(value = R.id.maybe_missing, callback = NOTHING_SELECTED)
+void onNothingSelected() {
+  // TODO ...
+}
+            </code></pre>
+            </li>
+            <li>@Nullable 忽视异常
+                <pre><code>
+@Nullable 
+@BindView(R.id.might_not_be_there) TextView mightNotBeThere;
+
+@Optional 
+@OnClick(R.id.maybe_missing) void onMaybeMissingClicked() {
+  // TODO ...
+}
+            </code></pre>
+            </li>
+
+            <li>findById 免转换
+                <pre><code>
+View view = LayoutInflater.from(context).inflate(R.layout.thing, null);
+TextView firstName = ButterKnife.findById(view, R.id.first_name);
+TextView lastName = ButterKnife.findById(view, R.id.last_name);
+ImageView photo = ButterKnife.findById(view, R.id.photo);
+            </code></pre>
+            </li>
+        </ul>
+
+    </main>
+
+
+
+
+
+
+
+
+</body>
+
+</html>
