@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android menu</h1>
+        <h2>syntax</h2>
+        <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;menu xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+    &lt;item android:id="@[+][package:]id/resource_name"
+          android:title="string"
+          android:titleCondensed="string"
+          android:icon="@[package:]drawable/drawable_resource_name"
+          android:onClick="method name"
+          android:showAsAction=["ifRoom" | "never" | "withText" | "always" | "collapseActionView"]
+          android:actionLayout="@[package:]layout/layout_resource_name"
+          android:actionViewClass="class name"
+          android:actionProviderClass="class name"
+          android:alphabeticShortcut="string"
+          android:numericShortcut="string"
+          android:checkable=["true" | "false"]
+          android:visible=["true" | "false"]
+          android:enabled=["true" | "false"]
+          android:menuCategory=["container" | "system" | "secondary" | "alternative"]
+          android:orderInCategory="integer" 
+    /&gt;
+    
+    &lt;group android:id="@[+][package:]id/resource name"
+           android:checkableBehavior=["none" | "all" | "single"]
+           android:visible=["true" | "false"]
+           android:enabled=["true" | "false"]
+           android:menuCategory=["container" | "system" | "secondary" | "alternative"]
+           android:orderInCategory="integer" &gt;
+           
+        &lt;item /&gt;
+        
+    &lt;/group&gt;
+    
+    &lt;item &gt;
+        &lt;menu&gt;
+          &lt;item /&gt;
+        &lt;/menu&gt;
+    &lt;/item&gt;
+    
+&lt;/menu&gt;</code></pre>
+        
+        
+    </main>
+</body>
+
+</html>

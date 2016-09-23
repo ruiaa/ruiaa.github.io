@@ -15,6 +15,7 @@
 <body>
     <main role="main">
         <h1>android xml 资源</h1>
+        
 
         <h2>文件结构</h2>
         <pre><code>
@@ -36,6 +37,7 @@
 /res/menu/                R.menu
 
 /res/values/
+        attrs.xml
         styles.xml        R.string
         themes.xml
         strings.xml
@@ -53,7 +55,7 @@
 </code></pre>
 
 
-        <h2>资源类</h2>
+        <h2>android.content.res.Resources</h2>
         <pre><code>int getColor(int id)  //对应res/values/colors.xml 
  
     Drawable getDrawable(int id) //对应res/drawable/
@@ -69,75 +71,9 @@
     String[] getStringArray(int id) //对应res/values/arrays.xml
  
     float getDimension(int id) //对应res/values/dimens.xml</code></pre>
-        <h2>/res/color/</h2>
-        <pre><code>
-//定义 /res/color/colorstatefile.xml
-&lt;?xml version="1.0"encoding="utf-8"?&gt;
-&lt;selectorxmlns:android="http://schemas.android.com/apk/res/android" &gt;
-    &lt;item android:color="hex_color"
-        android:state_pressed=["true" | "false"]
-        android:state_focused=["true" | "false"]
-        android:state_selected=["true" | "false"]
-        android:state_checkable=["true" | "false"]
-        android:state_checked=["true" | "false"]
-        android:state_enabled=["true" | "false"]
-        android:state_window_focused=["true" | "false"]
-        /&gt;
-        
-    &lt;item android:state_pressed="true" android:color="#ffff0000"/&gt;
-    
-     &lt;!-- default --&gt;
-    &lt;item android:color="#ff000000"/&gt;
-    
-&lt;/selector&gt;
 
-//使用
-@color/colorstatefile
-R.Color.colorstatefile
-</code></pre>
 
-        <h2>/res/values/</h2>
-        <pre><code>
-&lt;?xml version="1.0"encoding="utf-8"?&gt;
-&lt;resources&gt;
-    //格式
-    &lt;type_name  name="res_name"&gt;the_resoure&lt;/type_name&gt;
-    
-    //单个
-    &lt;string name="str_name">text_string&lt;/string&gt;
-    //String string = getString(R.String.str_name);
-    //@string/str_name
-    //假如有特殊字符，而没有用到转义字符，就必须用双引号将字符串完全包住
-    //"text_'string"
-    
-    //数组
-    &lt;string-array name="planets_array"&gt;
-        &lt;item&gt;Mercury&lt;/item&gt;
-        &lt;item&gt;Venus&lt;/item&gt;
-        &lt;item&gt;Earth&lt;/item&gt;
-        &lt;item&gt;Mars&lt;/item&gt;
-    &lt;/string-array&gt;
-    //@array/planets_array
-    //Resources res = getResources();
-    //String[] planets = res.getStringArray(R.array.planets_array);
-    
-    
-    //无类型数组
-    &lt;array name="planets_array"&gt;
-        &lt;item&gt;Mercury&lt;/item&gt;
-        &lt;item&gt;Venus&lt;/item&gt;
-        &lt;item&gt;Earth&lt;/item&gt;
-        &lt;item&gt;Mars&lt;/item&gt;
-    &lt;/array&gt;
-    //Resources res = getResources();
-    //TypedArray planetsArray = res.obtainTypedArray(R.array.planets_array);
-    //String str= planetsArray.getString(0);
-    
-&lt;/resources&gt;
-        </code></pre>
-
-        <h2></h2>
-
+        <h2>解析资源 android.util.AttributeSet</h2>
 
         <h2>@、@android:type、@*、？、@+</h2>
         <ul>

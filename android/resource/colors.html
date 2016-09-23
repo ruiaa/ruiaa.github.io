@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android colors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android colors</h1>
+        
+                <h2>/res/color/</h2>
+        <pre><code>
+//定义 /res/color/colorstatefile.xml
+&lt;?xml version="1.0"encoding="utf-8"?&gt;
+&lt;selectorxmlns:android="http://schemas.android.com/apk/res/android" &gt;
+    &lt;item android:color="hex_color"
+        android:state_pressed=["true" | "false"]
+        android:state_focused=["true" | "false"]
+        android:state_selected=["true" | "false"]
+        android:state_checkable=["true" | "false"]
+        android:state_checked=["true" | "false"]
+        android:state_enabled=["true" | "false"]
+        android:state_window_focused=["true" | "false"]
+        /&gt;
+        
+    &lt;item android:state_pressed="true" android:color="#ffff0000"/&gt;
+    
+     &lt;!-- default --&gt;
+    &lt;item android:color="#ff000000"/&gt;
+    
+&lt;/selector&gt;
+
+//使用
+@color/colorstatefile
+R.Color.colorstatefile
+</code></pre>
+    </main>
+</body>
+
+</html>

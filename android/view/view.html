@@ -15,10 +15,309 @@
 <body>
     <main role="main">
         <h1>android view</h1>
+
+        <h2>Implementing a Custom View</h2>
+        <ul>
+            <li>Creation 创建
+                <ul>
+                    <li>Constructors 构造器
+                        <p>There is a form of the constructor that are called when the view is created from code and a form that is called when the view is inflated from a layout file. The second form should parse and apply any attributes defined in the layout file.</p>
+                    </li>
+                    <li>onFinishInflate() XML加载完毕
+                        <p>Called after a view and all of its children has been inflated from XML.</p>
+                    </li>
+                </ul>
+            </li>
+            <li>Layout 布局
+                <ul>
+                    <li>onMeasure(int, int) 测量
+                        <p>Called to determine the size requirements for this view and all of its children.</p>
+                    </li>
+                    <li>onLayout(boolean, int, int, int, int) 布局
+                        <p>Called when this view should assign a size and position to all of its children.</p>
+                    </li>
+                    <li>onSizeChanged(int, int, int, int) 视图大小改变
+                        <p>Called when the size of this view has changed.</p>
+                    </li>
+                </ul>
+            </li>
+            <li>Drawing 绘制
+                <ul>
+                    <li>onDraw(android.graphics.Canvas)
+                        <p>Called when the view should render its content.</p>
+                    </li>
+                </ul>
+            </li>
+            <li>Event 事件响应
+                <ul>
+                    <li>processing onKeyDown(int, KeyEvent) 手机键
+                        <p>Called when a new hardware key event occurs.</p>
+                    </li>
+                    <li>onKeyUp(int, KeyEvent) 手机键
+                        <p>Called when a hardware key up event occurs.</p>
+                    </li>
+                    <li>onTrackballEvent(MotionEvent) 轨迹球
+                        <p>Called when a trackball motion event occurs.</p>
+                    </li>
+                    <li>onTouchEvent(MotionEvent) 触摸
+                        <p>Called when a touch screen motion event occurs.</p>
+                    </li>
+                </ul>
+            </li>
+            <li>Focus 焦点改变
+                <ul>
+                    <li>onFocusChanged(boolean, int, android.graphics.Rect)
+                        <p>Called when the view gains or loses focus.</p>
+                    </li>
+                    <li>onWindowFocusChanged(boolean)
+                        <p>Called when the window containing the view gains or loses focus.</p>
+                    </li>
+                </ul>
+            </li>
+            <li>Attaching View关联/解除关联Window window可见性
+                <ul>
+                    <li>onAttachedToWindow()
+                        <p>Called when the view is attached to a window.</p>
+                    </li>
+                    <li>onDetachedFromWindow()
+                        <p>Called when the view is detached from its window.</p>
+                    </li>
+                    <li>onWindowVisibilityChanged(int)
+                        <p>Called when the visibility of the window containing the view has changed.</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>IDs</h2>
+        <ul>
+            <li>
+                <pre><code>android:id="@+id/my_button"
+//
+ Button myButton = (Button) findViewById(R.id.my_button);
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>Position Size padding  margins</h2>
+        <ul>
+            <li>Position
+                <p>getLeft() and getTop() getRight() and getBottom()</p>
+            </li>
+            <li>Size
+                <ul>
+                    <li>测量时getMeasuredWidth() and getMeasuredHeight()</li>
+                    <li>实际getWidth() and getHeight()</li>
+                </ul>
+
+            </li>
+            <li>padding
+                <ul>
+                    <li>setPadding(int, int, int, int) or setPaddingRelative(int, int, int, int)</li>
+                    <li>getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom(), getPaddingStart(), getPaddingEnd()</li>
+                </ul>
+            </li>
+            <li>margins
+                <ul>
+                    <li>ViewGroup.MarginLayoutParams</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Scrolling</h2>
+        <ul>
+            <li>scrollBy(int, int), scrollTo(int, int), and awakenScrollBars()</li>
+        </ul>
+
+        <h2>Focus TouchMode</h2>
+        <ul>
+            <li>Touch Mode
+                <ul>
+                    <li>当用户开始通过键盘与设备交互的时候，设备就退出Touch Mode模式；当用户开始通过触摸屏与设备交互的时候，设备就进入Touch Mode模式。可以通过调用View的isInTouchMode来判断设备当前是否处于Touch Mode模式。</li>
+                    <li>Android规定，某些元素，即使是在Touch Mode模式下，也可以获得焦点。调用View的setFocusableInTouchMode(true)可以使View在Touch Mode模式之下仍然可获得焦点（像Edittext就是在内部设置了这个属性），调用isFocusableInTouchMode可以判断View是否可在Touch Mode模式下聚焦。</li>
+                </ul>
+            </li>
+            <li>焦点(光标) focus
+                <ul>
+                    <li>焦点改变监听
+                        <pre><code>
+view.setOnFocusChangeListener(new View.OnFocusChangeListener(){   
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus)
+    {
+        if(hasFocus){
+           
+            //获得焦点
+            
+        }else{
         
-        <h2>属性</h2>
+        }
         
-        
+    }
+});
+</code></pre>
+                    </li>
+                    <li>获取焦点
+                        <pre><code>
+//
+if(view.isInTouchMode()){
+    //View支持Focus，但是不支持在Touch模式下的Focus
+    view.requestFocusFromTouch();
+}else{
+    view.requestFocus();
+}
+            
+//焦点移动
+android:nextFocusDown 
+android:nextFocusLeft 
+android:nextFocusRight 
+android:nextFocusUp       
+</code></pre>
+                    </li>
+                    <li>使用/禁用 焦点
+                        <pre><code>
+//
+isFocusable()
+setFocusable()
+android:focusable
+
+//在TouchMode下
+isFocusableInTouchMode()
+setFocusableInTouchMode()
+android:focusableInTouchMode="true"
+</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>states</h2>
+        <ul>
+            <li>enabled
+                <p>表示当前视图是否可用，不可用的视图是无法响应onTouch事件的</p>
+            </li>
+            <li>focused</li>
+            <li>window_focused</li>
+            <li>selected</li>
+            <li>pressed</li>
+        </ul>
+
+        <h2>XML属性</h2>
+        <ul>
+            <li>标记/描述
+                <ul>
+                    <li>android:id 唯一编号 View.findViewById() , Activity.findViewById()</li>
+                    <li>android:tag 文本标签 View.getTag() , View.findViewWithTag()</li>
+                    <li>android:contentDescription 为一些没有文字描述的View提供说明</li>
+                </ul>
+            </li>
+            <li>大小 边距 背景
+                <ul>
+                    <li>android:minHeight</li>
+                    <li>android:minWidth</li>
+                    <li>android:padding</li>
+                    <li>android:paddingBottom</li>
+                    <li>android:paddingLeft</li>
+                    <li>android:paddingRight</li>
+                    <li>android:paddingTop</li>
+                    <li>android:background 透明："@android:color/transparent"和"@null"</li>
+
+                </ul>
+            </li>
+            <li>显示/唤醒
+                <ul>
+                    <li>android:visibility visible,invisible,gone(不显示,不占用空间)
+                        </p>
+                    </li>
+                    <li>android:keepScreenOn View在可见的情况下是否保持唤醒状态</li>
+                </ul>
+            </li>
+            <li>事件响应
+                <ul>
+                    <li>android:clickable 是否响应点击事件</li>
+                    <li>android:longClickable</li>
+                    <li>android:onClick 从上下文中调用指定的方法public void onClickXxx(View view)</li>
+                </ul>
+            </li>
+            <li>焦点focus 触摸方式TouchMode
+                <ul>
+                    <li>android:focusable 是否获得焦点</li>
+                    <li>android:focusableInTouchMode 在Touch模式下View是否能取得焦点</li>
+                    <li>android:nextFocusDown
+                        <p>设置下方指定视图获得下一个焦点。焦点移动是基于一个 在给定方向查找最近邻居的算法。如果指定视图不存在， 移动焦点时将报运行时错误。可以设置 imeOptions= actionDone，这样输入完即跳到下一个焦点。
+                        </p>
+                    </li>
+                    <li>android:nextFocusLeft
+                        <p>设置左边指定视图获得下一个焦点。
+                        </p>
+                    </li>
+                    <li>android:nextFocusRight
+                        <p>设置右边指定视图获得下一个焦点。
+                        </p>
+                    </li>
+                    <li>android:nextFocusUp
+                        <p>设置上方指定视图获得下一个焦点。
+                        </p>
+                    </li>
+                </ul>
+            </li>
+            <li>滚动
+                <ul>
+                    <li>允许滚动</li>
+                    <li>android:isScrollContainer 设置当前View为滚动容器</li>
+                    <li>边框渐变</li>
+                    <li>android:fadingEdge 边框渐变的方向 none,horizontal,vertical,</li>
+                    <li>android:fadingEdgeLength 边框渐变的长度</li>
+                    <li>显示滚动条</li>
+                    <li>android:scrollbars none,horizontal,vertical</li>
+                    <li>android:scrollbarAlwaysDrawHorizontalTrack 始终显示</li>
+                    <li>android:scrollbarAlwaysDrawVerticalTrack 始终显示</li>
+                    <li>滚动条样式</li>
+                    <li>android:scrollbarSize</li>
+                    <li>android:scrollbarStyle 风格和位置
+                        <p>insideOverlay、 insideInset、outsideOverlay、outsideInset</p>
+                    </li>
+                    <li>android:scrollbarThumbHorizontal drawable</li>
+                    <li>android:scrollbarThumbVertical drawable</li>
+                    <li>android:scrollbarTrackHorizontal 轨迹 drawable</li>
+                    <li>android:scrollbarTrackVertical 轨迹 drawable</li>
+                    <li>初始偏移</li>
+                    <li>android:scrollX</li>
+                    <li>android:scrollY</li>
+                    <li>滚动条淡化</li>
+                    <li>android:scrollbarDefaultDelayBeforeFade N毫秒后开始淡化</li>
+                    <li>android:scrollbarFadeDuration 淡出毫秒时间</li>
+                </ul>
+            </li>
+            <li>其他
+                <ul>
+                    <li>android:drawingCacheQuality
+                        <p>设置绘图时半透明质量。有以下值可设置：auto（默认， 由框架决定）/high（高质量，使用较高的颜色深度，消耗 更多的内存）/low（低质量，使用较低的颜色深度，但是 用更少的内存）</p>
+                    </li>
+                    <li>android:duplicateParentState
+                        <p>如果设置此属性，将直接从父容器中获取绘图状态（光标， 按下等）。 见下面代码部分，注意根据目前测试情况仅仅是 获取绘图状态，而没有获取事件，也就是你点一下 LinearLayout时Button有被点击的效果，但是不执行点击事 件。
+                        </p>
+                    </li>
+                    <li>android:fitsSystemWindows
+                        <p>设置布局调整时是否考虑系统窗口（如状态栏）
+                        </p>
+                    </li>
+                    <li>android:hapticFeedbackEnabled
+                        <p>设置触感反馈。（译者注：按软键以及进行某些UI交互时振动，暂时不知道用法，大家可以找找performHapticFeedback或HapticFeedback这个关键字的资料看看。）</p>
+                    </li>
+                    <li>android:saveEnabled
+                        <p>设置是否在窗口冻结时（如旋转屏幕）保存View的数据， 默认为true，但是前提是你需要设置id才能自动保存，参 见这里。</p>
+                    </li>
+                    <li>android:soundEffectsEnabled
+                        <p>设置点击或触摸时是否有声音效果
+                        </p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+
     </main>
 </body>
 

@@ -43,17 +43,22 @@
             <li>performMeasure方法中会调用measure方法，在measure方法中又会调用onMeasure方法，在onMeasure方法中会对所有的子元素进行measure过程，这个时候measure流程就从父容器传递到子元素了，这样就完成了一次measure过程，layout和draw的过程类似。</li>
             <li>measure过程决定了view的宽高，在几乎所有的情况下这个宽高都等同于view最终的宽高。layout过程决定了view的四个顶点的坐标和view实际的宽高，通过getWidth和getHeight方法可以得到最终的宽高。draw过程决定了view的显示。</li>
         </ul>
+        
+        <h2>视图重绘 invalidate()</h2>
 
         <h2>LayoutInflater加载布局</h2>
         <ul>
             <li><a href="http://blog.csdn.net/guolin_blog/article/details/12921889">guolin : Android LayoutInflater原理分析，带你一步步深入了解View(一)</a>
             </li>
-            <li>获取LayoutInflater的实例<pre><code>LayoutInflater layoutInflater = LayoutInflater.from(context); 
+            <li>获取LayoutInflater的实例<pre><code>
+LayoutInflater layoutInflater = LayoutInflater.from(context); 
+
 //
 LayoutInflater layoutInflater = (LayoutInflater) context  
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE); </code></pre>
             </li>
-            <li>inflate() 加载布局<pre><code>layoutInflater.inflate(resourceId, root); 
+            <li>inflate() 加载布局<pre><code>
+layoutInflater.inflate(resourceId, root); 
 //resourceId 加载的布局id
 //root 父布局，如果不需要就直接传null
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android resource values</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android resource values</h1>
+        
+                <h2>/res/values/</h2>
+        <pre><code>
+&lt;?xml version="1.0"encoding="utf-8"?&gt;
+&lt;resources&gt;
+    //格式
+    &lt;type_name  name="res_name"&gt;the_resoure&lt;/type_name&gt;
+    
+    //单个
+    &lt;string name="str_name">text_string&lt;/string&gt;
+    //String string = getString(R.String.str_name);
+    //@string/str_name
+    //假如有特殊字符，而没有用到转义字符，就必须用双引号将字符串完全包住
+    //"text_'string"
+    
+    //数组
+    &lt;string-array name="planets_array"&gt;
+        &lt;item&gt;Mercury&lt;/item&gt;
+        &lt;item&gt;Venus&lt;/item&gt;
+        &lt;item&gt;Earth&lt;/item&gt;
+        &lt;item&gt;Mars&lt;/item&gt;
+    &lt;/string-array&gt;
+    //@array/planets_array
+    //Resources res = getResources();
+    //String[] planets = res.getStringArray(R.array.planets_array);
+    
+    
+    //无类型数组
+    &lt;array name="planets_array"&gt;
+        &lt;item&gt;Mercury&lt;/item&gt;
+        &lt;item&gt;Venus&lt;/item&gt;
+        &lt;item&gt;Earth&lt;/item&gt;
+        &lt;item&gt;Mars&lt;/item&gt;
+    &lt;/array&gt;
+    //Resources res = getResources();
+    //TypedArray planetsArray = res.obtainTypedArray(R.array.planets_array);
+    //String str= planetsArray.getString(0);
+    
+&lt;/resources&gt;
+        </code></pre>
+        
+    </main>
+</body>
+
+</html>
