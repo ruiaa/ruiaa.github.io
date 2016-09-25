@@ -45,14 +45,18 @@
 
 
         <h2>创建型</h2>
+        
 
-        <h3>简单工厂模式 功能接口+多实现&gt;工厂:静态方法&gt;创建</h3>
-        <pre><code>//接口
+        <h3>简单工厂模式</h3>
+        <pre><code>
+// 功能接口+多实现&gt;工厂:静态方法&gt;创建        
+
+//功能接口
 public interface Sender {  
     public void Send();  
 } 
 
-//实现类
+//功能实现类
 public class MailSender implements Sender {  
     @Override  
     public void Send() {  
@@ -116,8 +120,12 @@ public class SendFactory {
 //使用
 Sender sender = SendFactory.produceMail();  
 sender.Send();</code></pre>
-        <h3>工厂方法模式 功能接口+多实现&gt;工厂接口+具体工厂&gt;创建</h3>
-        <pre><code>public interface Provider {  
+       
+        <h3>工厂方法模式</h3>
+        <pre><code>
+// 功能接口+多实现&gt;工厂接口+具体工厂&gt;创建
+
+public interface Provider {  
     public Sender produce();  
 } 
 
@@ -136,8 +144,11 @@ public class SendSmsFactory implements Provider{
         return new SmsSender();  
     }  
 } </code></pre>
-        <h3>抽象工厂模式 多个子产品组合成父产品</h3>
+       
+        <h3>抽象工厂模式</h3>
         <pre><code>
+// 多个子产品组合成父产品
+        
 /**
  * 发动机接口
  */
@@ -211,7 +222,8 @@ public class LowCarFactory implements CarFactory{
         return new LowTyre();
     }
 }</code></pre>
-        <h3>单例模式 保证仅创建一次</h3>
+       
+        <h3>单例模式</h3>
         <pre><code>//即时加载
 public class Singleton {
     private static Singleton instance = new Singleton();
@@ -266,18 +278,25 @@ public class Singleton {
     private Object readResolve() throws ObjectStreamException{
         return getInstance();
     }</code></pre>
-        <h3>原型模式 克隆 适用于对象new的过程很耗时</h3>
-        <pre><code>implements Cloneable
-    //浅克隆
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        //直接调用Object对象的clone方法
-        Object obj = super.clone();
-        return obj;
-    }
+       
+        <h3>原型模式 克隆</h3>
+        <pre><code>
+// 适用于对象new的过程很耗时
+
+
+implements Cloneable
+   
+   
+//浅克隆
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    //直接调用Object对象的clone方法
+    Object obj = super.clone();
+    return obj;
+}
     
-    //深克隆
-    
+
+//深克隆
 implements Serializable 
     //通过序列化和反序列化来实现深克隆对象
     public Object deepClone() throws IOException, ClassNotFoundException {  
@@ -293,8 +312,14 @@ implements Serializable
         return ois.readObject();  
     } 
 </code></pre>
-        <h3>建造者模式 对象的构建很复杂 把对象的构建和最后的组装分离开</h3>
-        <pre><code>public class AirShip {
+       
+        <h3>建造者模式</h3>
+        <pre><code>
+// 对象的构建很复杂 把对象的构建和最后的组装分离开
+//保证多个必要项全部赋值,可选项赋值
+//之后才能使用
+
+public class AirShip {
     private OrbitalModule orbitalModule;//轨道舱
     private Engine engine;//发动机
     private EscapeTower escapeTower;//逃逸塔
@@ -352,8 +377,8 @@ public class BestAirShipDirector implements AirShipDirector{
 }
 
 //使用
-    AirShipDirector shipDirector = new BestAirShipDirector(new BestAirShipBuilder()); 
-    AirShip airShip = shipDirector.directorAirShip();</code></pre>
+AirShipDirector shipDirector = new BestAirShipDirector(new BestAirShipBuilder()); 
+AirShip airShip = shipDirector.directorAirShip();</code></pre>
 
         <h2>结构型模式</h2>
         <h3>适配器模式 将一个类转换成满足另一个新接口的类</h3>
@@ -939,12 +964,15 @@ public class MyCollection implements Collection {
 } 
 
 </code></pre>
-        <h3>观察者模式 被观察者调用观察者接口</h3>
-        <pre><code>public interface Observer {  
+        <h3>观察者模式 </h3>
+        <pre><code>
+//被观察者调用观察者接口
+
+
+public interface Observer {  
     public void update();  
 } 
 public class Observer1 implements Observer {  
-  
     @Override  
     public void update() {  
         System.out.println("observer1 has received!");  
@@ -952,7 +980,6 @@ public class Observer1 implements Observer {
 }
  
 public interface Subject {  
-      
     /*增加观察者*/  
     public void add(Observer observer);  
       
@@ -967,7 +994,7 @@ public interface Subject {
 } 
 public abstract class AbstractSubject implements Subject {  
   
-    private Vector<Observer> vector = new Vector<Observer>();  
+    private Vector&lt;Observer&gt; vector = new Vector&lt;Observer&gt;();  
     @Override  
     public void add(Observer observer) {  
         vector.add(observer);  
@@ -980,9 +1007,9 @@ public abstract class AbstractSubject implements Subject {
   
     @Override  
     public void notifyObservers() {  
-        Enumeration<Observer> enumo = vector.elements();  
+        Enumeration&lt;Observer&gt; enumo = vector.elements();  
         while(enumo.hasMoreElements()){  
-            enumo.nextElement().update();  
+            enumo.nextElement().update(); 
         }  
     }  
 } 
@@ -997,11 +1024,13 @@ public class MySubject extends AbstractSubject {
 } 
 
 //使用
-        Subject sub = new MySubject();  
-        sub.add(new Observer1());  
-        sub.add(new Observer2());  
-          
-        sub.operation();
+//创建被观察者
+Subject sub = new MySubject();
+//插入观察者
+sub.add(new Observer1());  
+sub.add(new Observer2());  
+//发送事件,激活观察者
+sub.operation();
 </code></pre>
 
         <h3>备忘录模式 保存一个对象的某个状态,以便在适当的时候恢复</h3>

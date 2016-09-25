@@ -1,0 +1,36 @@
+define
+定义
+antialias
+反锯齿
+dither
+抖动 颜色表现
+alternate
+交替
+clip
+剪切
+syntax
+语法
+duration
+持续时间
+modify
+修改
+arbitrary
+任意的
+merge
+合并
+concurrency
+并发
+reactive
+反应性的
+iterable
+可迭代
+observable
+可观察
+observer
+观察者
+subscriber
+订阅者
+emit
+发射 发布
+Intermediate Language
+IL中间语言代码

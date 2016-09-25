@@ -6,7 +6,8 @@
     <title>android Data Binding Library</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -16,6 +17,11 @@
     <main role="main">
         <h1>android Data Binding Library</h1>
         
+        <h2>参考</h2>
+        <a href="http://www.jianshu.com/p/b1df61a4df77">田浩浩_DockOne  : Data Binding（数据绑定）用户指南</a>
+        <br>
+        <a href="https://developer.android.com/topic/libraries/data-binding/index.html#data_objects">libraries/data-binding/</a>
+
         <h2>配置环境</h2>
         <pre><code>
  Android 2.1 (API level 7+)
@@ -29,7 +35,7 @@ android {
 }
 
 </code></pre>
-        
+
         <h2>使用</h2>
         <pre><code>
 //1,定义属性
@@ -82,6 +88,599 @@ ListItemBinding binding = ListItemBinding.inflate(layoutInflater, viewGroup, fal
 //or
 ListItemBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item, viewGroup, false);
 </code></pre>
+
+        <h2>Data Binding Layout文件</h2>
+        <ul>
+            <li>Data Binding表达式 layout data @{}
+                <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;layout xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+    &lt;data&gt;
+        &lt;variable name="user" type="com.test.User"/&gt;
+    &lt;/data&gt;
+    &lt;LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"&gt;
+
+        &lt;TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.firstName}"/&gt;
+
+    &lt;/LinearLayout&gt;
+&lt;/layout&gt;</code></pre>
+            </li>
+            <li>Data对象 POJO,JavaBeans
+                <pre><code>
+//plain-old Java Object（POJO）
+//@{user.firstName} -> user.firstName
+public class User {
+   public final String firstName;
+   public final String lastName;
+   public User(String firstName, String lastName) {
+       this.firstName = firstName;
+       this.lastName = lastName;
+   }
+}
+
+
+//JavaBeans
+//@{user.firstName} -> user.getFirstName()
+public class User {
+   private final String firstName;
+   private final String lastName;
+   public User(String firstName, String lastName) {
+       this.firstName = firstName;
+       this.lastName = lastName;
+   }
+   public String getFirstName() {
+       return this.firstName;
+   }
+   public String getLastName() {
+       return this.lastName;
+   }
+}
+</code></pre>
+            </li>
+            <li>Binding类 LayoutNameBinding
+                <pre><code>
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+   super.onCreate(savedInstanceState);
+   ActivityMainBinding binding = 
+       DataBindingUtil.setContentView(this, R.layout.main_activity);
+   User user = new User("Test", "User");
+   binding.setUser(user);
+}
+
+//
+MyLayoutBinding binding = 
+    MyLayoutBinding.inflate(getLayoutInflater());
+
+
+//在ListView或者RecyclerView adapter使用Data Binding
+ListItemBinding binding = 
+    ListItemBinding.inflate(layoutInflater, viewGroup,false);
+//or
+ListItemBinding binding = 
+    DataBindingUtil.inflate(layoutInflater, R.layout.list_item, viewGroup, false);
+</code></pre>
+            </li>
+            <li>事件处理 事件属性名取决于监听器方法名
+                <pre><code>
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>深入Layout文件</h2>
+        <ul>
+            <li>Import,alias
+                <pre><code>
+//导入类
+&lt;data&gt;
+    &lt;import type="android.view.View"/&gt;
+&lt;/data&gt;
+//使用
+&lt;TextView
+   android:text="@{user.lastName}"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   android:visibility="@{user.isAdult ? View.VISIBLE : View.GONE}"/&gt;
+//Android Studio还没有处理imports，所以自动导入Variable在你的IDE不能使用
+&lt;TextView
+   android:text="@{((User)(user.connection)).lastName}"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"/&gt;
+//别名
+&lt;import type="android.view.View"/&gt;
+&lt;import type="com.example.real.estate.View"
+        alias="Vista"/&gt;
+//导入的类型可以在Variable和表达式中使用作为引用来使用
+&lt;data&gt;
+    &lt;import type="com.example.User"/&gt;
+    &lt;import type="java.util.List"/&gt;
+    &lt;variable name="user" type="User"/&gt;
+    &lt;variable name="userList" type="List&lt;User&gt;"/&gt;
+ &lt;/data&gt;
+ //导入的类型还可以在表达式中使用static属性和方法
+&lt;data>
+    &lt;import type="com.example.MyStringUtils"/&gt;
+    &lt;variable name="user" type="com.example.User"/&gt;
+&lt;/data>
+…
+&lt;TextView
+   android:text="@{MyStringUtils.capitalize(user.lastName)}"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"/&gt;
+</code></pre>
+            </li>
+            <li>Variables
+                <pre><code>
+</code></pre>
+            </li>
+            <li>自定义Binding类名称
+                <pre><code>
+//默认包
+//com.example.app.databinding.ContactItem
+&lt;data class="ContactItem"&gt;
+    ...
+&lt;/data&gt;
+
+//
+&lt;data class="com.example.ContactItem"&gt;
+    ...
+&lt;/data&gt;
+</code></pre>
+            </li>
+            <li>Includes
+                <pre><code>
+//传递Variables  容器layout -> 被包含的layout
+//xmlns:bind  include bind:
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"&gt;
+   &lt;data&gt;
+       &lt;variable name="user" type="com.example.User"/&gt;
+   &lt;/data&gt;
+   &lt;LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"&gt;
+       &lt;include layout="@layout/name"
+           bind:user="@{user}"/&gt;
+       &lt;include layout="@layout/contact"
+           bind:user="@{user}"/&gt;
+   &lt;/LinearLayout&gt;
+&lt;/layout&gt;
+
+//注意：在name.xml以及contact.xml两个layout文件中必需要有user variable
+</code></pre>
+            </li>
+            <li>表达式
+                <ul>
+                    <li>常用表达式 java
+                        <ul>
+                            <li>示例：
+                                <pre><code>
+android:text="@{String.valueOf(index + 1)}"
+android:visibility="@{age &lt; 13 ? View.GONE : View.VISIBLE}"
+android:transitionName='@{"image_" + id}'
+</code></pre>
+                            </li>
+                            <li>数学 + - / * %
+                            </li>
+                            <li>字符串连接 +
+                            </li>
+                            <li>逻辑 &amp;&amp; ||
+                            </li>
+                            <li>二进制 位运算 &amp; | ^
+                            </li>
+                            <li>移位 &gt;&gt; &gt;&gt;&gt; &lt;&lt;
+                            </li>
+                            <li>一元运算 + - ! ~
+                            </li>
+                            <li>比较 == &gt; &lt; &gt;= &lt;=
+                            </li>
+                            <li>instanceof</li>
+                            <li>分组 ()
+                            </li>
+                            <li>null</li>
+                            <li>Cast</li>
+                            <li>方法调用</li>
+                            <li>数据访问 []
+                            </li>
+                            <li>三元运算 ? :
+                            </li>
+                        </ul>
+                    </li>
+                    <li>缺少的操作：
+                        <ul>
+                            <li>this</li>
+                            <li>super</li>
+                            <li>new</li>
+                            <li>显式泛型调用</li>
+                        </ul>
+                    </li>
+                    <li>Null合并操作 ??<pre><code>
+//?? 
+//如果左边的对象不是null，选择左边的对象；
+//如果左边的对象是null，选择右边的对象：
+android:text="@{user.displayName ?? user.lastName}"
+
+//等价于
+android:text="@{user.displayName != null ? user.displayName : user.lastName}"
+</code></pre>
+                    </li>
+                    <li>属性引用
+                        <ul>
+                            <li>android:text="@{user.lastName}"</li>
+                            <li>当一个表达式引用一个类的属性，它仍使用同样的格式对于字段、getters以及ObservableFields。</li>
+                        </ul>
+                    </li>
+                    <li>避免 NullPointerException 赋予类型默认值</li>
+                    <li>集合 []<pre><code>
+//常用的集合：arrays、lists、sparse lists以及maps，都可以使用[]来访问。
+&lt;data&gt;
+  &lt;import type="android.util.SparseArray"/&gt;
+  &lt;import type="java.util.Map"/&gt;
+  &lt;import type="java.util.List"/&gt;
+  &lt;variable name="list" type="List&lt;String&gt;"/&gt;
+  &lt;variable name="sparse" type="SparseArray&lt;String&gt;"/&gt;
+  &lt;variable name="map" type="Map&lt;String, String&gt;"/&gt;
+  &lt;variable name="index" type="int"/&gt;
+  &lt;variable name="key" type="String"/&gt;
+&lt;/data&gt;
+…
+android:text="@{list[index]}"
+…
+android:text="@{sparse[index]}"
+…
+android:text="@{map[key]}"
+</code></pre>
+                    </li>
+                    <li>字符串 "@{'firstName'}"<pre><code>
+//使用单引号包含属性值时,在表达式中使用双引号
+android:text='@{map["firstName"]}'
+
+//使用双引号来包含属性值时,字符串前后需要使用单引号,或者反引号
+android:text="@{map[`firstName`}"
+android:text="@{map['firstName']}"
+</code></pre>
+                    </li>
+                    <li>Resources<pre><code>
+//使用正常的表达式来访问resources
+android:padding="@{large? @dimen/largePadding : @dimen/smallPadding}"
+
+//格式化字符串和复数可以通过提供参数来判断
+android:text="@{@string/nameFormat(firstName, lastName)}"
+android:text="@{@plurals/banana(bananaCount)}"
+
+//当复数需要多个参数时，所有的参数都会通过：
+Have an orange
+Have %d oranges
+android:text="@{@plurals/orange(orangeCount, orangeCount)}"
+
+//一些资源需要显式类型判断
+类型	              正常引用	   表达式引用
+String[]	       @array	   @stringArray
+int[]	           @array	   @intArray
+TypedArray	       @array	   @typedArray
+Animator	       @animator   @animator
+StateListAnimator  @animator   @stateListAnimator
+color int	       @color	   @color
+ColorStateList	   @color	   @colorStateList
+</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h2>Data对象 数据变化通知机制</h2>
+        <ul>
+            <li>Observable对象 android.databinding.Observable接口
+                <pre><code>
+//Observable接口有一个机制来添加和删除监听器，但通知与否由开发人员管理
+
+
+//BaseObservable : 实现监听器注册机制的一个基类
+//当属性改变时, 由Data实现类负责通知
+//指定Bindable注解给getter
+//setter内通知该属性改变 notifyPropertyChanged()
+
+private static class User extends BaseObservable {
+   private String firstName;
+   private String lastName;
+   //指定Bindable注解给getter
+   @Bindable
+   public String getFirstName() {
+       return this.firstName;
+   }
+   @Bindable
+   public String getFirstName() {
+       return this.lastName;
+   }
+   public void setFirstName(String firstName) {
+       this.firstName = firstName;
+       //setter内通知该属性改变
+       notifyPropertyChanged(BR.firstName);
+   }
+   public void setLastName(String lastName) {
+       this.lastName = lastName;
+       notifyPropertyChanged(BR.lastName);
+   }
+}
+
+
+
+//在编译期间，Bindable注解在BR类文件中生成一个Entry。
+//BR类文件会在模块包内生成。
+
+//如果用于Data类的基类不能改变，Observable接口通过PropertyChangeRegistry
+//来实现用于储存和有效地通知监听器。
+</code></pre>
+            </li>
+            <li>Observable字段 ObservableFields
+                <pre><code>
+//ObservableFields是自包含具有单个字段的observable对象。
+//它有所有基本类型和一引用类型。要使用它需要在data对象中创建public final字段：
+
+private static class User {
+   public final ObservableField&lt;String&gt; firstName =
+       new ObservableField&lt;&gt;();
+   public final ObservableField&lt;String> lastName =
+       new ObservableField&lt;&gt;();
+   public final ObservableInt age = new ObservableInt();
+}
+
+//要访问该值，使用set和get方法
+user.firstName.set("Google");
+int age = user.age.get();
+</code></pre>
+            </li>
+            <li>Observable集合 ObservableArrayMap ObservableArrayList 
+                <pre><code>
+//ObservableArrayMap 通过String键访问map
+ObservableArrayMap&lt;String, Object&gt; user = new ObservableArrayMap&lt;&gt;();
+user.put("firstName", "Google");
+user.put("lastName", "Inc.");
+user.put("age", 17);
+
+&lt;data&gt;
+    &lt;import type="android.databinding.ObservableMap"/&gt;
+    &lt;variable name="user" type="ObservableMap&lt;String, Object&gt;"/&gt;
+&lt;/data&gt;
+…
+&lt;TextView
+   android:text='@{user["lastName"]}'
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   /&gt;
+&lt;TextView
+   android:text='@{String.valueOf(1 + (Integer)user["age"])}'
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   /&gt;
+
+
+
+
+//ObservableArrayList 通过int索引访问list
+ObservableArrayList&lt;Object&gt; user = new ObservableArrayList&lt;&gt;();
+user.add("Google");
+user.add("Inc.");
+user.add(17);
+
+&lt;data&gt;
+    &lt;import type="android.databinding.ObservableList"/&gt;
+    &lt;import type="com.example.my.app.Fields"/&gt;
+    &lt;variable name="user" type="ObservableList&lt;Object&gt;"/&gt;
+&lt;/data&gt;
+…
+&lt;TextView
+   android:text='@{user[Fields.LAST_NAME]}'
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"/&gt;
+&lt;TextView
+   android:text='@{String.valueOf(1 + (Integer)user[Fields.AGE])}'
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"/&gt;
+</code></pre>
+           </li>
+        </ul>
+        
+        <h2>Binding生成</h2>
+        <ul>
+            <li>创建 在inflation之后就立马创建
+                <pre><code>
+//在Binding类上使用静态方法.inflate方法载入View的层次结构并且绑定到它
+MyLayoutBinding binding = MyLayoutBinding.inflate(layoutInflater);
+MyLayoutBinding binding = MyLayoutBinding.inflate(LayoutInflater, viewGroup, false);
+
+//使用不同的机制载入layout，可分开绑定
+MyLayoutBinding binding = MyLayoutBinding.bind(viewRoot);
+
+//有时Binding不能提前知道，可以使用DataBindingUtil类来创建Binding
+ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater, layoutId,
+    parent, attachToParent);
+ViewDataBinding binding = DataBindingUtil.bindTo(viewRoot, layoutId);
+</code></pre>
+            </li>
+            <li>带ID的Views 在Binding中生成相应的常量引用
+                <pre><code>
+//在layout中对于每个带ID的View会生成一个public final字段。
+//Binding在View层次结构上做单一的传递，提取带ID的Views   
+&lt;layout xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+   &lt;data&gt;
+       &lt;variable name="user" type="com.example.User"/&gt;
+   &lt;/data&gt;
+   &lt;LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"&gt;
+       
+       &lt;TextView 
+           android:id="@+id/firstName"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@{user.firstName}"
+       /&gt;
+       
+       &lt;TextView 
+           android:id="@+id/lastName"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@{user.lastName}"
+       /&gt;
+       
+   &lt;/LinearLayout&gt;
+&lt;/layout&gt;           
+
+//生成如下的Binding类
+public final TextView firstName;
+public final TextView lastName;      
+</code></pre>
+            </li>
+            <li>Variables 在Binding中生成setters和getters
+                <pre><code>
+&lt;data&gt;
+    &lt;import type="android.graphics.drawable.Drawable"/&gt;
+    &lt;variable name="user"  type="com.example.User"/&gt;
+    &lt;variable name="image" type="Drawable"/&gt;
+    &lt;variable name="note"  type="String"/&gt;
+&lt;/data&gt;
+
+//在Binding中生成setters和getters
+public abstract com.example.User getUser();
+public abstract void setUser(com.example.User user);
+public abstract Drawable getImage();
+public abstract void setImage(Drawable image);
+public abstract String getNote();
+public abstract void setNote(String note);
+</code></pre>
+            </li>
+            <li>ViewStubs
+            </li>
+        </ul>
+        
+        <h2>Binding进阶</h2>
+        <ul>
+            <li>直接Binding  executePendingBindings()
+                <ul>
+                    <li>When a variable or observable changes, the binding will be scheduled to change before the next frame. There are times, however, when binding must be executed immediately. To force execution, use the executePendingBindings() method.
+                    </li>
+                    </ul>
+            </li>
+            <li>动态Variables
+                <pre><code>
+//RecyclerView
+//绑定的所有layouts有一个“item”的Variable
+//BindingHolder.getBinding() 返回ViewDataBinding
+public void onBindViewHolder(BindingHolder holder, int position) {
+   final T item = mItems.get(position);
+   holder.getBinding().setVariable(BR.item, item);
+   holder.getBinding().executePendingBindings();
+}
+</code></pre>
+            </li>
+            <li>后台线程
+                <ul>
+                    <li>
+                        只要它不是一个集合，你可以在后台线程中改变你的数据模型。在判断是否要避免任何并发问题时，Data Binding会对每个Varialbe/field本地化。
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h2>属性Setters</h2>
+        <ul>
+            <li>自动Setters : attribute="@{(int)value}" -> 寻找setAttribute(int);
+                <pre><code>
+//DrawerLayout没有任何属性，但有大量的setters
+&lt;android.support.v4.widget.DrawerLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:scrimColor="@{@color/scrim}"
+    app:drawerListener="@{fragment.drawerListener}"/&gt;
+</code></pre>
+            </li>
+            <li>重命名的Setters @BindingMethods
+                <pre><code>
+//一些有setters的属性按名称并不匹配。
+//对于这些方法，属性可以通过BindingMethods注解相关联。
+//这必须与一个包含BindingMethod注解的类相关联，每一个用于一个重命名的方法。
+//例如，android:tint属性与setImageTintList相关联，而不与setTint相关。
+
+@BindingMethods({
+       @BindingMethod(type = "android.widget.ImageView",
+                      attribute = "android:tint",
+                      method = "setImageTintList"),
+})
+</code></pre>
+            </li>
+            <li>自定义Setters @BindingAdapter
+                <pre><code>
+//有些属性需要自定义绑定逻辑。
+//例如，对于android:paddingLeft属性并没有相关setter。
+//相反，setPadding(left, top, right, bottom)是存在在。
+//一个带有BindingAdapter注解的静态绑定适配器方法允许开发者自定义setter如何对于一个属性的调用。
+
+@BindingAdapter("android:paddingLeft")
+public static void setPaddingLeft(View view, int padding) {
+   view.setPadding(padding,
+                   view.getPaddingTop(),
+                   view.getPaddingRight(),
+                   view.getPaddingBottom());
+}
+</code></pre>
+            </li>
+        </ul>
+        
+        <h2>转换</h2>
+        <ul>
+            <li>对象转换
+                <pre><code>
+//当从Binding表达式返回一个对象，相应setter会从自动、重命名以及自定义的setters之中选择出来
+//该对象将被转换为所选择的setter的参数类型。
+
+android:text='@{userMap["lastName"]}'
+
+//android:text="" ->  setText(CharSequence)
+//userMap["lastName"] -> object -> charSequence
+</code></pre>
+            </li>
+            <li>自定义转换 @BindingConversion
+                <pre><code>
+android:background="@{isError ? @color/red : @color/white}"
+
+//Drawable : ColorDrawable &lt;-- Int
+@BindingConversion
+public static ColorDrawable convertColorToDrawable(int color) {
+   return new ColorDrawable(color);
+}
+
+//转换仅仅发生在setter级别，因此它是不允许以下混合类型
+android:background="@{isError ? @drawable/error : @color/white}"
+</code></pre>
+            </li>
+        </ul>
+        
+        <h2>Android Studio支持</h2>
+        <ul>
+            <li>数组以及通用类型，比如说Observable类，可能会显示错误事实上并没有错误。</li>
+        </ul>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     </main>
 </body>
 

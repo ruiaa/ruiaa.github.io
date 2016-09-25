@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>java8 lambda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>java8 lambda</h1>
+        <p>通过表达式来代替功能接口</p>
+
+        <h2>基本语法:</h2>
+        <ul>
+            <li>(parameters) -> expression</li>
+            <li>(parameters) ->{ statements; }</li>
+            <li>例子<pre><code>
+// 1. 不需要参数,返回值为 5  
+() -> 5  
+  
+// 2. 接收一个参数(数字类型),返回其2倍的值  
+x -> 2 * x  
+  
+// 3. 接受2个参数(数字),并返回他们的差值  
+(x, y) -> x – y  
+  
+// 4. 接收2个int型整数,返回他们的和  
+(int x, int y) -> x + y  
+  
+// 5. 接受一个 string 对象,并在控制台打印,不返回任何值(看起来像是返回void)  
+(String s) -> System.out.print(s)  
+
+//
+() -> { return 3.1415 };
+</code></pre>
+            </li>
+            <li>结构
+                <ul>
+                    <li>一个 Lambda 表达式可以有零个或多个参数</li>
+                    <li>参数的类型既可以明确声明，也可以根据上下文来推断。例如：(int a)与(a)效果相同</li>
+                    <li>所有参数需包含在圆括号内，参数之间用逗号相隔。例如：(a, b) 或 (int a, int b) 或 (String a, int b, float c)</li>
+                    <li>空圆括号代表参数集为空。例如：() -> 42</li>
+                    <li>当只有一个参数，且其类型可推导时，圆括号（）可省略。例如：a -> return a*a</li>
+                    <li>Lambda 表达式的主体可包含零条或多条语句</li>
+                    <li>如果 Lambda 表达式的主体只有一条语句，花括号{}可省略。匿名函数的返回类型与该主体表达式一致</li>
+                    <li>如果 Lambda 表达式的主体包含一条以上语句，则表达式必须包含在花括号{}中（形成代码块）。匿名函数的返回类型与代码块的返回类型一致，若没有返回则为空</li>
+                </ul>
+            </li>
+        </ul>
+
+
+        <h2>函数式接口 : 只包含一个抽象方法声明的接口</h2>
+        <ul>
+            <li>每个 Lambda 表达式都能隐式地赋值给函数式接口
+                <pre><code>
+//通过 Lambda 表达式创建 Runnable 接口的引用
+Runnable r = () -> System.out.println("hello world");
+
+//当不指明函数式接口时，编译器会自动解释这种转化
+//函数签名推断 : public Thread(Runnable r) { }
+//将该 Lambda 表达式赋给 Runnable 接口
+new Thread(
+   () -> System.out.println("hello world")
+).start();
+</code></pre>
+            </li>
+            <li>Java 8 @FunctionalInterface
+                <pre><code>
+@FunctionalInterface 
+public interface WorkerInterface {
+
+   public void doSomeWork();
+
+}
+
+public class WorkerInterfaceTest {
+
+public static void execute(WorkerInterface worker) {
+    worker.doSomeWork();
+}
+
+public static void main(String [] args) {
+
+    //invoke doSomeWork using Annonymous class
+    execute(new WorkerInterface() {
+        @Override
+        public void doSomeWork() {
+            System.out.println("Worker invoked using Anonymous class");
+        }
+    });
+
+    //invoke doSomeWork using Lambda expression 
+    execute( () -> System.out.println("Worker invoked using Lambda expression") );
+}
+
+}
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>Lambda 表达式与匿名类的区别</h2>
+        <ul>
+            <li>使用匿名类与 Lambda 表达式的一大区别在于关键词的使用。对于匿名类，关键词 this 解读为匿名类，而对于 Lambda 表达式，关键词 this 解读为写就 Lambda 的外部类。</li>
+            <li>Lambda 表达式与匿名类的另一不同在于两者的编译方法。Java 编译器编译 Lambda 表达式并将他们转化为类里面的私有函数，它使用 Java 7 中新加的 invokedynamic 指令动态绑定该方法</li>
+        </ul>
+
+
+
+        <h2>集合操作</h2>
+        <pre><code>
+//
+//
+//遍历  forEach()
+List&lt;String&gt; players =  ....;  
+  
+// 以前的循环方式  
+for (String player : players) {  
+     System.out.print(player + "; ");  
+}  
+  
+// 使用 lambda 表达式以及函数操作(functional operation)  
+players.forEach((player) -> System.out.print(player + "; "));  
+   
+// 在 Java 8 中使用双冒号操作符(double colon operator)  
+players.forEach(System.out::println);  
+
+
+//
+//
+//排序
+// 1.1 使用匿名内部类根据 name 排序 players  
+Arrays.sort(players, new Comparator&lt;String&gt;() {  
+    @Override  
+    public int compare(String s1, String s2) {  
+        return (s1.compareTo(s2));  
+    }  
+});
+// 1.2 使用 lambda expression 排序 players  
+Comparator&lt;String&gt; sortByName = (String s1, String s2) -> (s1.compareTo(s2));  
+Arrays.sort(players, sortByName);  
+  
+// 1.3 也可以采用如下形式:  
+Arrays.sort(players, (String s1, String s2) -> (s1.compareTo(s2))); 
+// 1.1 使用匿名内部类根据 surname 排序 players  
+Arrays.sort(players, new Comparator&lt;String&gt;() {  
+    @Override  
+    public int compare(String s1, String s2) {  
+        return (s1.substring(s1.indexOf(" ")).compareTo(s2.substring(s2.indexOf(" "))));  
+    }  
+});  
+  
+// 1.2 使用 lambda expression 排序,根据 surname  
+Comparator&lt;String&gt; sortBySurname = (String s1, String s2) ->   
+    ( s1.substring(s1.indexOf(" ")).compareTo( s2.substring(s2.indexOf(" ")) ) );  
+Arrays.sort(players, sortBySurname);  
+  
+// 1.3 或者这样,怀疑原作者是不是想错了,括号好多...  
+Arrays.sort(players, (String s1, String s2) ->   
+      ( s1.substring(s1.indexOf(" ")).compareTo( s2.substring(s2.indexOf(" ")) ) )   
+    );  
+  
+// 2.1 使用匿名内部类根据 name lenght 排序 players  
+Arrays.sort(players, new Comparator&lt;String&gt;() {  
+    @Override  
+    public int compare(String s1, String s2) {  
+        return (s1.length() - s2.length());  
+    }  
+});  
+  
+// 2.2 使用 lambda expression 排序,根据 name lenght  
+Comparator&lt;String&gt; sortByNameLenght = (String s1, String s2) -> (s1.length() - s2.length());  
+Arrays.sort(players, sortByNameLenght);  
+  
+// 2.3 or this  
+Arrays.sort(players, (String s1, String s2) -> (s1.length() - s2.length()));  
+  
+// 3.1 使用匿名内部类排序 players, 根据最后一个字母  
+Arrays.sort(players, new Comparator&lt;String&gt;() {  
+    @Override  
+    public int compare(String s1, String s2) {  
+        return (s1.charAt(s1.length() - 1) - s2.charAt(s2.length() - 1));  
+    }  
+});  
+  
+// 3.2 使用 lambda expression 排序,根据最后一个字母  
+Comparator&lt;String&gt; sortByLastLetter =   
+    (String s1, String s2) ->   
+        (s1.charAt(s1.length() - 1) - s2.charAt(s2.length() - 1));  
+Arrays.sort(players, sortByLastLetter);  
+  
+// 3.3 or this  
+Arrays.sort(players, (String s1, String s2) -> (s1.charAt(s1.length() - 1) - s2.charAt(s2.length() - 1))); 
+</code></pre>
+
+        <h2>匿名类</h2>
+        <pre><code>
+// 使用匿名内部类  
+btn.setOnAction(new EventHandler&lt;ActionEvent&gt;() {  
+          @Override  
+          public void handle(ActionEvent event) {  
+              System.out.println("Hello World!");   
+          }  
+    });  
+   
+// 或者使用 lambda expression  
+btn.setOnAction(event -> System.out.println("Hello World!")); 
+
+
+// 1.1使用匿名内部类  
+new Thread(new Runnable() {  
+    @Override  
+    public void run() {  
+        System.out.println("Hello world !");  
+    }  
+}).start();  
+  
+// 1.2使用 lambda expression  
+new Thread(() -> System.out.println("Hello world !")).start();  
+  
+// 2.1使用匿名内部类  
+Runnable race1 = new Runnable() {  
+    @Override  
+    public void run() {  
+        System.out.println("Hello world !");  
+    }  
+};  
+  
+// 2.2使用 lambda expression  
+Runnable race2 = () -> System.out.println("Hello world !");  
+ 
+</code></pre>
+
+        <h2>Streams</h2>
+        <pre><code>
+public class Person {  }
+List&lt;Person&gt; javaProgrammers = ....;
+
+//遍历输出
+javaProgrammers.forEach(
+    (p) -> System.out.printf("%s ", p.getName()
+);  
+
+//遍历操作
+Consumer&lt;Person&gt; giveRaise = 
+    e -> e.setSalary(e.getSalary() / 100 * 5 + e.getSalary());  
+javaProgrammers.forEach(giveRaise);  
+
+//过滤器
+javaProgrammers.stream()
+          .filter((p) -> (p.getSalary() > 1400))  
+          .forEach((p) -> System.out.printf("%s ;", p.getName())); 
+          
+// 定义 filters  
+Predicate&lt;Person&gt; ageFilter = (p) -> (p.getAge() > 25);  
+Predicate&lt;Person&gt; salaryFilter = (p) -> (p.getSalary() > 1400);  
+Predicate&lt;Person&gt; genderFilter = (p) -> ("female".equals(p.getGender())); 
+
+javaProgrammers.stream()  
+          .filter(ageFilter)  
+          .filter(genderFilter)  
+          .forEach((p) -> System.out.printf("%s ;", p.getName()));  
+
+//限制结果集的个数
+javaProgrammers.stream()  
+          .filter(genderFilter)  
+          .limit(3)  
+          .forEach((p) -> System.out.printf("%s ;", p.getName())); 
+          
+//排序
+List&lt;Person&gt; sortedJavaProgrammers = javaProgrammers  
+          .stream()  
+          .sorted((p, p2) -> (p.getName().compareTo(p2.getName())))  
+          .limit(5)  
+          .collect(toList());  
+          
+//min和max
+Person pers = javaProgrammers  
+          .stream()  
+          .min((p1, p2) -> (p1.getSalary() - p2.getSalary()))  
+          .get()
+          
+//转存 map collect
+System.out.println("将 PHP programmers 的 first name 拼接成字符串:");  
+String phpDevelopers = phpProgrammers  
+          .stream()  
+          .map(Person::getFirstName)  
+          .collect(joining(" ; ")); 
+System.out.println("将 Java programmers 的 first name 存放到 Set:");  
+Set&lt;String&gt; javaDevFirstName = javaProgrammers  
+          .stream()  
+          .map(Person::getFirstName)  
+          .collect(toSet());
+System.out.println("将 Java programmers 的 first name 存放到 TreeSet:");  
+TreeSet&lt;String&gt; javaDevLastName = javaProgrammers  
+          .stream()  
+          .map(Person::getLastName)  
+          .collect(toCollection(TreeSet::new)); 
+          
+          
+//并行 parallel
+System.out.println("计算付给 Java programmers 的所有money:");  
+int totalSalary = javaProgrammers  
+          .parallelStream()  
+          .mapToInt(p -> p.getSalary())  
+          .sum();
+          
+//汇总
+//计算 count, min, max, sum, and average for numbers  
+List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  
+IntSummaryStatistics stats = numbers  
+          .stream()  
+          .mapToInt((x) -> x)  
+          .summaryStatistics();  
+  
+System.out.println("List中最大的数字 : " + stats.getMax());  
+System.out.println("List中最小的数字 : " + stats.getMin());  
+System.out.println("所有数字的总和   : " + stats.getSum());          
+</code></pre>
+
+        <h2></h2>
+        <pre><code>
+
+</code></pre>
+
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>LINQ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>LINQ</h1>
+
+        <a href="http://www.cnblogs.com/liulun/archive/2013/02/26/2909985.html">30分钟LINQ教程</a>
+
+        <h2>与LINQ有关的语言特性</h2>
+        <ul>
+            <li>隐式类型
+                <p>var -> type -> IL</p>
+                <pre><code>
+var a = 1; //int a = 1;
+var b = "123";//string b = "123"; 
+var myObj = new MyObj();//MyObj myObj = new MyObj()
+</code></pre>
+            </li>
+            <li>匿名类型
+                <pre><code>
+var obj = new {Guid.Empty, myTitle = "匿名类型", myOtherParam = new int[] { 1, 2, 3, 4 } };
+Console.WriteLine(obj.Empty);//另一个对象的属性名字，被原封不动的拷贝到匿名对象中来了。
+Console.WriteLine(obj.myTitle);
+Console.ReadKey();
+
+new关键字之后就直接为对象定义了属性，并且为这些属性赋值
+
+而且，对象创建出来之后，在创建对象的方法中，还可以畅通无阻的访问对象的属性
+
+当把一个对象的属性拷贝到匿名对象中时，可以不用显示的指定属性的名字，这时原始属性的名字会被“拷贝”到匿名对象中
+
+obj的类型是Anonymous Type类型的
+
+不要试图在创建匿名对象的方法外面去访问对象的属性
+</code></pre>
+            </li>
+            <li>自动属性
+                <pre><code>
+public class MyObj
+{
+　　　　public Guid id { get; set; }
+　　　　public string Title { get; set; }
+}
+</code></pre>
+            </li>
+            <li>初始化器<pre><code>
+//
+var myObj = new MyObj();
+myObj.id = Guid.NewGuid();
+myObj.Title = "allen";
+
+//使用初始化器
+var myObj1 = new MyObj() { id = Guid.NewGuid(), Title = "allen" };
+//构造器带参数
+var myObj1 = new MyObj ("allen") { id = Guid.NewGuid(), Title = "allen" };
+//集合初始化器的样例
+var arr = new List&lt;int&gt;() { 1, 2, 3, 4, 5, 6 };
+</code></pre>
+            </li>
+            <li>委托</li>
+            <li>泛型</li>
+        </ul>
+        
+        <h2>查询操作符</h2>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>ReactiveX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>ReactiveX</h1>
+        <p>一个使用可观察数据流进行异步编程的编程接口
+            <br>Rx = Observables + LINQ + Schedulers
+            <br>观察者模式 + 迭代器模式 + 函数式编程</p>
+
+        <h2>模型</h2>
+        <ul>
+            <li>流程
+                <pre><code>
+1、定义一个方法，它完成某些任务，然后从异步调用中返回一个值，这个方法是观察者的一部分
+2、将这个异步调用本身定义为一个Observable
+3、观察者通过订阅(Subscribe)操作关联到那个Observable
+4、继续你的业务逻辑，等方法返回时，Observable会发射结果，观察者的方法会开始处理结果或结果集
+
+// defines, but does not invoke, the Subscriber's onNext handler
+// (in this example, the observer is very simple and has only an onNext handler)
+def myOnNext = { it -> do something useful with it };
+// defines, but does not invoke, the Observable
+def myObservable = someObservable(itsParameters);
+// subscribes the Subscriber to the Observable, and invokes the Observable
+myObservable.subscribe(myOnNext);
+// go on about my business
+</code></pre>
+            </li>
+            <li>订阅 Subscribe()
+                <p>将观察者连接到Observable</p>
+            </li>
+            <li>回调观察者方法
+                <ul>
+                    <li>onNext(T item)
+                        <p>Observable调用这个方法发射数据，方法的参数就是Observable发射的数据，这个方法可能会被调用多次，取决于你的实现。</p>
+                    </li>
+                    <li>onError(Exception ex)
+                        <p>当Observable遇到错误或者无法返回期望的数据时会调用这个方法，这个调用会终止Observable，后续不会再调用onNext和onCompleted，onError方法的参数是抛出的异常。</p>
+                    </li>
+                    <li>onComplete
+                        <p>正常终止，如果没有遇到错误，Observable在最后一次调用onNext之后调用此方法。</p>
+                    </li>
+                </ul>
+            </li>
+            <li>取消订阅 Unsubscribe())</li>
+            <li>发射数据序列的时机
+                <p>一个"热"的Observable可能一创建完就开始发射数据，因此所有后续订阅它的观察者可能从序列中间的某个位置开始接受数据（有一些数据错过了）
+                    <br>一个"冷"的Observable会一直等待，直到有观察者订阅它才开始发射数据，因此这个观察者可以确保会收到整个数据序列。
+                    <br>在一些ReactiveX实现里，还存在一种被称作Connectable的Observable，不管有没有观察者订阅它，这种Observable都不会开始发射数据，除非Connect方法被调用。
+                </p>
+            </li>
+        </ul>
+        
+        
+        <h2><a href="operation.html">operation</a></h2>
+        
+        <h2><a href="scheduler.html">线程 scheduler</a></h2>
+        
+        <h2><a href="subject.html">subject</a></h2>
+        
+        <h2>Rx</h2>
+        <ul>
+            <li><a href="rxjava.html">RxJava</a></li>
+            <li><a href="rxandroid.html">RxAndroid</a></li>
+            <li><a href="rxkotlin.html">RxKotlin</a></li>
+            <li><a href="rxjs.html">RxJs</a></li>
+        </ul>
+
+    
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

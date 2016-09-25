@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>RxJava</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>RxJava</h1>
+        <a href="http://gank.io/post/560e15be2dca930e00da1083#toc_14">给Android开发者的RxJava详解 作者：扔物线</a>
+
+        <h2>配置</h2>
+        <pre><code>
+Maven示例:
+&lt;dependency&gt;
+    &lt;groupId&gt;io.reactivex&lt;/groupId&gt;
+    &lt;artifactId&gt;rxjava&lt;/artifactId&gt;
+    &lt;version&gt;1.0.10&lt;/version&gt;
+&lt;/dependency&gt;
+
+
+Ivy示例:
+&lt;dependency org="io.reactivex" name="rxjava" rev="1.0.10" /&gt;
+
+
+SBT示例:
+libraryDependencies += "com.netflix.rxjava" % "rxjava-scala" % "1.0.10"
+
+
+Gradle示例:
+compile 'io.reactivex:rxjava:1.0.10'
+</code></pre>
+
+        <h2>Subscriber 实现Observer的抽象类</h2>
+        <p>onStart(): 这是 Subscriber 增加的方法。它会在 subscribe 刚开始，而事件还未发送之前被调用，可以用于做一些准备工作，例如数据的清零或重置。这是一个可选方法，默认情况下它的实现为空。需要注意的是，如果对准备工作的线程有要求（例如弹出一个显示进度的对话框，这必须在主线程执行）， onStart() 就不适用了，因为它总是在 subscribe 所发生的线程被调用，而不能指定线程。要在指定的线程来做准备工作，可以使用 doOnSubscribe() 方法，具体可以在后面的文中看到。 unsubscribe(): 这是 Subscriber 所实现的另一个接口 Subscription 的方法，用于取消订阅。在这个方法被调用后，Subscriber 将不再接收事件。一般在这个方法调用前，可以使用 isUnsubscribed() 先判断一下状态。 unsubscribe() 这个方法很重要，因为在 subscribe() 之后， Observable 会持有 Subscriber 的引用，这个引用如果不能及时被释放，将有内存泄露的风险。所以最好保持一个原则：要在不再使用的时候尽快在合适的地方（例如 onPause() onStop() 等方法中）调用 unsubscribe() 来解除引用关系，以避免内存泄露的发生。</p>
+
+
+                <h2>Single</h2>
+        <ul>
+            <li><a href="http://reactivex.io/documentation/single.html">single</a>
+            </li>
+            <li>只发射一个值，或者一个错误通知
+                <p>onSuccess - Single发射单个的值到这个方法
+                    <br>onError - 如果无法发射需要的值，Single发射一个Throwable对象到这个方法</p>
+            </li>
+            <li>Single的操作符
+                <ul>
+                    <li>compose
+                        <p>返回Single 创建一个自定义的操作符</p>
+                    </li>
+                    <li>concat and concatWith
+                        <p>返回Observable 连接多个Single和Observable发射的数据</p>
+                    </li>
+                    <li>create
+                        <p>返回Single 调用观察者的create方法创建一个Single</p>
+                    </li>
+                    <li>error
+                        <p>返回Single 返回一个立即给订阅者发射错误通知的Single</p>
+                    </li>
+                    <li>flatMap
+                        <p>返回Single 返回一个Single，它发射对原Single的数据执行flatMap操作后的结果</p>
+                    </li>
+                    <li>flatMapObservable
+                        <p>返回Observable 返回一个Observable，它发射对原Single的数据执行flatMap操作后的结果</p>
+                    </li>
+                    <li>from
+                        <p>返回Single 将Future转换成Single</p>
+                    </li>
+                    <li>just
+                        <p>返回Single 返回一个发射一个指定值的Single</p>
+                    </li>
+                    <li>map
+                        <p>返回Single 返回一个Single，它发射对原Single的数据执行map操作后的结果</p>
+                    </li>
+                    <li>merge
+                        <p>返回Single 将一个Single(它发射的数据是另一个Single，假设为B)转换成另一个Single(它发射来自另一个Single(B)的数据)</p>
+                    </li>
+                    <li>merge and mergeWith
+                        <p>返回Observable 合并发射来自多个Single的数据</p>
+                    </li>
+                    <li>observeOn
+                        <p>返回Single 指示Single在指定的调度程序上调用订阅者的方法</p>
+                    </li>
+                    <li>onErrorReturn
+                        <p>返回Single 将一个发射错误通知的Single转换成一个发射指定数据项的Single</p>
+                    </li>
+                    <li>subscribeOn
+                        <p>返回Single 指示Single在指定的调度程序上执行操作</p>
+                    </li>
+                    <li>timeout
+                        <p>返回Single 它给原有的Single添加超时控制，如果超时了就发射一个错误通知</p>
+                    </li>
+                    <li>toSingle
+                        <p>返回Single 将一个发射单个值的Observable转换为一个Single</p>
+                    </li>
+                    <li>zip and zipWith
+                        <p>返回Single 将多个Single转换为一个，后者发射的数据是对前者应用一个函数后的结果</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+
+        <h2>创建Observable</h2>
+        <ul>
+            <li>create
+                <pre><code>
+Observable observable = Observable.create(new Observable.OnSubscribe&lt;String&gt;() {
+    @Override
+    public void call(Subscriber&lt;? super String&gt; subscriber) {
+        
+        //检查观察者的isUnsubscribed状态，以便在没有观察者的时候，
+        //让Observable停止发射数据或者做昂贵的运算。
+        //if (!subscriber.isUnsubscribed())
+        
+        subscriber.onNext("Hello");
+        subscriber.onNext("Hi");
+        subscriber.onNext("Aloha");
+        subscriber.onCompleted();
+    }
+});</code></pre>
+            </li>
+            <li>just(T...) from(T[]) / from(Iterable&lt;? extends T&gt;)</li>
+        </ul>
+
+        <h2>订阅 subscribe()</h2>
+
+        <h2>解订阅 unsubscribe()</h2>
+        <pre><code>
+public Subscription subscribe(Subscriber subscriber) { }
+</code></pre>
+
+        <h2>Action</h2>
+
+        <h2>变换 </h2>
+        <ul>
+            <li>flatMap() (数据发送可能交错 ConcatMap严格按顺序发送 flatMapIterable switchMap只监视当前产生数据的observable)
+                <pre><code>
+
+</code></pre>
+            </li>
+        </ul>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

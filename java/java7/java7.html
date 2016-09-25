@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>java 7</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>java 7</h1>
+
+        <h2>类型推导 操作符<></h2>
+        <pre><code>
+//JDK 7之前
+Map&lt;String, List&lt;String&gt;&gt; employeeRecords =  new HashMap&lt;String, List&lt;String&gt;&gt;();
+List&lt;Integer&gt; primes = new ArrayList&lt;Integer&gt;();
+
+//JDK 7
+Map&lt;String, List&lt;String&gt;&gt; employeeRecords =  new HashMap&lt;&gt;();
+List&lt;Integer&gt; primes = new ArrayList&lt;&gt;();</code></pre>
+
+<h2>在switch中支持String 大小写敏感</h2>
+<pre><code>String state = "NEW";
+ 
+switch (day) {
+   case "NEW": System.out.println("Order is in NEW state"); break;
+   case "CANCELED": System.out.println("Order is Cancelled"); break;
+   case "REPLACE": System.out.println("Order is replaced successfully"); break;
+   case "FILLED": System.out.println("Order is filled"); break;
+   default: System.out.println("Invalid");
+ }</code></pre>
+ 
+ <h2>自动资源管理 try-with-resource</h2>
+ <pre><code>
+public static void main(String args[]) {
+      
+    try (
+            FileInputStream fin = new FileInputStream("info.xml");
+            BufferedReader br = new BufferedReader(new InputStreamReader(fin));
+        ) 
+    {
+        if (br.ready()) {
+            String line1 = br.readLine();
+            System.out.println(line1);
+        }
+        
+    } catch (FileNotFoundException ex) {
+    
+        System.out.println("Info.xml is not found");
+        
+    } catch (IOException ex) {
+       
+        System.out.println("Can't read the file");
+        
+    }
+}
+ </code></pre>
+ 
+ <h2>Fork Join框架</h2>
+ <h2>数值字面量中使用下划线</h2>
+ <pre><code>
+int billion = 1_000_000_000;  // 10^9
+long creditCardNumber =  1234_4567_8901_2345L; //16 digit number
+long ssn = 777_99_8888L;
+double pi = 3.1415_9265;
+float  pif = 3.14_15_92_65f;
+
+//不能在小数后面，或者数字的开始和结束的地方放下划线
+double pi = 3._1415_9265; // underscore just after decimal point
+long creditcardNum = 1234_4567_8901_2345_L; //underscore at the end of number
+long ssn = _777_99_8888L; //undersocre at the beginning
+ </code></pre>
+ <h2>在一个catch块中捕获多个异常</h2>
+ <pre><code>
+try {
+   ......
+ 
+} catch(ClassNotFoundException|SQLException ex) {
+    ex.printStackTrace();
+ 
+}
+
+//不包括异常的子类型的
+//error
+try { 
+   ......
+
+} catch (FileNotFoundException | IOException ex) {
+   ex.printStackTrace();
+}
+ </code></pre>
+
+<h2>使用"0b"前缀的二进制字面量</h2>
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

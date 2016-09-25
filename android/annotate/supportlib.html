@@ -35,6 +35,44 @@
         </ul>
 
         <h2>IntDef/StringDef: 类型定义注解</h2>
+        <pre><ocde>
+//定义一个名为@Flavour的新注解，并使用@IntDef指定它可以接受的值类型
+
+public class IceCreamFlavourManager {
+
+    private int flavour;
+
+    public static final int VANILLA = 0;
+    public static final int CHOCOLATE = 1;
+    public static final int STRAWBERRY = 2;
+
+    @IntDef({VANILLA, CHOCOLATE, STRAWBERRY})
+    public @interface Flavour {
+    }
+
+    @Flavour
+    public int getFlavour() {
+        return flavour;
+    }
+
+    public void setFlavour(@Flavour int flavour) {
+        this.flavour = flavour;
+    }
+
+}
+
+
+
+
+//指定整型值作为标志位，也就是说这些整型值可以使用’｜’或者’&amp;’进行与或等操作
+@IntDef(flag = true, value = {VANILLA, CHOCOLATE, STRAWBERRY})
+public @interface Flavour {
+}
+
+//调用
+iceCreamFlavourManager.setFlavour(IceCreamFlavourManager.VANILLA &amp; IceCreamFlavourManager
+                .CHOCOLATE);
+</ocde></pre>
 
         <h2>线程注解 </h2>
         <ul>
