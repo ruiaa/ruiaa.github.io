@@ -107,9 +107,11 @@ hide(Fragment)
 show(Fragment)
 
 //会将view从UI中移除,状态依然由FragmentManager维护
+//onPause()-onDestroyView()
 detach(Fragment)
 
 //重建view视图，附加到UI上并显示
+//onCreateView()-onResume()
 attach(Fragment)
 
 //事务操作保存到回退栈

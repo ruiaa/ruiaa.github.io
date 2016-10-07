@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android dialog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android dialog</h1>
+        <p>android.app.Dialog</p>
+
+        <h2>基本实现</h2>
+        <pre><code>
+//1,    AlertDialog.Builder 设置对话框样式
+AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(this);
+//2,    创建对话框
+AlertDialog alertDialog = alertDialogBuilder.create();
+//3,    显示对话框
+alertDialog.show();
+//4,    隐藏
+alertDialog。dismiss();
+
+</code></pre>
+
+        <h2>样式 alertDialogBuilder</h2>
+        <pre><code>
+setTitle();//设置标题
+setIcon();//设置图表
+
+/*设置下方按钮*/
+setPositiveButton();
+setNegativeButton();
+setNeutralButton();
+
+//设置内容区域
+setMessage();//设置显示文本
+setItems();//设置对话框内容为简单列表项
+setSingleChoiceItems();//设置对话框内容为单选列表项
+setMultiChoiceItems();//设置对话框内容为多选列表项
+setAdapter();//设置对话框内容为自定义列表项
+setView();//设置对话框内容为自定义View
+
+
+//设置对话框是否可取消
+setCancelable(booleab cancelable);
+setCancelListener(onCancelListener);
+</code></pre>
+
+        <h2>ProgressDialog</h2>
+        <ul>
+            <li>
+                <p>get/setMax()</p>
+            </li>
+            <li>
+                <p>get/setProgress()</p>
+            </li>
+            <li>
+                <p>get/setSecondaryProgress</p>
+            </li>
+            <li>
+                <p>incrementProgressBy(int) 设置增长进度</p>
+            </li>
+            <li>
+                <p>incrementSecondaryProgressBy</p>
+            </li>
+            <li>
+                <p>setMessage</p>
+            </li>
+            <li>
+                <p>setProgressStyle</p>
+            </li>
+            <li>
+                <p>setProgressDrawable</p>
+            </li>
+            <li>
+                <p>onStart()</p>
+            </li>
+        </ul>
+        <h2>DatePickerDialog</h2>
+        <h2>TimePickerDialog</h2>
+        <h2>AppCompatDialog</h2>
+        <h2>CharacterPickerDialog</h2>
+        <h2>Presentation</h2>
+        <h2>MediaRouteChooserDialog,MediaRouteControllerDialog</h2>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

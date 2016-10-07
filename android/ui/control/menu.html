@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android Menu</h1>
+
+        <h2>OptionsMenu</h2>
+        <ul>
+            <li>public boolean onCreateOptionsMenu(Menu menu)：
+                <p>静态:根据menu资源文件创建,
+                    <br>getMenuInflater().inflate(R.menu.menu_id,menu);
+                    <br>动态:通过Menu的add方法添加选项菜单,groupId：组别，不分组可以写Menu.NONE
+                    <br>public MenuItem add(int groupId, int itemId, int order, CharSequence title);
+                </p>
+            </li>
+            <li>public boolean onPrepareOptionsMenu(Menu menu)：
+                <p>选项菜单显示之前触发</p>
+            </li>
+            <li>public boolean onMenuOpened(int featureId, Menu menu)：
+                <p>选项菜单打开时触发</p>
+            </li>
+            <li>public boolean onOptionsItemSelected(MenuItem item)：
+                <p>根据item对象的getItemId方法判断点击了哪一个菜单</p>
+            </li>
+            <li>public void onOptionsMenuClosed(Menu menu):
+                <p>菜单关闭时触发</p>
+            </li>
+        </ul>
+
+        <h2>ContextMenu 长按被操作对象，弹出浮动的操作菜单</h2>
+        <ul>
+            <li>创建上下文菜单：覆写onCreateContenxtMenu方法，由其参数ContextMenu类的menu对象结合其add方法，添加子菜单。
+            </li>
+            <li>添加单项选择监听：覆写onContextItemSelected方法，由其参数MenuItem类的item对象结合其getItemId方法，判断选择了哪一个子菜单。
+            </li>
+            <li>注册上下文菜单：将想要注册上下文菜单的控件对象作为registerForContextMenu方法的参数传入，即可为其添加上下文菜单</li>
+        </ul>
+        <h2>SubMenu</h2>
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

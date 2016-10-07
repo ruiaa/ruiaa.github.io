@@ -6,7 +6,8 @@
     <title>android</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -15,18 +16,12 @@
 <body>
     <main role="main">
         <article>
-            <h1>Android学习大纲</h1>
 
             <a href="http://hukai.me/android-training-course-in-chinese/index.html">Android官方培训课程中文版(v0.9.5)</a>
             <br>
             <a href="https://developer.android.com/guide/index.html"> Develop
 API Guides</a>
 
-            <h2>开发工具</h2>
-            <ul>
-                <li><a href="tool/androidstudio.html">Android Studio</a>
-                </li>
-            </ul>
 
             <h2>系统架构</h2>
             <ul>
@@ -42,11 +37,15 @@ API Guides</a>
                 <li>2、系统运行库与Android运行环境(Libraris , Android Runtime)</li>
                 <li>1、Linux内核(Linux Kernel)</li>
             </ul>
+            
+            <h2>软件架构</h2>
+            <ul>
+                <li><a>MVC MVP MVVM</a></li>
+            </ul>
 
             <h2>manifest</h2>
             <ul>
-                <li><a>permission</a>
-                </li>
+                <li><a>permission</a></li>
             </ul>
 
             <h2>app</h2>
@@ -63,7 +62,7 @@ API Guides</a>
                 </li>
             </ul>
 
-            <h2>应用通信</h2>
+            <h2>组件/应用通信</h2>
             <ul>
                 <li><a href="communication/intent.html">Intent</a>
                 </li>
@@ -80,7 +79,15 @@ API Guides</a>
                 <li><a href="communication/contentprovider.html">ContentProvider</a>
                 </li>
             </ul>
-
+            
+            <h2>事件总线</h2>
+            <ul>
+                <li><a href="lib/eventbus.html">EventBus</a>
+                </li>
+                <li><a href="lib/rxbus.html">RxBus</a>
+                </li>
+            </ul>
+            
             <h2>多线程/多进程</h2>
             <ul>
                 <li><a href="thread/multiprocess.html">multiProcess</a>
@@ -93,6 +100,13 @@ API Guides</a>
                 </li>
             </ul>
 
+            <h2>异步操作库</h2>
+            <ul>
+                <li><a href="/reactivex/reactivex.html">ReactiveX</a></li>
+            </ul>
+            
+            
+            
             <h2>数据存储</h2>
             <ul>
                 <li><a href="stroge/sharepreferences.html">SharePreferences</a>
@@ -105,6 +119,16 @@ API Guides</a>
                 </li>
             </ul>
 
+            <h2>ORM</h2>
+           
+            <h2>图片加载</h2>
+            <ul>
+                <li>七牛与阿里云存储 图片管理方案</li>
+                <li>网络图片加载优化</li>
+            </ul>
+            
+            <h2>缓存管理</h2>
+            
             <h2>网络通信</h2>
             <ul>
                 <li><a>bluethooth</a>
@@ -116,6 +140,24 @@ API Guides</a>
                 <li><a>http https</a>
                 </li>
             </ul>
+            
+            <h2>网络请求库</h2>
+            <ul>
+                <li><a href="net/okhttp.html">okhttp</a></li>
+                <li><a href="net/retrofit.html">Retrofit</a></li>
+                <li><a href="net/volley.html">volley</a></li>
+            </ul>
+            
+            <h2>Json转换</h2>
+            <ul>
+                <li><a href="/javascript/json.html">Json</a>
+                </li>
+                <li><a href="net/gson.html">Gson</a>
+                </li>
+            </ul>
+            
+            
+            
 
             <h2>应用资源</h2>
             <ul>
@@ -186,11 +228,17 @@ API Guides</a>
                 <li><a>滑动条</a>
                 </li>
             </ul>
-            
-            <h2>数据绑定</h2>
+
+            <h2>UI-数据绑定</h2>
             <ul>
                 <li><a href="databinding/databindinglibrary.html">android Data Binding Library</a>
                 </li>
+                <li>RxBing
+                    <p>UI --> Observable
+                        <br>UIEvent --> onNext()
+                        <br>Listener --> Observer</p>
+                </li>
+                <li><a>KBinding</a></li>
             </ul>
 
             <h2>手机桌面</h2>
@@ -201,14 +249,23 @@ API Guides</a>
                 </li>
             </ul>
 
+           
+            
+            
+
+            
             <h2>多媒体</h2>
 
             <h2>传感器</h2>
 
             <h2>manager</h2>
+            
+            
 
             <h2>注解</h2>
             <ul>
+                <li><a href="/java/java/annotate.html">annotate</a>
+                </li>
                 <li><a href="annotate/supportlib.html">Android Support Annotations Library </a>
                 </li>
                 <li><a href="annotate/butterknife.html">View的绑定注解Butter Knife</a>
@@ -216,24 +273,28 @@ API Guides</a>
             </ul>
 
             <h2>依赖注入</h2>
-            
-            <h2>数据格式</h2>
-            <ul><li><a>Json</a></li><li><a>Gson</a></li></ul>
-            
-            <h2>网络请求库</h2>
-            <ul><li><a href="lib/retrofit.html">Retrofit</a></li></ul>
+            <ul>
+                <li><a href="/java/java/di.html">DI</a>
+                </li>
+                <li><a href="lib/dragger2.html">Dragger2</a>
+                </li>
+            </ul>
 
-            <h2>事件总线</h2>
-            <ul><li><a href="lib/eventbus.html">EventBus</a></li></ul>
-            
             <h2>retrolambda</h2>
-            <ul><li><a href="lib/retrolambda.html">gradle-retrolambda</a></li></ul>
+            <ul>
+                <li><a href="lib/retrolambda.html">gradle-retrolambda</a>
+                </li>
+            </ul>
             
-            <h2>RxAndroid</h2>
+            
+            
+            <h2>开发工具</h2>
+            <ul>
+                <li><a href="tool/androidstudio.html">Android Studio</a></li>
+            </ul>
             
             <h2>测试</h2>
-            
-            <h2>kotlin KBinding</h2>
+
 
 
 

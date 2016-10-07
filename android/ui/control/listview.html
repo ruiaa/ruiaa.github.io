@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android ListView</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android ListView</h1>
+
+        <h2>ListView</h2>
+        <ul>
+            <li>divider 子项分隔线</li>
+            <li>dividerHeight</li>
+            <li>headerDividersEnabled</li>
+            <li>footerDividersEnabled</li>
+            <li>listSelector 子项点击效果</li>
+            <li></li>
+            <li>addHeaderView()</li>
+            <li>addFooterView()</li>
+            <li>setAdapter()</li>
+        </ul>
+        
+        <h2>ArrayAdapter</h2>
+        <pre><code>    ArrayAdapter(Context context, int resource, int textViewResourceId, List&lt;T&gt; objects)
+</code></pre>
+        
+        <h2>SimpleAdapter</h2>
+        <pre><code>    SimpleAdapter(Context context, List&lt;? extends Map&lt;String, ?&gt;&gt; data, int resource, String[] from, int[] to)
+
+    resource: 子项布局
+    from: keys
+    to: ids
+    data: get(from[i])----&gt;to[i]
+</code></pre>
+        
+        <h2>BaseAdapter</h2>
+        <pre><code>
+class MyAdapter extends BaseAdapter {
+    
+    private Context context;
+    private List<String> dataList;
+
+    //创建ViewHolder类
+    class ViewHolder{
+        TextView content;
+    }
+    
+    //构造函数需要传入两个必要的参数：上下文对象和数据源
+    public MyAdapter(Context context, List<String> dataList) {
+        this.context = context;
+        this.dataList = dataList;
+    }
+    
+    //返回子项视图
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view;
+        ViewHolder viewHolder;
+        if(convertView==null){
+            view = LayoutInflater.from(context).inflate(R.layout.item_id,null);
+            viewHolder=new ViewHolder();
+            viewHolder.content=(TextView) view.findViewById(R.id.item_content_id);
+            view.setTag(viewHolder);
+        }else{
+            view=convertView;
+            viewHolder= (ViewHolder) view.getTag();
+        }
+        
+        viewHolder.content.setText(dataList.get(position));
+        
+        return view;
+    }
+
+    //返回子项的个数
+    @Override
+    public int getCount() {
+        return dataList.size();
+    }
+    //返回子项对应的对象
+    @Override
+    public Object getItem(int position) {
+        return dataList.get(position);
+    }
+    //返回子项的下标
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+}
+</code></pre>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

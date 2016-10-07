@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Rxandroid</title>
+    <title>DI 依赖注入 dependency injection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
@@ -14,19 +14,33 @@
 
 <body>
     <main role="main">
-        <h1>RxAndroid</h1>
+        <h1>DI 依赖注入 dependency injection 通过外部来传入依赖</h1>
         
-        <h2>配置</h2>
-        <a href="https://github.com/ReactiveX/RxAndroid">github RxAndroid</a>
+        <h2>依赖与解耦</h2>
         <pre><code>
-compile 'io.reactivex:rxandroid:1.2.1'
-compile 'io.reactivex:rxjava:1.1.6'
+//A依赖于B
+public class A{
+
+    private B b;
+    
+    public A(){
+        this.b=new B();
+    }
+}
+
+
+//解耦 将B通过构造器注入到A
+public class A{
+
+    private B b;
+    
+    public A(B b){
+        this.b=b;
+    }
+}
 </code></pre>
         
-        <h2>RxBinding</h2>
-        <p>UI --> Observable<br>UIEvent --> onNext()<br>Listener --> Observer</p>
-        <h2>RxBus</h2>
-        
+        <h2>JSR-330 依赖注入标准</h2>
         
     </main>
 </body>

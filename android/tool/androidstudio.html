@@ -6,7 +6,8 @@
     <title>android studio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -15,18 +16,149 @@
 <body>
     <main role="main">
         <h1>android studio</h1>
-        
+        <a href="https://developer.android.com/studio/intro/index.html">AS User Guide</a>
+
+        <h2>代码自动完成</h2>
+        <ul>
+            <li>基本自动完成 Control+空格
+                <p>显示对变量、类型、方法和表达式等的基本建议。 如果连续两次调用基本自动完成，将显示更多结果，包括私有成员和非导入静态成员。</p>
+            </li>
+            <li>智能自动完成 Control+Shift+空格
+                <p>根据上下文显示相关选项。 智能自动完成可识别预期类型和数据流。 如果连续两次调用智能自动完成，将显示更多结果，包括链。</p>
+            </li>
+            <li>语句自动完成 Control+Shift+Enter
+                <p>自动完成当前语句，添加缺失的圆括号、大括号、花括号和格式化等。</p>
+            </li>
+            <li>快速修复并显示建议 Alt+Enter</li>
+        </ul>
+
+        <h2>导航</h2>
+        <ul>
+            <li></li>
+        </ul>
+
+        <h2>样式和格式化</h2>
+        <ul>
+            <li>自定义代码样式设置 File > Settings > Editor > Code Style</li>
+            <li>重新格式化代码 Control+Alt+L</li>
+            <li>自动缩进所有行 Control+Alt+I</li>
+        </ul>
+
+        <h2>构建系统</h2>
+
         <h2>library</h2>
+
         <h2>工具属性</h2>
-        
-        
-        
+        <ul>
+            <li><a href="http://www.flysnow.org/2015/08/06/android-tech-docs-tools-attributes.html">Android技术文档翻译--工具属性(Tools Attributes)</a>
+            </li>
+            <li>xmlns:tools="http://schemas.android.com/tools"</li>
+        </ul>
+
+        <h2>代码模板 Live Templates </h2>
+        <ul><li>$ACTIVITY$ 当前所在的类名</li>
+        <li>$CURSOR$ 代表当前鼠标的定位位置</li><li>$$ 代表是一个变量</li></ul>
+
+        <h2>静态分析</h2>
+
+        <h2>Vector Asset Studio图像像素变换</h2>
+
+        <h2>Translations Editor</h2>
+
+        <h2>instant run</h2>
+        <ul>
+            <li>android studio 2.0
+                <br>classpath 'com.android.tools.build:gradle:2.0.0-alpha1'
+            </li>
+            <li>
+                Preferences -> Build,Execution,Deployment -> Instant Run
+            </li>
+        </ul>
+
+        <h2>多渠道打包</h2>
+        <pre><code>
+//渠道信息     AndroidManifest.xml
+&lt;meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL_VALUE}" /&gt;
+
+
+//设置productFlavors  build.gradle
+productFlavors {
+     wandoujia {
+          manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+     }
+  
+     xiaomi{
+          manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+     }
+  
+     qq {
+          manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+     }
+  
+     _360 {
+          manifestPlaceholders = [UMENG_CHANNEL_VALUE: "360"]
+     }
+  
+}
+//or
+android { 
+    productFlavors {
+        wandoujia{}
+        xiaomi{}
+        qq{}
+        _360 {}
+    } 
+
+    productFlavors.all { 
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name] 
+        }
+}
+
+
+//签名        build.gradle
+signingConfigs{
+     release {
+          storeFile file("keystore路径")
+          storePassword "***"
+          keyAlias "***"
+          keyPassword "***"
+     }
+}
+
+buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+
+//生成      Terminal , cmd
+gradle assembleRelease
+
+//根据渠道自定义apk的名称
+android {
+
+    applicationVariants.all { variant ->
+
+        variant.outputs.each { output ->
+
+            output.outputFile = new File(
+
+                    output.outputFile.parent,
+
+                    "xxxx(apk的名字)-${variant.buildType.name}-${defaultConfig.versionName}-${variant.productFlavors[0].name}.apk".toLowerCase())
+
+        }
+
+    }
+
+}
+</code></pre>
+
     </main>
 </body>
-
-
-
-
 
 
 

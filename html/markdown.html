@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>markdown</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>markdown</h1>
+
+        <h2>自动转换</h2>
+        <ul>
+            <li>如果你使用的 &amp; &lt; 字符是 HTML 字符实体的一部分，它会保留原状，否则它会被转换成 &amp;amp; &amp;lt;</li>
+        </ul>
+
+        <h2>区块元素</h2>
+        <ul>
+            <li>标题 = - #
+                <pre><code>
+//类 Setext 形式 利用 = （最高阶标题）和 - （第二阶标题）
+
+This is an H1
+=============
+
+This is an H2
+-------------
+
+
+
+
+//类 Atx 形式  行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶
+
+# 这是 H1
+
+## 这是 H2
+
+###### 这是 H6
+
+
+//行尾的井字符数量不决定标题的阶数
+# 这是 H1 #
+
+## 这是 H2 ##
+
+### 这是 H3 ######
+</code></pre>
+            </li>
+
+            <li>段落
+                <pre><code>
+
+</code></pre>
+            </li>
+
+            <li>换行
+                <pre><code>
+
+</code></pre>
+            </li>
+
+            <li>区块引用>
+                <pre><code>
+//每行的最前面加上 >
+> This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+> consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+> Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+> 
+> Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+> id sem consectetuer libero luctus adipiscing.
+
+
+//只在整个段落的第一行最前面加上 >
+> This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+> Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.
+
+
+//嵌套 根据层次加上不同数量的 >
+>This is the first level of quoting.
+>
+> > This is nested blockquote.
+>
+> Back to the first level.
+
+
+//引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等
+
+</code></pre>
+            </li>
+
+            <li>列表
+                <pre><code>
+//无序列表使用星号、加号或是减号作为列表标记
+*   Red       +   Red       -   Red    
+*   Green     +   Green     -   Green           
+*   Blue      +   Blue      -   Blue     
+
+
+//有序列表则使用数字接着一个英文句点,数字并不会影响输出的 HTML 结果
+////转义 1986\. What a great season.
+1.  Bird
+2.  McHale
+3.  Parish
+
+
+
+//列表项目间用空行分开，在输出HTML时会将项目内容用&lt;p&gt;标签包起来
+*   Bird         &lt;ul>               
+*   Magic        &lt;li>Bird&lt;/li>       
+                 &lt;li>Magic&lt;/li>               
+                 &lt;/ul>   
+                 
+*   Bird         &lt;ul>                   
+                 &lt;li>&lt;p>Bird&lt;/p>&lt;/li>           
+*   Magic        &lt;li>&lt;p>Magic&lt;/p>&lt;/li>                   
+                 &lt;/ul>   
+                 
+                 
+//列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符
+1.  This is a list item with two paragraphs. Lorem ipsum dolor
+    sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+    mi posuere lectus.
+
+    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
+    sit amet velit.
+
+2.  Suspendisse id sem consectetuer libero luctus adipiscing.
+
+
+
+//如果要在列表项目内放进引用，那 > 就需要缩进
+*   A list item with a blockquote:
+
+    > This is a blockquote
+    > inside a list item.
+
+
+//如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符
+*   一列表项包含一个列表区块：
+
+        &lt;code...>
+</code></pre>
+            </li>
+
+            <li>代码区块
+                <pre><code>
+//缩进 4 个空格或是 1 个制表符
+//这个每行一阶的缩进（4 个空格或是 1 个制表符），在转html都会被移除
+//&amp; 、 &lt; 和 > 会自动转成 HTML 实体
+//一般的 Markdown 语法不会被转换，像是星号便只是星号
+这是一个普通段落：
+
+    这是一个代码区块。
+</code></pre>
+            </li>
+
+            <li>分割线
+                <pre><code>
+//在一行中用三个以上的星号、减号、底线来建立一个分隔线
+//行内不能有其他东西,可以在星号或是减号中间插入空格
+* * *
+
+***
+
+*****
+
+- - -
+
+----------------------------------------
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>区段元素</h2>
+        <ul>
+            <li>链接
+                <pre><code>
+//行内式
+//[] 显示文字
+//() 链接
+//"" title
+This is [an example](http://example.com/ "Title") inline link.
+
+
+
+
+//参考式 以标识命名url
+//链接 [][]  [文字][标记]
+//可以省略标记，以文字作为标记
+This is [an example][id] reference-style link.
+
+//辨识链接
+[id]: http://example.com/  "Optional Title Here"
+//方括号（前面可以选择性地加上至多三个空格来缩进），里面输入链接文字
+//接着一个冒号
+//接着一个以上的空格或制表符
+//接着链接的网址
+//选择性地接着 title 内容，可以用单引号、双引号或是括弧包着
+
+I get 10 times more traffic from [Google] [1] than from
+[Yahoo] [2] or [MSN] [3].
+
+  [1]: http://google.com/        "Google"
+  [2]: http://search.yahoo.com/  "Yahoo Search"
+  [3]: http://search.msn.com/    "MSN Search"
+  
+
+I get 10 times more traffic from [Google][] than from
+[Yahoo][] or [MSN][].
+
+  [google]: http://google.com/        "Google"
+  [yahoo]:  http://search.yahoo.com/  "Yahoo Search"
+  [msn]:    http://search.msn.com/    "MSN Search"
+</code></pre>
+            </li>
+            
+            <li>强调 * _
+                <pre><code>
+//&lt;em&gt;
+*single asterisks*
+
+_single underscores_
+
+
+//&lt;strong&gt;
+**double asterisks**
+
+__double underscores__
+
+
+//转义 \*  ,   \_
+</code></pre>
+            </li>
+            
+            <li>代码  反引号`
+                <pre><code>
+//标记一小段行内代码
+Use the `printf()` function.
+
+
+//如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段
+``There is a literal backtick (`) here.``
+//起始和结束端都放入一个空白，就可以在区段的一开始就插入反引号
+ `` ` ``
+</code></pre>
+            </li>
+            
+            <li>图片
+                <pre><code>
+![Alt text](/path/to/img.jpg)
+
+![Alt text](/path/to/img.jpg "Optional title")
+//一个惊叹号 !
+//接着一个方括号，里面放上图片的替代文字
+//接着一个普通括号，里面放上图片的网址，最后还可以用引号包住并加上 选择性的 'title' 文字
+
+
+![Alt text][id]
+[id]: url/to/image  "Optional title attribute"
+</code></pre>
+            </li>
+            
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

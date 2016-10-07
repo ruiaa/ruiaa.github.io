@@ -6,7 +6,8 @@
     <title>EventBus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -15,14 +16,153 @@
 <body>
     <main role="main">
         <h1>EventBus</h1>
+
+        <h2>参考</h2>
+        <a href="https://github.com/greenrobot/EventBus">github EventBus</a>
+
+        <h2>配置</h2>
+        <pre><code>
+compile 'org.greenrobot:eventbus:3.0.0'
+
+//ProGuard
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe &lt;methods&gt;;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    &lt;init&gt;(java.lang.Throwable);
+}
+</code></pre>
+
+        <h2>使用</h2>
+        <pre><code>
+//Step 1: Define events (OPJO)
+public class MessageEvent {
+ 
+    public final String message;
+ 
+    public MessageEvent(String message) {
+        this.message = message;
+    }
+}
+
+
+
+//Step 2: Prepare subscribers @Subscribe
+// This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+@Subscribe(threadMode = ThreadMode.MAIN)
+public void onMessageEvent(MessageEvent event) {
+    Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
+}
+// This method will be called when a SomeOtherEvent is posted
+@Subscribe
+public void handleSomethingElse(SomeOtherEvent event) {
+    doSomethingWith(event);
+}
+
+
+
+//Step 3: register subscribers 
+@Override
+public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+}
+@Override
+public void onStop() {
+    EventBus.getDefault().unregister(this);
+    super.onStop();
+}
+
+
+
+//Step 4: Post events
+EventBus.getDefault().post(new MessageEvent("Hello everyone!"));
+</code></pre>
+
+        <h2>ThreadMode</h2>
+        <ul>
+            <li>PostThread 默认
+                <p>发布事件和接收事件在同一个线程</p>
+            </li>
+            <li>MainThread</li>
+            <li>BackgroundThread
+                <p>如果事件在UI线程中发布出来，那么该事件处理函数就会在新的线程中运行。
+                    <br>如果事件在子线程中发布出来，那么该事件处理函数直接在发布事件的线程中执行</p>
+            </li>
+            <li>Async
+                <p>无论事件在哪个线程发布，该事件处理函数都会在新建的子线程中执行</p>
+            </li>
+        </ul>
+
+        <h2>黏性事件:在发送某种类型黏性事件之后再订阅该事件也能收到该事件的最近一条</h2>
+        <pre><code>
+//EventBus keeps the last sticky event of a certain type in memory.
+//eventbus在内存中保存某种类型黏性事件的最后一个。
+
+//黏性事件处理函数：
+@Subscribe(sticky = true)
+public void XXX(MessageEvent messageEvent) {
+    ......
+}
+
+
+//发送黏性事件：
+EventBus.getDefault().postSticky(new MessageEvent("test"));
+
+
+//Getting and Removing sticky Events manually
+//获取,删除某种类型的黏性事件
+
+MessageEvent stickyEvent = EventBus.getDefault().getStickyEvent(MessageEvent.class);
+// Better check that an event was actually posted before
+if(stickyEvent != null) {
+// "Consume" the sticky event
+EventBus.getDefault().removeStickyEvent(stickyEvent);
+// Now do something with it
+}
+
+MessageEvent stickyEvent = EventBus.getDefault().removeStickyEvent(MessageEvent.class);
+// Better check that an event was actually posted before
+if(stickyEvent != null) {
+// Now do something with it
+}
+</code></pre>
+
+        <h2>使用EventBuilder配置EventBus</h2>
+        <pre><code>
+boolean logSubscriberExceptions = true;
+boolean logNoSubscriberMessages = true;
+boolean sendSubscriberExceptionEvent = true;
+boolean sendNoSubscriberEvent = true;
+boolean throwSubscriberException;
+boolean eventInheritance = true;
+boolean ignoreGeneratedIndex;
+boolean strictMethodVerification;
+               
         
-        
+//配置默认的EventBus -->EventBus.getDefault();
+//在EventBus实例化之前，最好是在Application中去调用
+EventBus.builder()
+    .throwSubscriberException(BuildConfig.DEBUG)
+    .installDefaultEventBus();
+
+
+//builder模式配置单个实例
+EventBus eventBus = EventBus.builder()
+    .logNoSubscriberMessages(false)
+    .throwSubscriberException(true)
+    .sendNoSubscriberEvent(false)
+    .build();
+</code></pre>
+
+        <h2>Subscriber Index</h2>
+
     </main>
 </body>
-
-
-
-
 
 
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Gson</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>Gson</h1>
+        
+        <h2>查看</h2>
+        <a href="http://www.jianshu.com/p/c88260adaf5e">怪盗kidou 你真的会用Gson吗?Gson使用指南（二）</a>
+        <a href="https://github.com/google/gson/blob/master/UserGuide.md">Gson UserGuide</a>
+        
+        <h2>fromJson() toJson()</h2>
+        <pre><code>
+//基本数据类型
+Gson gson = new Gson();
+int i = gson.fromJson("100", int.class);              //100
+double d = gson.fromJson("\"99.99\"", double.class);  //99.99
+boolean b = gson.fromJson("true", boolean.class);     // true
+String str = gson.fromJson("String", String.class);   // String
+
+Gson gson = new Gson();
+String jsonNumber = gson.toJson(100);       // 100
+String jsonBoolean = gson.toJson(false);    // false
+String jsonString = gson.toJson("String"); //"String"
+
+
+
+//POJO类
+class BagOfPrimitives {
+  private int value1 = 1;
+  private String value2 = "abc";
+  private transient int value3 = 3;
+  BagOfPrimitives() {
+    // no-args constructor
+  }
+}
+
+BagOfPrimitives obj = new BagOfPrimitives();
+Gson gson = new Gson();
+String json = gson.toJson(obj);  //==> json is {"value1":1,"value2":"abc"}
+
+BagOfPrimitives obj2 = gson.fromJson(json, BagOfPrimitives.class);
+
+
+
+//Array 
+Gson gson = new Gson();
+int[] ints = {1, 2, 3, 4, 5};
+String[] strings = {"abc", "def", "ghi"};
+
+gson.toJson(ints);     // ==> [1,2,3,4,5]
+gson.toJson(strings);  // ==> ["abc", "def", "ghi"]
+
+int[] ints2 = gson.fromJson("[1,2,3,4,5]", int[].class); 
+
+
+
+//Collections 
+Gson gson = new Gson();
+Collection&lt;Integer&gt; ints = Lists.immutableList(1,2,3,4,5);
+
+String json = gson.toJson(ints);  // ==> json is [1,2,3,4,5]
+
+Type collectionType = new TypeToken&lt;Collection&lt;Integer&gt;(){}.getType();
+Collection&lt;Integer&gt; ints2 = gson.fromJson(json, collectionType);
+//TypeToken的构造方法是protected修饰的
+//new TypeToken&lt;Collection&lt;Integer&gt;(){}.getType()
+</code></pre>
+       
+       <h2>属性重命名 @SerializedName</h2>
+       <pre><code>
+@SerializedName("email_address")
+public String emailAddress;
+
+//or
+@SerializedName(value = "emailAddress", alternate = {"email", "email_address"})
+public String emailAddress;
+</code></pre>
+       
+       <h2></h2>
+        
+        
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

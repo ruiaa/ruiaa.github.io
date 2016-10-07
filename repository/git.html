@@ -6,7 +6,8 @@
     <title>git学习</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -144,6 +145,7 @@
             <ul>
                 <li>$ git push -u origin master</li>
                 <li>$ git push origin master</li>
+                <li>$ git push origin branchName</li>
                 <br>
                 <br>
                 <br>
@@ -161,6 +163,13 @@
                 <li>$ git clone http://domain.com/user/repo.git</li>
             </ul>
 
+            <h2>远程同步</h2>
+            <ul>
+                <li>远程与本地分别进行修改和提交</li>
+                <li>git fetch origin  同步远程服务器上的数据到本地</li>
+                <li>origin/master和master分别指向一个分支，合并点在上一次同步处</li>
+            </ul>
+
             <h2>搜索</h2>
             <ul>
                 <li>$ git grep "xxx"</li>
@@ -176,7 +185,8 @@
             <h2>别名</h2>
             <ul>
                 <li>$ git config --global alias.aliasName gitCommand</li>
-                <li>$ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"</li>
+                <li>$ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)
+                    <%an>%Creset' --abbrev-commit"</li>
             </ul>
         </article>
     </main>

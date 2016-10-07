@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Rxandroid</title>
+    <title>android PopupWindow</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
@@ -14,18 +14,27 @@
 
 <body>
     <main role="main">
-        <h1>RxAndroid</h1>
+        <h1>android PopupWindow</h1>
         
-        <h2>配置</h2>
-        <a href="https://github.com/ReactiveX/RxAndroid">github RxAndroid</a>
+        <h2>OnDismissListener</h2>
+        
+        <h2>PopupWindow</h2>
         <pre><code>
-compile 'io.reactivex:rxandroid:1.2.1'
-compile 'io.reactivex:rxjava:1.1.6'
+//创建
+PopupWindow(Context context)
+
+//弹出
+//作为下拉框
+showAsDropDown(View anchor, int xoff, int yoff, int gravity)
+//相对
+showAtLocation(View parent, int gravity, int x, int y)
+
+//隐藏
+dismiss()
+
+//样式
+setXxx()
 </code></pre>
-        
-        <h2>RxBinding</h2>
-        <p>UI --> Observable<br>UIEvent --> onNext()<br>Listener --> Observer</p>
-        <h2>RxBus</h2>
         
         
     </main>

@@ -6,7 +6,8 @@
     <title>http</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -44,6 +45,8 @@
 
     {"status":202,"info":"\u6b64\u7528\u6237\u4e0d\u5b58\u5728\uff01","data":null}</code></pre>
 
+        <h2>medua type</h2>
+
         <h2>Http请求方式</h2>
         <ul>
             <li>get
@@ -71,7 +74,7 @@
                 <p>回显服务器收到的请求，主要用于测试或诊断。</p>
             </li>
         </ul>
-        
+
         <h2>get</h2>
         <pre><code>//在url中填写参数：
  http://xxxx.xx.com/xx.php?params1=value1&amp;params2=value2
@@ -79,9 +82,9 @@
  //使用路由
  http://xxxx.xx.com/xxx/value1/value2/value3
 </code></pre>
-   
-       <h2>post</h2>
-       <pre><code>//x-www-form-urlencoded的编码方式
+
+        <h2>post</h2>
+        <pre><code>//x-www-form-urlencoded的编码方式
 tel=13637829200&amp;password=123456
 
 //form-data的编码方式
@@ -95,6 +98,103 @@ tel=13637829200&amp;password=123456
   123456
   ----WebKitFormBoundary7MA4YWxkTrZu0gW
 </code></pre>
+
+        <h2>GET</h2>
+
+        <ul>
+            <li>安全且幂等</li>
+            <li>获取表示</li>
+            <li>
+                <p>变更时获取表示（缓存）</p>
+            </li>
+            <li>
+                <p>200（OK） - 表示已在响应中发出</p>
+            </li>
+            <li>204（无内容） - 资源有空表示</li>
+            <li>301（Moved Permanently） - 资源的URI已被更新</li>
+            <li>303（See Other） - 其他（如，负载均衡）</li>
+            <li>304（not modified）- 资源未更改（缓存）</li>
+            <li>400 （bad request）- 指代坏请求（如，参数错误）</li>
+            <li>404 （not found）- 资源不存在</li>
+            <li>406 （not acceptable）- 服务端不支持所需表示</li>
+            <li>500 （internal server error）- 通用错误响应</li>
+            <li>503 （Service Unavailable）- 服务端当前无法处理请求</li>
+        </ul>
+
+
+        <h2>POST</h2>
+
+        <ul>
+            <li>不安全且不幂等</li>
+            <li>使用服务端管理的（自动产生）的实例号创建资源</li>
+            <li>创建子资源</li>
+            <li>部分更新资源</li>
+            <li>
+                <p>如果没有被修改，则不过更新资源（乐观锁）</p>
+            </li>
+            <li>
+                <p>200（OK）- 如果现有资源已被更改</p>
+            </li>
+            <li>201（created）- 如果新资源被创建</li>
+            <li>202（accepted）- 已接受处理请求但尚未完成（异步处理）</li>
+            <li>301（Moved Permanently）- 资源的URI被更新</li>
+            <li>303（See Other）- 其他（如，负载均衡）</li>
+            <li>400（bad request）- 指代坏请求</li>
+            <li>404 （not found）- 资源不存在</li>
+            <li>406 （not acceptable）- 服务端不支持所需表示</li>
+            <li>409 （conflict）- 通用冲突</li>
+            <li>412 （Precondition Failed）- 前置条件失败（如执行条件更新时的冲突）</li>
+            <li>415 （unsupported media type）- 接受到的表示不受支持</li>
+            <li>500 （internal server error）- 通用错误响应</li>
+            <li>503 （Service Unavailable）- 服务当前无法处理请求</li>
+        </ul>
+
+
+        <h2>PUT</h2>
+
+        <ul>
+            <li>不安全但幂等</li>
+            <li>用客户端管理的实例号创建一个资源</li>
+            <li>通过替换的方式更新资源</li>
+            <li>
+                <p>如果未被修改，则更新资源（乐观锁）</p>
+            </li>
+            <li>
+                <p>200 （OK）- 如果已存在资源被更改</p>
+            </li>
+            <li>201 （created）- 如果新资源被创建</li>
+            <li>301（Moved Permanently）- 资源的URI已更改</li>
+            <li>303 （See Other）- 其他（如，负载均衡）</li>
+            <li>400 （bad request）- 指代坏请求</li>
+            <li>404 （not found）- 资源不存在</li>
+            <li>406 （not acceptable）- 服务端不支持所需表示</li>
+            <li>409 （conflict）- 通用冲突</li>
+            <li>412 （Precondition Failed）- 前置条件失败（如执行条件更新时的冲突）</li>
+            <li>415 （unsupported media type）- 接受到的表示不受支持</li>
+            <li>500 （internal server error）- 通用错误响应</li>
+            <li>503 （Service Unavailable）- 服务当前无法处理请求</li>
+        </ul>
+
+
+        <h2>DELETE</h2>
+
+        <ul>
+            <li>不安全但幂等</li>
+            <li>
+                <p>删除资源</p>
+            </li>
+            <li>
+                <p>200 （OK）- 资源已被删除</p>
+            </li>
+            <li>301 （Moved Permanently）- 资源的URI已更改</li>
+            <li>303 （See Other）- 其他，如负载均衡</li>
+            <li>400 （bad request）- 指代坏请求</li>
+            <li>404 （not found）- 资源不存在</li>
+            <li>409 （conflict）- 通用冲突</li>
+            <li>500 （internal server error）- 通用错误响应</li>
+            <li>503 （Service Unavailable）- 服务端当前无法处理请求</li>
+        </ul>
+
     </main>
 </body>
 

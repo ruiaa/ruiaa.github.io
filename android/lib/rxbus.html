@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>RxBus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>RxBus</h1>
+        <pre><code>
+
+public class RxBus {
+   
+    private static volatile RxBus defaultInstance;
+
+    private final Subject&lt;Object, Object&gt; bus;
+    
+
+    public RxBus() {
+      bus = new SerializedSubject&lt;&gt;(PublishSubject.create());
+    }
+    
+    // 单例RxBus
+    public static RxBus getDefault() {
+        if (defaultInstance == null) {
+            synchronized (RxBus.class) {
+                if (defaultInstance == null) {
+                    defaultInstance = new RxBus();
+                }
+            }
+        }
+        return defaultInstance ;
+    }
+    
+    // 发送一个新的事件
+    public void post (Object o) {
+        bus.onNext(o);
+    }
+    
+    // 根据传递的EventType返回特定类型的被观察者
+    public &lt;T&gt; Observable&lt;T&gt; toObservable (Class&lt;T&gt; eventType) {
+        return bus.ofType(eventType);
+    }
+}
+   
+       
+               
+//使用
+//设置观察者
+rxSubscription = RxBus.getDefault()
+        .toObserverable(Event.class)
+        .subscribe( new Action1&lt;Event&gt;() {
+                            @Override
+                            public void call(Event userEvent) {
+                            long id = userEvent.getId();
+                            String name = userEvent.getName();
+                            ...
+                            }
+                        },
+                    new Action1&lt;Throwable&gt;() {
+                             @Override
+                             public void call(Throwable throwable) {
+                             
+                             }        
+                        }
+         );
+         
+//发射数据
+RxBus.getDefault().post(new Event ());
+
+//取消订阅事件
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    if(!rxSubscription.isUnsubscribed()) {
+        rxSubscription.unsubscribe();
+    }
+}
+</code></pre>
+        
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

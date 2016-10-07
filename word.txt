@@ -32,5 +32,46 @@ subscriber
 订阅者
 emit
 发射 发布
+compose
+组成 构成
+concat
+合并 连接
+flat
+扁平
+manually
+手动地
+automatically
+自动地
+complex
+复杂的
+compound
+复合
+toggle
+切换
+prompt
+提示
+chronometer
+精密计时器
+inverse
+倒转
+indeterminate
+不定的
+divider
+分隔物
+decoration
+装饰
+popup
+弹出
+recycler
+回收
+
+
+
+
+
+
+
+
+
 Intermediate Language
 IL中间语言代码

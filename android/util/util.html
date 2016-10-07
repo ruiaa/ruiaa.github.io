@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Rxandroid</title>
+    <title>android 工具类</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
@@ -14,18 +14,19 @@
 
 <body>
     <main role="main">
-        <h1>RxAndroid</h1>
+        <h1>android 工具类</h1>
         
-        <h2>配置</h2>
-        <a href="https://github.com/ReactiveX/RxAndroid">github RxAndroid</a>
+        <h2>CountDownTimer 倒计时</h2>
         <pre><code>
-compile 'io.reactivex:rxandroid:1.2.1'
-compile 'io.reactivex:rxjava:1.1.6'
+new CountDownTimer(30000, 1000) {
+     public void onTick(long millisUntilFinished) {
+         mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+     }
+     public void onFinish() {
+         mTextField.setText("done!");
+     }
+  }.start();
 </code></pre>
-        
-        <h2>RxBinding</h2>
-        <p>UI --> Observable<br>UIEvent --> onNext()<br>Listener --> Observer</p>
-        <h2>RxBus</h2>
         
         
     </main>

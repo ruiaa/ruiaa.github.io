@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Rxandroid</title>
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
@@ -14,18 +14,15 @@
 
 <body>
     <main role="main">
-        <h1>RxAndroid</h1>
+        <h1>ViewPager</h1>
         
-        <h2>配置</h2>
-        <a href="https://github.com/ReactiveX/RxAndroid">github RxAndroid</a>
+        <h2>PagerAdapter</h2>
         <pre><code>
-compile 'io.reactivex:rxandroid:1.2.1'
-compile 'io.reactivex:rxjava:1.1.6'
+//instantiateItem(ViewGroup container, int position) ：初始化一个子View
+//destroyItem(ViewGroup container, int position,Object object)：销毁一个子View
+//getCount()：返回子View的个数
+//isViewFromObject(View arg0, Object arg1)：判断子View是否来自Objects
 </code></pre>
-        
-        <h2>RxBinding</h2>
-        <p>UI --> Observable<br>UIEvent --> onNext()<br>Listener --> Observer</p>
-        <h2>RxBus</h2>
         
         
     </main>

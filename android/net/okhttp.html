@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>OkHttp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>OkHttp</h1>
+
+        <a href="https://github.com/square/okhttp">github okhttp</a>
+        <br>
+        <a href="http://square.github.io/okhttp/3.x/okhttp/">okhttp doc</a>
+        <br>
+
+        <h2>使用</h2>
+        <pre><code>
+//Initial
+OkHttpClient okHttpClient = new OkHttpClient();
+okHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
+okHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+
+
+//get
+Request request = new Request.Builder()
+      .url(url)
+      .build();
+      
+
+//post
+RequestBody body = new FormBody.Builder()
+    .add("name", "Cuber")
+    .add("age", "26")
+    .build();
+
+Request request = new Request.Builder()
+      .url(url)
+      .post(body)
+      .build();
+      
+//Send
+Response response = client.newCall(request).execute();
+//如果response是null, 就代表timeout或没有网络
+
+//使用Callback
+Response response = client.newCall(request).enqueue(new Callback() {
+
+    @Override
+    public void onFailure(Request request, IOException e) {
+        //timeout或没有网络
+        //注意！这里是backgroundThread
+    }
+
+    @Override
+        public void onResponse(Response response) throws IOException {
+        //成功
+        //注意！这里是backgroundThread
+    }
+});
+</code></pre>
+
+        <h2>Request</h2>
+        <pre><code>
+Request request = new Request.Builder()
+      .url(url)
+      .post(body)
+      .build();
+</code></pre>
+
+        <h2>RequestBody &lt;-- FormBody,MultipartBody</h2>
+        <ul>
+            <li>RequestBody
+                <pre><code>
+static RequestBody	RequestBody.create(MediaType, String)
+static RequestBody	RequestBody.create(MediaType, File)
+static RequestBody	RequestBody.create(MediaType, byte[])
+</code></pre>
+            </li>
+            <li>FormBody
+                <pre><code>
+FormBody body = new FormBody.Builder()
+    .add("name", "Cuber")
+    .add("age", "26")
+    .build();
+    
+</code></pre>
+            </li>
+            <li>MultipartBody
+                <pre><code>
+
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>Response</h2>
+        <pre><code>
+//The response body must be closed.
+ResponseBody	Response.body()
+
+Response.close()
+Response.body().close()
+Response.body().source().close()
+Response.body().charStream().close()
+Response.body().byteString().close()
+Response.body().bytes()
+Response.body().string()
+</code></pre>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

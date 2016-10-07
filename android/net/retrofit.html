@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android Retrofit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android Retrofit</h1>
+        <p>RESTful POJO &lt;-&gt; JSON</p>
+
+        <a href="https://github.com/square/retrofit">github retrofit</a>
+
+        <h2>配置</h2>
+        <pre><code>
+dependencies {
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'  
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+}
+
+
+//解析库配置
+Gson	    com.squareup.retrofit:converter-gson:2.0.0-beta2
+Jackson	    com.squareup.retrofit:converter-jackson:2.0.0-beta1
+Moshi	    com.squareup.retrofit:converter-moshi:2.0.0-beta1
+Protobuf	com.squareup.retrofit:converter-protobuf:2.0.0-beta1
+Wire	    com.squareup.retrofit:converter-wire:2.0.0-beta1
+Simple XML	com.squareup.retrofit:converter-simplexml:2.0.0-beta1
+
+//PROGUARD
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on RoboVM on iOS. Will not be used at runtime.
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+</code></pre>
+
+        <h2>使用</h2>
+        <pre><code>
+//1,定义业务请求接口
+public interface GitHubService {
+  @GET("users/{user}/repos")
+  Call&lt;ResponseBody&gt; repo(@Path("user") String user);
+}
+
+//2,需要创建Retrofit实例，并完成相应的配置
+Retrofit retrofit = new Retrofit.Builder()
+    .baseUrl("https://api.github.com/")  //baseUlr必须以/(斜线)结束
+    .addConverterFactory(GsonConverterFactory.create())
+    //.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+    .build();
+
+GitHubService service = retrofit.create(GitHubService.class);
+
+//3,调用请求方法，并得到Call实例
+Call&lt;List&lt;Repo&gt;&gt; call = service.listRepos("octocat");
+//observable = service.listRepos("octocat");
+
+//同步
+ResponseBody repo = call.execute();
+//异步
+call.enqueue(new Callback&lt;ResponseBody&gt;() {
+            @Override
+            public void onResponse(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response) {
+                try {
+                    System.out.println(response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call&lt;ResponseBody&gt; call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+//取消请求
+call.cancel();
+</code></pre>
+
+        <h2>注解</h2>
+        <pre><code>
+//请求
+
+@GET @POST　@PUT @DELETE @PATCH @HEAD @OPTIONS ("path")  //baseUrl + path -->URL
+
+
+@HTTP (method = "", path = "", hasBody = false)
+
+
+@FormUrlEncoded  //表单请求
+
+
+//params ---> url
+
+@Path      @Path("id") int groupId --> {id} --> groupId
+
+@Query     @Query("key") String value --> 
+
+@QueryMap  @QueryMap Map&lt;String, String> options -->
+
+
+
+</code></pre>
+
+        <h2>注解</h2>
+        <ul>
+            <li>请求方法
+                <pre><code>
+
+@GET
+    String value：默认为""，值为请求的相对URL路径
+
+@POST
+    String value：默认为""，值为请求的相对URL路径
+    
+@PUT
+    String value：默认为""，值为请求的相对URL路径
+    
+@DELETE
+    String value：默认为""，值为请求的相对URL路径
+
+@PATCH
+    String value：默认为""，值为请求的相对URL路径
+    
+@OPTIONS
+    String value：默认为""，值为请求的相对URL路径
+    
+@HTTP
+    String method()：请求方式
+    String path()：默认为""，值为请求的相对URL路径
+    boolean hasBody()：默认为false
+
+    @HTTP(method = "DELETE", path = "remove/", hasBody = true)
+    Call&lt;ResponseBody> deleteObject(@Body RequestBody object);
+
+
+@HEAD
+    包含Head的Request请求
+    
+
+@FormUrlEncoded     
+    发送表单数据，使用@Field或者@FieldMap注解和参数来指定每个表单项的key，value为参数的值。
+
+@Multipart  
+    发送multipart数据，使用@Part或者@PartMap注解定义即将发送的每一个文件
+
+  
+@Streaming
+    将返回值okhttp3.Response.body() body()转换为byte[] 
+    
+</code></pre>
+            </li>
+            <li>请求参数
+                <pre><code>
+@Body
+     请求体，声明一个对象作为请求体发送到服务器，用于POST/PUT
+     @POST("users/new")
+     Call&lt;ResponseBody&gt; getInfo(@Body User user);    
+
+@Field
+    String value：默认为""，参数名称
+    bolean encoded：指定的名称和值是否已URL编码，默认为false，
+
+    @FormUrlEncoded
+    @POST("login")
+    Call&lt;ResponseBody&gt; login(@Field("name") String name,
+                                                @Field("pwd") String pwd);
+    // {@code name=Bob+Smith&pwd=123}
+
+    @FormUrlEncoded
+    @POST("queryScore")
+    Call&lt;ResponseBody&gt; queryScore(@Field("name") String... name);               
+    // {@code name=Bob&name=Jane}
+
+@FieldMap
+    bolean encoded：指定的名称和值是否已URL编码，默认为false，
+
+    @FormUrlEncoded
+    @POST("things")
+    Call&lt;ResponseBody&gt; things(@FieldMap Map&lt;String, String&gt; fields);
+
+
+@Part   
+    String value()：默认为""，参数名称
+    String encoding()：默认编码格式为 "binary";
+
+    @Multipart
+    @POST("upload")
+    Call&lt;ResponseBody&gt; upload(
+                @Part("description") String description,
+                @Part(value = "http://blog.csdn.net/IO_Field/article/details/image", encoding = "8-bit") RequestBody image);
+                
+                
+@PartMap
+    String encoding()：默认编码格式为 "binary";
+
+    @Multipart
+    @POST("upload")
+    Call&lt;ResponseBody&gt; upload(@Part("file") RequestBody file,@PartMap Map&lt;String, RequestBody&gt; params);
+
+@Path
+    String value()：参数名称
+    boolean encoded() ：指定的名称和值是否URL编码，默认为false(URL编码)。设置为true时，不进行URL编码
+
+    @GET("image/{id}")
+    Call&lt;ResponseBody&gt; getInfo(@Path("id") int id);
+
+    // 指定的名称和值默认URL编码
+    @GET("user/{name}")
+    Call&lt;ResponseBody&gt; encoded(@Path("name") String name);
+
+    // 指定的名称和值取消URL编码
+    @GET("user/{name}")
+    Call&lt;ResponseBody&gt; notEncoded(@Path(value="http://blog.csdn.net/IO_Field/article/details/name", encoded=true) String name);
+
+@Query  
+    String value：默认为""，参数名称
+    bolean encoded：指定的名称和值是否已URL编码，默认为false，
+
+    @GET("list")
+    Call&lt;ResponseBody&gt; list(@Query("page") int page);
+    // https://api.example.com/tasks?id=123  
+    @GET("list")
+    Call&lt;ResponseBody&gt; list(@Query("category") String ... page);
+
+    @GET("search")
+    Call&lt;ResponseBody&gt; list(@Query(value="http://blog.csdn.net/IO_Field/article/details/foo", encoded=true) String foo);
+
+    @GET("tasks")
+    Call&lt;List&lt;Task&gt;&gt; getTask(@Query("id") List&lt;Long&gt; taskIds);
+    // https://api.example.com/tasks?id=123&id=124&id=125   
+
+@QueryMap   
+    bolean encoded：指定的名称和值是否已URL编码，默认为false，    
+
+    @GET("search")
+    Call&lt;ResponseBody&gt; list(@QueryMap Map&lt;String, String&gt; filters);
+
+    @GET("search")
+    Call&lt;ResponseBody&gt; list(@QueryMap(encoded=true) Map&lt;String, String&gt; filters);
+
+@Url
+    注解的值为请求的相对URL路径
+    @GET
+    Call&lt;ResponseBody&gt; list(@Url String url);
+</code></pre>
+            </li>
+            <li>请求头
+                <pre><code>
+@Headers
+    String[] value();
+
+    @Headers({
+        "X-Foo: Bar",
+        "X-Ping: Pong"
+    })
+    @GET("deleteObject")
+    Call(ResponseBody) deleteObject(@Query("id") String id);
+
+@Header
+    String value：默认为""，参数名称
+
+    @GET("query")
+    Call&lt;ResponseBody&gt; query(@Header("Accept-Language") String lang);
+
+@HeaderMap
+
+@GET("query")
+Call&lt;ResponseBody&gt; query(@HeaderMap Map&lt;String, String&gt; headers);
+</code></pre>
+            </li>
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
