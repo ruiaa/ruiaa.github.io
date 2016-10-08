@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android common layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android common layout</h1>
+
+        <h2>LinearLayout</h2>
+        <ul>
+            <li>orientation 方向vertical/horizonal</li>
+            <li>gravity 内部控件对齐方式</li>
+            <li></li>
+            <li>layout_weight 权重 match_parent逆(负)权/wrap_content顺(正)权</li>
+        </ul>
+        
+        <h2>FrameLayout</h2>
+        <ul>
+            <li>从屏幕左上角按照层次堆叠方式布局，后面的控件覆盖前面的控件</li>
+            <li></li>
+            <li>layout_gravity top|bottom|left|right|center|center_horizontal|center_vertical</li>
+        </ul>
+        
+        <h2>RelativeLayout</h2>
+        <ul>
+            <li></li>
+            <li>layout_alignParentTop/Botton/Left/Right 相对于父控件</li>
+            <li>layout_centerInParent/Horizontal/Vertical 居中</li>
+            <li>layout_above/below/toLeftOf/toRightOf 相对给定Id控件</li>
+            <li>layout_alignBaseline/Top/Bottom/Left/Right 控件的x边缘与给定ID的x边缘对齐</li>
+        </ul>
+        
+        <h2>TableLayout</h2>
+        <ul>
+            <li>列的索引从0开始</li>
+            <li>shrinkColiums 可收缩的列，内容过多就收缩显示到第二行</li>
+            <li>stretchColumns 可伸展的列，将空白区域填充满整个列</li>
+            <li>collapseColumns 设置要隐藏的列</li>
+            <li></li>
+            <li>TableRow 组织一行</li>
+            <li></li>
+            <li>layout_column 列号</li>
+            <li>layout_span 跨越列数</li>
+        </ul>
+        
+        <h2>GridLayout</h2>
+        <ul>
+            <li>columnCount rowCount</li>
+            <li>每一行的高度是由这一行中Cell的最大高度决定的</li>
+            <li>每一列的宽度是由每一列中Cell的最大宽度决定的</li>
+            <li></li>
+            <li>layout_column/row</li>
+            <li>layout_columnSpan/rowSpan</li>
+            <li>layout_gravity 填充方式 center...|top...|fill...|clip...</li>
+        </ul>
+        
+        <h2>AbsoluteLayout</h2>
+        <ul>
+            <li>layout_x/y</li>
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

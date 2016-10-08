@@ -6,7 +6,8 @@
     <title>android window</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -15,84 +16,64 @@
 <body>
     <main role="main">
         <h1>android window</h1>
-        <h2></h2>
-        <pre><code>视图层管理
-设置活动全局布局
-setContentView(R.layout.first_layout);
 
-feature设置（要先于setContentView(R.layout.first_layout);）
+
+
+        <h2>window feature</h2>
+        <ul>
+            <li>requestWindowFeature
+                <pre><code>//1,请求feature
 requestWindowFeature(Window.FEATURE_NO_TITLE);
-// 1.default_features：系统默认状态，一般不需要指定
-// 2.feature_context_menu：启用contextmenu，默认该项已启用，一般无需指定
-// 3.feature_custom_title：自定义标题。当需要自定义标题时必须指定。如：标题是一个按钮时
-// 4.feature_indeterminate_progress：不确定的进度
-// 5.feature_left_icon：标题栏左侧的图标
-// 6.feature_no_title：无标题
-// 7.feature_options_panel：启用“选项面板”功能，默认已启用。
-// 8.feature_progress：进度指示器功能
-// 9.feature_right_icon:标题栏右侧的图标
-private void showfeature_indeterminate_progress() {
-        requestwindowfeature(window.feature_indeterminate_progress);
-        setcontentview(r.layout.main);
-        getwindow().setfeatureint(window.feature_indeterminate_progress, r.layout.progress);
-        // 必须得加上否则显示不出效果 可以通过这个在以后设置显示或隐藏
-        setprogressbarindeterminatevisibility(true);
-    }
-    private void showfeature_custom_title() {
-        // 自定义标题。当需要自定义标题时必须指定。如：标题是一个按钮时
-        requestwindowfeature(window.feature_custom_title);
-        setcontentview(r.layout.main);
-        getwindow().setfeatureint(window.feature_custom_title, r.layout.customtitle);
-    }
-    private void showfeature_left_icon()
-    {
-         requestwindowfeature(window.feature_left_icon);
-         setcontentview(r.layout.main);
-         getwindow().setfeaturedrawableresource(window.feature_left_icon,
-         r.drawable.icon);
-    }
-    private void showfeature_no_title()
-    {
-         requestwindowfeature(window.feature_no_title);
-         setcontentview(r.layout.main);
-         // 加上这句设置为全屏 不加则只隐藏title
-         getwindow().setflags(windowmanager.layoutparams.flag_fullscreen,
-         windowmanager.layoutparams.flag_fullscreen);
-    }
-    private void showfeature_progress()
-    {
-        requestwindowfeature(window.feature_progress);
-        setprogressbarvisibility(true);
-        setcontentview(r.layout.main);
-        settitle("");
-        getwindow().setfeatureint(window.feature_progress, window.progress_visibility_on);
-        // 通过线程来改变progressbar的值
-        new thread(new runnable() {
-            public void run() {
-                for (int i = 0; i < 10; i++) {
-                    try {
-                        thread.sleep(1000);
-                        message m = new message();
-                        m.what = (i + 1) * 20;
-                        windowfeaturedemoactivity.this.mymessagehandler.sendmessage(m);
-                    } catch (exception e) {
-                        e.printstacktrace();
-                    }
-                }
-            }
-        }).start();
-    }
-    handler mymessagehandler = new handler() {
-        // @override
-        public void handlemessage(message msg) {
-            // 设置标题栏中前景的一个进度条进度值
-            setprogress(100 * msg.what);
-            // 设置标题栏中后面的一个进度条进度值
-            setsecondaryprogress(100 * msg.what + 10);
-            super.handlemessage(msg);
-        }
-    };
-}</code></pre>
+//2,设置活动全局布局
+setContentView(R.layout.first_layout);
+//3,设置feature
+getWindow().setFeatureXxx(  ); 
+</code></pre>
+            </li>
+            <li>default_features：系统默认状态，一般不需要指定
+            </li>
+            <li>feature_context_menu：启用contextmenu，默认该项已启用，一般无需指定
+            </li>
+            <li>feature_custom_title：自定义标题。
+                <pre><code>this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);  
+setContentView(R.layout.main);  
+getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
+</code></pre>
+            </li>
+            <li>feature_indeterminate_progress：不确定的进度
+                <pre><code>this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
+setContentView(R.layout.main);  
+getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS, R.layout.progress);  
+setProgressBarIndeterminateVisibility(true);  
+</code></pre>
+            </li>
+            <li>feature_progress：进度指示器功能
+                <pre><code>requestWindowFeature(Window.FEATURE_PROGRESS);
+setProgressBarVisibility(true);
+setContentview(R.layout.main);
+setTitle(&quot;&quot;);
+getWindow().setFeatureInt(Window.FEATURE_PROGRESS, R.layout.progress);
+//设置标题栏中进度条进度值
+setProgress(i);
+setSecondaryProgress(i+i);
+</code></pre>
+            </li>
+            <li>feature_left_icon，feature_right_icon：标题栏左右侧的图标
+                <pre><code>requestWindowFeature(Window.FEATURE_RIGHT_ICON);  
+setContentView(R.layout.main);      
+getWindow().setFeatureDrawableResource(Window.FEATURE_RIGHT_ICON,R.drawable.ic_launcher);  
+</code></pre>
+            </li>
+            <li>feature_no_title：无标题
+                <pre><code>this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
+setContentView(R.layout.main);  
+//全屏
+getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
+</code></pre>
+            </li>
+            <li>feature_options_panel：启用“选项面板”功能，默认已启用。
+            </li>
+        </ul>
 
     </main>
 </body>
