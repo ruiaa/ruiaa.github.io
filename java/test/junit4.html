@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Junit4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>Junit4</h1>
+
+        <h2>使用</h2>
+        <pre><code>    //1,
+    compile
+    //2,
+    package com.ruiaa.mytry;
+    public class ExampleUnitTest {
+        @Test
+        public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
+        }
+    }
+</code></pre>
+        
+        <h2>注解</h2>
+        <ul>
+            <li>@Test：把一个方法标记为测试方法</li>
+            <li>@Before：每一个测试方法执行前自动调用一次</li>
+            <li>@After：每一个测试方法执行完自动调用一次</li>
+            <li>@BeforeClass：static 所有测试方法执行前执行一次，在测试类还没有实例化就已经被加载</li>
+            <li>@AfterClass：static 所有测试方法执行完执行一次，在测试类还没有实例化就已经被加载</li>
+            <li>@Ignore：暂不执行该测试方法,或者该测试类</li>
+        </ul>
+        
+        <h2>@Test : expected , timeout</h2>
+        <ul>
+            <li>expected 表示此测试方法执行后应该抛出的异常
+                <pre><code>@Test(expected = Exception.class)
+public void testFactorialException() throws Exception {
+    new Math().factorial(-1);
+    //检测失败
+    fail(&quot;factorial参数为负数没有抛出异常&quot;);
+}
+</code></pre>
+            </li>
+            <li>timeout 检测测试指定方法,或者指定测试类中每一个方法的执行时间,毫秒
+                <pre><code>@Test(timeout = 2000)
+</code></pre>
+            </li>
+        </ul>
+        
+        <h2>Assert</h2>
+        <ul>
+            <li>assertEquals</li>
+            <li>assertSame assertNotSame</li>
+            <li>assertFalse assertTrue</li>
+            <li>assertNull assertNotNull</li>
+        </ul>
+        
+        <h2>参数化测试  Collection -&gt; construtor -&gt; testMethod</h2>
+        <pre><code>    @RunWith(Parameterized.class)  
+    public class MyTryTest{
+        ...
+        ...
+        public MyTryTest(int i,String str){
+            ...
+            ...
+        }
+        
+        
+        @Parameterized.Parameters   
+        public static Collection&lt;Object[]&gt; data() {  
+            Object[][] data = new Object[][] {  
+                    { 2, true },  
+                    { 5, false },  
+                    { 10, false }  
+            };  
+            return Arrays.asList(data);  
+        }
+        
+        
+        @Test
+        public void testMyMethod(){
+            ...
+        }
+
+
+    }
+</code></pre>
+
+        <h2>TestSuite套件 @RunWith(Suite.class)  @SuiteClasses({ , })</h2>
+        <pre><code>    @RunWith(Suite.class)  
+    @SuiteClasses({ 
+        MyTry1Test.class, 
+        MyTry2Test.class 
+    })  
+    public class AllTests {  
+
+    } 
+</code></pre>
+
+        <h2>TestCase</h2>
+        
+        <h2>TestResult</h2>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

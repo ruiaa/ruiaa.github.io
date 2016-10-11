@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android error</h1>
+
+        <h2>Sql</h2>
+        <ul>
+            <li>!!!! SQL字段 <em>[数字]</em> , "["+String.valueOf(i)+"]"</li>
+            <li>SQL条件值 <em>数字</em> , <em>'字符串'</em> , "字符串字段"+"='"+String(val)+"'"</li>
+        </ul>
+
+        <h2>error</h2>
+        <ul>
+            <li>syntax error语法错误</li>
+        </ul>
+
+        <h2>运行时错误：时间次序</h2>
+        <ul>
+            <li>同一进程 ContentProvider+SQLite
+                <ul>
+                    <li>NullPointerException at SQLiteOpenHelper.getDatabaseLocked</li>
+                    <li>ContentProvider 最先创建 onCreate</li>
+                    <li>Application 接着创建 onCreate</li>
+                    <br>
+                    <li>不要在ContentProvider创建中使用ApplicationContext
+                        <br>使用ContentProvider.getContext()
+                    </li>
+                    <li><em>错误</em>在ContentProvider创建时触发SQLite使用ApplicationContext创建
+                        <br>应该传递ContentProvider.getContext()
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+
+
+        <h2>UI错误</h2>
+        <ul>
+            <li>RecyclerView: No adapter attached; skipping layout
+                <ul>
+                    <li>recyclerView.setLayoutManager(new LinearLayoutManager(context));</li>
+                </ul>
+            </li>
+            <li>StackOverflowError at android.view.ViewGroup.jumpDrawablesToCurrentState
+                <ul>
+                    <li>view=LayoutInflater.from(context).inflate(R.layout.view,container,false)</li>
+                    <li>注意添加 false</li>
+                </ul>
+            </li>
+        </ul>
+
+
+
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
