@@ -23,34 +23,34 @@
             <li>singleLine 单行</li>
             <li>maxLines 最多行数</li>
             <li>ellipsize 超出宽度时显示方式 ...end start middle; 跑马灯 marquee</li>
-            <li>drawableRight 插入图片</li>
+            <li>drawableLeft,drawableRight,drawablePadding 插入图片</li>
             <li>autoLink 链接</li>
         </ul>
         
         <h2>EditText</h2>
         <ul>
-            <li>
-                <p>password 密码显示</p>
-            </li>
-            <li>
-                <p>numeric 数字</p>
-            </li>
-            <li>
-                <p>maxLength</p>
-            </li>
-            <li>
-                <p>editable</p>
-            </li>
-            <li>
-                <p>selectAllOnFocus 默认在获得焦点时选中全部</p>
-            </li>
-            <li>
-                <p>selectAll</p>
-            </li>
-            <li>
-                <p>setSelection 设置输入光标位置</p>
-            </li>
+            <li>password 密码显示</li>
+            <li>numeric 数字</li>
+            <li>maxLength</li>
+            <li>editable</li>
+            <li>selectAllOnFocus 默认在获得焦点时选中全部</li>
+            <li>selectAll</li>
+            <li>setSelection 设置输入光标位置</li>
         </ul>
+        
+        <h2>TextInputLayout hintText-->floatingLabel</h2>
+        <pre><code>
+&lt;android.support.design.widget.TextInputLayout
+        android:id="@+id/til_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        &lt;EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+&lt;/android.support.design.widget.TextInputLayout>
+</code></pre>
         
         <h2>软键盘</h2>
         <ul>

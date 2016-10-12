@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android CoordinatorLayout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android CoordinatorLayout</h1>
+
+        <h2>CoordinatorLayout</h2>
+        <ul>
+            <li>layout_behavior="@string/appbar_scrolling_view_behavior" 可滚动组件</li>
+            <li>layout_scrollFlags="scroll|enterAlways" 响应behavior触发的控件 设置响应方式
+                <ul>
+                    <li>scroll: 滚动出屏幕- 没有设置这个flag的view将被固定在屏幕顶部</li>
+                    <li>enterAlways: 让任意向下的滚动都会导致该view变为可见，启用快速“返回模式”</li>
+                    <li>enterAlwaysCollapsed: 当view已经设置minHeight又使用此标志时，view只能以最小高度进入，只有当滚动视图到达顶部时才扩大到完整高度</li>
+                    <li>exitUntilCollapsed: this flag causes the view to scroll off until it is ‘collapsed’ (its minHeight) before exiting</li>
+                </ul>
+            </li>
+            <li>layout_anchor</li>
+            <li>layout_anchorGravity</li>
+        </ul>
+
+        <h2>Coordinator.Behavior</h2>
+
+        <h2>CollapsingToolbarLayout 可折叠的toolbar</h2>
+        <ul>
+            <li>app:layout_scrollFlags="scroll|exitUntilCollapsed"</li>
+            <li>app:layout_collapseMode : pin固定在屏幕的顶部,parallax 视差折叠</li>
+            <li>app:layout_collapseParallaxMultiplier=”0.7” 设置视差因子</li>
+        </ul>
+        <pre><code>
+&lt;android.support.design.widget.AppBarLayout
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/detail_backdrop_height"
+    android:fitsSystemWindows="true"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    &lt;android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/collapsing_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:contentScrim="?attr/colorPrimary"
+        app:expandedTitleMarginEnd="64dp"
+        app:expandedTitleMarginStart="48dp"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+        &lt;ImageView
+            android:id="@+id/backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_banner"
+            app:layout_collapseMode="parallax"/>
+
+        &lt;android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    &lt;/android.support.design.widget.CollapsingToolbarLayout>
+
+&lt;/android.support.design.widget.AppBarLayout>
+</code></pre>
+        <h2>FloatingActionButton (extends ImageButton )</h2>
+        <ul>
+            <li>app:fabSize</li>
+            <li>app:elevation 高度</li>
+            <li>app:rippleColor 涟漪颜色</li>
+            <li></li>
+            <li>app:layout_anchor="@id/app_bar" 显示位置锚点</li>
+            <li>app:layout_anchorGravity="bottom|right|end"</li>
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android TabLayout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android TabLayout</h1>
+
+        <h2>TabLayout</h2>
+        <ul>
+            <li>app:tabTextColor="" 标签颜色</li>
+            <li>app:tabSelectedTextColor="" 标签选中时颜色</li>
+            <li>app:tabIndicatorColor="" 标签下标指示器颜色</li>
+            <li>app:tabIndicatorHeight="" 标签下标指示器高度</li>
+            <li>app:tabMode="" 标签能否进行横向滑动</li>
+            <li>TabItem</li>
+            <li></li>
+            <li>addTab(tabLayout.newTab().setText("tab1"));</li>
+            <li>ViewPager
+                <pre><code>
+mViewPager = (ViewPager) findViewById(R.id.viewpager);
+// 设置ViewPager的数据等
+setupViewPager();
+TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+tabLayout.setupWithViewPager(mViewPager);
+</code></pre>
+            </li>
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

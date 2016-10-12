@@ -64,6 +64,18 @@ popup
 弹出
 recycler
 回收
+proxy
+代理
+authenticator
+证书
+dispatch
+分发
+connection
+连接
+intercept
+拦截
+collapse
+坍塌
 
 
 
