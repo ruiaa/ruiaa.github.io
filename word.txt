@@ -76,7 +76,14 @@ intercept
 拦截
 collapse
 坍塌
-
+parallax
+视差
+graphical
+图形
+texture
+纹理
+vertices
+顶点
 
 
 

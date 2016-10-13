@@ -6,7 +6,8 @@
     <title>android canvas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -16,85 +17,206 @@
     <main role="main">
         <h1>android canvas</h1>
 
-        <h2>坐标系</h2>
+        <h2>android.graphics.Canvas</h2>
         <ul>
-            <li>Canvas坐标系:坐标原点在View的左上角，从坐标原点向右为x轴的正半轴，从坐标原点向下为y轴的正半轴</li>
-            <li>绘图坐标系 :可变换 drawXxx()都是基于当前的绘图坐标系
+            <li>坐标系变换
+                <ul>
+                    <li>save 保存当前坐标系</li>
+                    <li>restore 恢复到最近save的坐标系</li>
+                    <li>translate 平移原点</li>
+                    <li>rotate 旋转坐标系</li>
+                    <li>scale 放大缩小</li>
+                    <li>skew 扭曲 将画布在x/y方向上倾斜相应的角度</li>
+                    <li>getMatrix 转换矩阵</li>
+                </ul>
+            </li>
+            <li>图层Layer
+                <ul>
+                    <li>saveLayer, savaLayerAlpha 创建一个新的Layer到“栈”中</li>
+                    <li>restore,restoreToCount 从“栈”中推出一个Layer</li>
+                </ul>
+            </li>
+            <li>绘图
+                <ul>
+                    <li>
+                        <p>drawPoint 一个点</p>
+                    </li>
+                    <li>
+                        <p>drawPoints 多个点</p>
+                    </li>
+                    <li>
+                        <p>drawVertices 顶点</p>
+                    </li>
+                    <li></li>
+                    <li>
+                        <p>drawLine 线</p>
+                    </li>
+                    <li>
+                        <p>drawLines</p>
+                    </li>
+                    <li>
+                        <p>drawArc 弧</p>
+                    </li>
+                    <li>
+                        <p>drawPath 路径</p>
+                    </li>
+                    <li></li>
+                    <li>
+                        <p>drawOval 椭圆</p>
+                    </li>
+                    <li>
+                        <p>drawRect 矩形</p>
+                    </li>
+                    <li>
+                        <p>drawRoundRect 圆角矩形</p>
+                    </li>
+                    <li>
+                        <p>drawCircle 圆形</p>
+                    </li>
+                    <li></li>
+                    <li>
+                        <p>drawColor</p>
+                    </li>
+                    <li>
+                        <p>drawRGB</p>
+                    </li>
+                    <li></li>
+                    <li>
+                        <p>drawBitmap 位图</p>
+                        <pre><code>//Bitmap：图片对象，left:偏移左边的位置，top： 偏移顶部的位置
+drawBitmap(Bitmap bitmap, float left, float top, Paint paint)
+
+drawBitmap(Bitmap bitmap, Rect src, RectF dst, Paint paint)；
+Rect src: 对图片进行裁截，若是空null则显示整个图片
+RectF dst：图片在Canvas画布中显示的区域，
+            大于src则把src的裁截区放大，
+            小于src则把src的裁截区缩小。
+</code></pre>
+                    </li>
+                    <li>
+                        <p>drawPicture</p>
+                    </li>
+                    <li></li>
+                    <li>
+                        <p>drawText 字符串</p>
+                    </li>
+                    <li>
+                        <p>drawTextOnPath 沿着路径绘制字符串</p>
+                    </li>
+                    <li>
+                        <p>drawPosText 按照既定点绘制字符串</p>
+                    </li>
+                </ul>
+            </li>
+            <li>clip
+                <ul>
+                    <li>clipPath</li>
+                    <li>clipRect</li>
+                    <li>Region.Op 裁剪组合模式</li>
+                </ul>
+            </li>
+            <li>setXfermode
+                <ul>
+                    <li>AvoidXfermode 指定了一个颜色和容差，强制Paint避免在它上面绘图(或者只在它上面绘图)。</li>
+                    <li>PixelXorXfermode 当覆盖已有的颜色时，应用一个简单的像素XOR操作。</li>
+                    <li>PorterDuffXfermode 这是一个非常强大的转换模式，使用它，可以使用图像合成的16条Porter-Duff规则的任意一条来控制Paint如何与已有的Canvas图像进行交互。</li>
+                </ul>
             </li>
         </ul>
         
-        <h2>android.graphics.Canvas</h2>
-        <pre><code>
-坐标系保存
-
-坐标系变换
-
-绘图
-drawArc 绘制弧
-drawBitmap 绘制位图
-drawCircle 绘制圆形
-drawLine 绘制线
-drawOval 绘制椭圆
-drawPath 绘制路径
-drawPoint 绘制一个点
-drawPoints 绘制多个点
-drawRect 绘制矩形
-drawRoundRect 绘制圆角矩形
-drawText 绘制字符串
-drawTextOnPath 沿着路径绘制字符串
-</code></pre>
-
-   
-       <h2>android.graphics.Paint</h2>
-       <pre><code>
-setARGB/setColor 设置颜色
-setAlpha 设置透明度
-setAntiAlias 设置是否抗锯齿
-setShader 设置画笔的填充效果
-setShadowLayer 设置阴影
-setStyle 设置画笔风格
-setStrokeWidth 设置空心边框的宽度
-setTextSize 设置绘制文本时文字的大小
-</code></pre>
-  
         <h2>android.graphics.Path</h2>
-        <pre><code>
-addArc(RectF oval, float startAngle, float sweepAngle)
-绘制弧线,配合Paint的Style可以实现不同的填充效果
-addCircle(float x, float y, float radius, Path.Direction dir)
-绘制圆形,其中第dir参数用来指定绘制时是顺时针还是逆时针
-addOval(RectF oval, Path.Direction dir)
-绘制椭圆形，其中 oval作为椭圆的外切矩形区域
-addRect(RectF rect, Path.Direction dir)
-绘制矩形
-addRoundRect(RectF rect, float rx, float ry, Path.Direction dir)
-绘制圆角矩形
-lineTo(float x, float y)
-绘制直线
-addPath(Path src)
-添加一个新的Path到当前Path
-arcTo(RectF oval, float startAngle, float sweepAngle, boolean forceMoveTo)
-与addArc方法相似，但也有区别，下文细述。
-quadTo(float x1, float y1, float x2, float y2)
-绘制二次贝塞尔曲线,其中 (x1,y1)为控制点，(x2,y2)为终点
-cubicTo(float x1, float y1, float x2, float y2, float x3, float y3)
-绘制三次贝塞尔曲线，其中(x1,y1),(x2,y2)为控制点，(x3,y3)为终点
-rLineTo(float dx, float dy)
-rMoveTo(float dx, float dy)
-rQuadTo(float dx1, float dy1, float dx2, float dy2)
-rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3)
-</code></pre>
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+        <ul>
+            <li>addPath/Arc/Circle/Oval/Rect/RoundRect</li>
+            <li>moveTo,lineTo,close,reset</li>
+            <li>arcTo 弧线</li>
+            <li>quadTo 二次贝塞尔曲线</li>
+            <li>cubicTo 三次贝塞尔曲线</li>
+            <li>Path.op 集合运算
+                <ul>
+                    <li>path1.op(path2, Path.Op.DIFFERENCE);</li>
+                    <li>Path.Op.INTERSECT 共同 path1 = path1 ∩ path2</li>
+                    <li>Path.Op.UNION 所有 path1 = path1 ∪ path2</li>
+                    <li>Path.Op.DIFFERENCE p1非共同 path1 = path1 - (path1 ∩ path2)</li>
+                    <li>Path.Op.REVERSE_DIFFERENCE p2非共同 path1 = path2 - (path1 ∩ path2)</li>
+                    <li>Path.Op.XOR 所有非共同path1 = (path1 ∪ path2) - (path1 ∩ path2)</li>
+                </ul>
+            </li>
+            <li>setFillType 填充模式
+                <ul>
+                    <li>非零环绕数规则(Nonzero-rule)</li>
+                    <li>奇偶规则(Even–odd rule)</li>
+                </ul>
+            </li>
+            <li>PathMeasure</li>
+        </ul>
+        
+        <h2>android.graphics.Paint</h2>
+        <ul>
+            <li>setARGB/setColor 颜色</li>
+            <li>setColorFilter 颜色过滤器,过滤掉对应的色值，比如去掉照片颜色，生成老照片效果
+                <ul>
+                    <li>ColorMatrixColorFilter 通过颜色矩阵（ColorMatrix）对图像中的色值进行改变</li>
+                    <li>LightingColorFilter</li>
+                    <li>PorterDuffColorFilter</li>
+                </ul>
+            </li>
+            <li>setAlpha 透明度</li>
+            <li>setAntiAlias 是否抗锯齿</li>
+            <li>setShader 画笔的填充效果</li>
+            <li>setShadowLayer 阴影</li>
+            <li>setStyle 画笔风格</li>
+            <li>setStrokeWidth 空心边框的宽度</li>
+            <li>text文本
+                <ul>
+                    <li>setFakeBoldText(boolean fakeBoldText)：模拟实现粗体文字</li>
+                    <li>setSubpixelText(boolean subpixelText)：在绘制斜线的时使用抗锯齿来平滑外观；</li>
+                    <li>setTextAlign(Paint.Align align)：设置绘制文字的对齐方向；</li>
+                    <li>setTextScaleX(float scaleX)：设置绘制文字x轴的缩放比例，可以实现文字的拉伸的效果；</li>
+                    <li>setTextSize(float textSize)：设置绘制文字的字号大小；</li>
+                    <li>setTextSkewX(float skewX)：设置斜体文字，skewX为倾斜弧度；</li>
+                    <li>setTypeface(Typeface typeface)：字体风格，包括粗体，斜体以及衬线体，非衬线体等；</li>
+                    <li>setUnderlineText(boolean underlineText)：设置带有下划线的文字效果；</li>
+                    <li>setStrikeThruText(boolean strikeThruText)：设置带有删除线的效果；</li>
+                </ul>
+            </li>
+            <li>setPathEffect 路径效果
+                <ul>
+                    <li>参数phase：偏移量，绘制的图形可以随着偏移量变化而不断的发生变动</li>
+                    <li>CornerPathEffect 将Path的各个连接线段之间的夹角用一种更平滑的方式连接</li>
+                    <li>DashPathEffect 将Path的线段虚线化</li>
+                    <li>DiscretePathEffect 打散Path的线段，使得在原来路径的基础上发生打散效果</li>
+                    <li>PathDashPathEffect 使用Path图形来填充当前的路径</li>
+                    <li>ComposePathEffect 组合效果 先表现innerpe，再在innerpe的基础上增加outerpe效果</li>
+                    <li>SumPathEffect 叠加效果 两个参数的效果各自独立进行表现，简单重叠</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h2>android.graphics.Shader</h2>
+        <ul>
+            <li>Shader.TileMode
+                <ul>
+                    <li>CLAMP: 边缘拉伸，即使用边缘的最后一个像素进行延展</li>
+                    <li>MIRROR：交替景象, 两个相邻图像间没有缝隙，就像照镜子一样</li>
+                    <li>REPETA：重复摆放,两个相邻图像间有缝隙缝隙</li>
+                </ul>
+            </li>
+            <li>BitmapShader :位图图像渲染</li>
+            <li>LinearGradient:线性渲染</li>
+            <li>RadialGradient:环形渲染</li>
+            <li>SweepGradient:扫描渐变渲染/梯度渲染</li>
+            <li>ComposeGradient:组合渲染</li>
+        </ul>
+        
+        <h2>android.graphics.Matrix</h2>
+
+
+
+
+
+
+
+
     </main>
 </body>
 
