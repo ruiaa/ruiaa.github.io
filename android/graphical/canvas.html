@@ -38,51 +38,24 @@
             </li>
             <li>绘图
                 <ul>
-                    <li>
-                        <p>drawPoint 一个点</p>
-                    </li>
-                    <li>
-                        <p>drawPoints 多个点</p>
-                    </li>
-                    <li>
-                        <p>drawVertices 顶点</p>
-                    </li>
+                    <li>drawPoint 一个点</li>
+                    <li>drawPoints 多个点</li>
+                    <li>drawVertices 顶点</li>
                     <li></li>
-                    <li>
-                        <p>drawLine 线</p>
-                    </li>
-                    <li>
-                        <p>drawLines</p>
-                    </li>
-                    <li>
-                        <p>drawArc 弧</p>
-                    </li>
-                    <li>
-                        <p>drawPath 路径</p>
-                    </li>
+                    <li>drawLine 线</li>
+                    <li>drawLines</li>
+                    <li>drawArc 弧</li>
+                    <li>drawPath 路径</li>
                     <li></li>
-                    <li>
-                        <p>drawOval 椭圆</p>
-                    </li>
-                    <li>
-                        <p>drawRect 矩形</p>
-                    </li>
-                    <li>
-                        <p>drawRoundRect 圆角矩形</p>
-                    </li>
-                    <li>
-                        <p>drawCircle 圆形</p>
-                    </li>
+                    <li>drawOval 椭圆</li>
+                    <li>drawRect 矩形</li>
+                    <li>drawRoundRect 圆角矩形</li>
+                    <li>drawCircle 圆形</li>
                     <li></li>
-                    <li>
-                        <p>drawColor</p>
-                    </li>
-                    <li>
-                        <p>drawRGB</p>
-                    </li>
+                    <li>drawColor</li>
+                    <li>drawRGB</li>
                     <li></li>
-                    <li>
-                        <p>drawBitmap 位图</p>
+                    <li>drawBitmap 位图
                         <pre><code>//Bitmap：图片对象，left:偏移左边的位置，top： 偏移顶部的位置
 drawBitmap(Bitmap bitmap, float left, float top, Paint paint)
 
@@ -93,19 +66,11 @@ RectF dst：图片在Canvas画布中显示的区域，
             小于src则把src的裁截区缩小。
 </code></pre>
                     </li>
-                    <li>
-                        <p>drawPicture</p>
-                    </li>
+                    <li>drawPicture</li>
                     <li></li>
-                    <li>
-                        <p>drawText 字符串</p>
-                    </li>
-                    <li>
-                        <p>drawTextOnPath 沿着路径绘制字符串</p>
-                    </li>
-                    <li>
-                        <p>drawPosText 按照既定点绘制字符串</p>
-                    </li>
+                    <li>drawText 字符串</li>
+                    <li>drawTextOnPath 沿着路径绘制字符串</li>
+                    <li>drawPosText 按照既定点绘制字符串</li>
                 </ul>
             </li>
             <li>clip
@@ -123,7 +88,7 @@ RectF dst：图片在Canvas画布中显示的区域，
                 </ul>
             </li>
         </ul>
-        
+
         <h2>android.graphics.Path</h2>
         <ul>
             <li>addPath/Arc/Circle/Oval/Rect/RoundRect</li>
@@ -149,7 +114,7 @@ RectF dst：图片在Canvas画布中显示的区域，
             </li>
             <li>PathMeasure</li>
         </ul>
-        
+
         <h2>android.graphics.Paint</h2>
         <ul>
             <li>setARGB/setColor 颜色</li>
@@ -190,8 +155,28 @@ RectF dst：图片在Canvas画布中显示的区域，
                     <li>SumPathEffect 叠加效果 两个参数的效果各自独立进行表现，简单重叠</li>
                 </ul>
             </li>
+            <li>setXfermode 重叠效果 PorterDuff.Mode
+                <ul>
+                    <li>1.PorterDuff.Mode.CLEAR所绘制不会提交到画布上。</li>
+                    <li>2.PorterDuff.Mode.SRC显示上层绘制图片</li>
+                    <li>3.PorterDuff.Mode.DST显示下层绘制图片</li>
+                    <li>4.PorterDuff.Mode.SRC_OVER正常绘制显示，上下层绘制叠盖。</li>
+                    <li>5.PorterDuff.Mode.DST_OVER上下层都显示。下层居上显示。</li>
+                    <li>6.PorterDuff.Mode.SRC_IN取两层绘制交集。显示上层。</li>
+                    <li>7.PorterDuff.Mode.DST_IN取两层绘制交集。显示下层。</li>
+                    <li>8.PorterDuff.Mode.SRC_OUT取上层绘制非交集部分。</li>
+                    <li>9.PorterDuff.Mode.DST_OUT取下层绘制非交集部分。</li>
+                    <li>10.PorterDuff.Mode.SRC_ATOP取下层非交集部分与上层交集部分</li>
+                    <li>11.PorterDuff.Mode.DST_ATOP取上层非交集部分与下层交集部分</li>
+                    <li>12.PorterDuff.Mode.XOR取两层绘制非交集。两层绘制非交集。</li>
+                    <li>13.PorterDuff.Mode.DARKEN上下层都显示。变暗</li>
+                    <li>14.PorterDuff.Mode.LIGHTEN上下层都显示。变量</li>
+                    <li>15.PorterDuff.Mode.MULTIPLY取两层绘制交集</li>
+                    <li>16.PorterDuff.Mode.SCREEN上下层都显示。</li>
+                </ul>
+            </li>
         </ul>
-        
+
         <h2>android.graphics.Shader</h2>
         <ul>
             <li>Shader.TileMode
@@ -207,7 +192,7 @@ RectF dst：图片在Canvas画布中显示的区域，
             <li>SweepGradient:扫描渐变渲染/梯度渲染</li>
             <li>ComposeGradient:组合渲染</li>
         </ul>
-        
+
         <h2>android.graphics.Matrix</h2>
 
 

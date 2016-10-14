@@ -6,7 +6,8 @@
     <title>android Bitmap</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
     </script>
     <script type="text/javascript" src="/js-base.js">
     </script>
@@ -15,14 +16,55 @@
 <body>
     <main role="main">
         <h1>android Bitmap</h1>
-        
-        
+
+        <h2>Bitmap : compress,recycle,getXxx</h2>
+        <ul>
+            <li>public boolean compress (Bitmap.CompressFormat format, int quality, OutputStream stream) 将位图的压缩到指定的OutputStream,format压缩格式 ,quality: 0-100,(PNG会忽略品质设定 )</li>
+            <li>public void recycle()——回收位图占用的内存空间，把位图标记为Dead</li>
+            <li>public final boolean isRecycled() ——判断位图内存是否已释放</li>
+            <li>public final int getWidth()——获取位图的宽度</li>
+            <li>public final int getHeight()——获取位图的高度</li>
+            <li>public final boolean isMutable()——图片是否可修改</li>
+            <li>public int getScaledWidth(Canvas canvas)——获取指定密度转换后的图像的宽度</li>
+            <li>public int getScaledHeight(Canvas canvas)——获取指定密度转换后的图像的高度</li>
+            <li></li>
+            <li>public static Bitmap createBitmap(Bitmap src) ——以src为原图生成不可变得新图像</li>
+            <li>public static Bitmap createScaledBitmap(Bitmap src, int dstWidth,int dstHeight, boolean filter)——以src为原图，创建新的图像，指定新图像的高宽以及是否变。</li>
+            <li>public static Bitmap createBitmap(int width, int height, Config config)——创建指定格式、大小的位图</li>
+            <li>public static Bitmap createBitmap(Bitmap source, int x, int y, int width, int height)以source为原图，创建新的图片，指定起始坐标以及新图像的高宽。</li>
+            <li>public static Bitmap createBitmap(Bitmap source, int x, int y, int width, int height, Matrixm, boolean filter)</li>
+        </ul>
+
+        <h2>BitmapFactory:decode from file,resource,stream,bytes</h2>
+        <ul>
+            <li>public static Bitmap decodeFile(String pathName, Options opts)</li>
+            <li>public static Bitmap decodeResource(Resources res, int id)</li>
+            <li>public static Bitmap decodeStream(InputStreamis)</li>
+            <li>public static Bitmap decodeByteArray(byte[] data, int offset, int length)</li>
+            <li></li>
+            <li>Option 参数类：
+                <ul>
+                    <li>boolean inJustDecodeBounds——如果设置为true，不获取图片，不分配内存，但会返回图片的高宽度信息。</li>
+                    <li>int inSampleSize——图片缩放的倍数。如果设为4，则宽和高都为原来的1/4，则图是原来的1/16。</li>
+                    <li>int outWidth——获取图片的宽度值</li>
+                    <li>int outHeight——获取图片的高度值</li>
+                    <li>int inDensity——用于位图的像素压缩比</li>
+                    <li>int inTargetDensity——用于目标位图的像素压缩比（要生成的位图）</li>
+                    <li>boolean inScaled——设置为true时进行图片压缩</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>BitmapDrawable : 从文件路径、输入流、Bitmap中创建    get,set,draw</h2>
+        <ul>
+            <li>public BitmapDrawable(Resources res, Bitmap bitmap)——从位图创建绘制</li>
+            <li>public BitmapDrawable(Resources res, String filepath)——通过打开agiven文件路径和位图解码创建绘制</li>
+            <li>public BitmapDrawable(Resources res, InputStream is)——创建一个可绘制从给定的输入流bydecoding位图。</li>
+        </ul>
+
+
     </main>
 </body>
-
-
-
-
 
 
 

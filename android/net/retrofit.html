@@ -19,6 +19,10 @@
         <p>RESTful POJO &lt;-&gt; JSON</p>
 
         <a href="https://github.com/square/retrofit">github retrofit</a>
+        <br>
+        <a href="http://www.jianshu.com/p/308f3c54abdd">怪盗kidou:你真的会用Retrofit2吗?Retrofit2完全教程</a>
+        <br>
+        <a href="http://blog.csdn.net/lmj623565791/article/details/51304204">鸿洋_:Retrofit2 完全解析 探索与okhttp之间的关系</a>
 
         <h2>配置</h2>
         <pre><code>
@@ -55,7 +59,7 @@ Simple XML	com.squareup.retrofit:converter-simplexml:2.0.0-beta1
         <pre><code>
 //1,定义业务请求接口
 public interface GitHubService {
-  @GET("users/{user}/repos")
+  @GET("users/{user}")
   Call&lt;ResponseBody&gt; repo(@Path("user") String user);
 }
 
@@ -63,14 +67,14 @@ public interface GitHubService {
 Retrofit retrofit = new Retrofit.Builder()
     .baseUrl("https://api.github.com/")  //baseUlr必须以/(斜线)结束
     .addConverterFactory(GsonConverterFactory.create())
-    //.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+    //.addCallAdapterFactory(RxJavaCallAdapterFactory.create())  //RxJava
     .build();
 
 GitHubService service = retrofit.create(GitHubService.class);
 
 //3,调用请求方法，并得到Call实例
-Call&lt;List&lt;Repo&gt;&gt; call = service.listRepos("octocat");
-//observable = service.listRepos("octocat");
+Call&lt;ResponseBody&gt; call = service.repo("octocat");
+
 
 //同步
 ResponseBody repo = call.execute();
@@ -95,142 +99,156 @@ call.enqueue(new Callback&lt;ResponseBody&gt;() {
 call.cancel();
 </code></pre>
 
-        <h2>注解</h2>
+        <h2>+RxJava</h2>
         <pre><code>
-//请求
+//1,接口设计：
 
-@GET @POST　@PUT @DELETE @PATCH @HEAD @OPTIONS ("path")  //baseUrl + path -->URL
-
-
-@HTTP (method = "", path = "", hasBody = false)
-
-
-@FormUrlEncoded  //表单请求
-
-
-//params ---> url
-
-@Path      @Path("id") int groupId --> {id} --> groupId
-
-@Query     @Query("key") String value --> 
-
-@QueryMap  @QueryMap Map&lt;String, String> options -->
+public interface BlogService {
+  @POST("/blog")
+  Observable&lt;Result&lt;List&lt;Blog>>> getBlogs();
+}
 
 
 
+//
+//2,通过RxJavaCallAdapterFactory为Retrofit添加RxJava支持：
+
+Retrofit retrofit = new Retrofit.Builder()
+      .baseUrl("http://localhost:4567/")
+      .addConverterFactory(GsonConverterFactory.create())
+      .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+      .build();
+
+
+//
+//3,使用：
+
+BlogService service = retrofit.create(BlogService.class);
+service.getBlogs()
+  .subscribeOn(Schedulers.io())
+  .subscribe(new Subscriber&lt;Result&lt;List&lt;Blog>>>() {
+      @Override
+      public void onCompleted() {
+        System.out.println("onCompleted");
+      }
+
+      @Override
+      public void onError(Throwable e) {
+        System.err.println("onError");
+      }
+
+      @Override
+      public void onNext(Result&lt;List&lt;Blog>> blogsResult) {
+        System.out.println(blogsResult);
+      }
+  });
+    
 </code></pre>
 
-        <h2>注解</h2>
+        <h2>方法级注解</h2>
         <ul>
-            <li>请求方法
+            <li>各种请求方法 ： @GET @POST　@PUT @DELETE @PATCH @HEAD @OPTIONS ("myPath")
+                <p>baseUrl + myPath -->URL</p>
+            </li>
+            <li>@HTTP
+                <p>模拟各种请求方法 ： @HTTP(method = "DELETE", path = "remove/", hasBody = true)</p>
                 <pre><code>
-
-@GET
-    String value：默认为""，值为请求的相对URL路径
-
-@POST
-    String value：默认为""，值为请求的相对URL路径
-    
-@PUT
-    String value：默认为""，值为请求的相对URL路径
-    
-@DELETE
-    String value：默认为""，值为请求的相对URL路径
-
-@PATCH
-    String value：默认为""，值为请求的相对URL路径
-    
-@OPTIONS
-    String value：默认为""，值为请求的相对URL路径
-    
-@HTTP
+@HTTP                
     String method()：请求方式
     String path()：默认为""，值为请求的相对URL路径
     boolean hasBody()：默认为false
 
     @HTTP(method = "DELETE", path = "remove/", hasBody = true)
     Call&lt;ResponseBody> deleteObject(@Body RequestBody object);
-
-
-@HEAD
-    包含Head的Request请求
-    
-
-@FormUrlEncoded     
-    发送表单数据，使用@Field或者@FieldMap注解和参数来指定每个表单项的key，value为参数的值。
-
-@Multipart  
-    发送multipart数据，使用@Part或者@PartMap注解定义即将发送的每一个文件
-
-  
-@Streaming
-    将返回值okhttp3.Response.body() body()转换为byte[] 
-    
 </code></pre>
             </li>
-            <li>请求参数
+            <li>@Headers
+                <p>请求头</p>
                 <pre><code>
-@Body
-     请求体，声明一个对象作为请求体发送到服务器，用于POST/PUT
-     @POST("users/new")
-     Call&lt;ResponseBody&gt; getInfo(@Body User user);    
-
-@Field
-    String value：默认为""，参数名称
-    bolean encoded：指定的名称和值是否已URL编码，默认为false，
-
-    @FormUrlEncoded
-    @POST("login")
-    Call&lt;ResponseBody&gt; login(@Field("name") String name,
-                                                @Field("pwd") String pwd);
-    // {@code name=Bob+Smith&pwd=123}
-
-    @FormUrlEncoded
-    @POST("queryScore")
-    Call&lt;ResponseBody&gt; queryScore(@Field("name") String... name);               
-    // {@code name=Bob&name=Jane}
-
-@FieldMap
-    bolean encoded：指定的名称和值是否已URL编码，默认为false，
-
-    @FormUrlEncoded
-    @POST("things")
-    Call&lt;ResponseBody&gt; things(@FieldMap Map&lt;String, String&gt; fields);
+@Headers
+    String[] value();
 
 
-@Part   
-    String value()：默认为""，参数名称
-    String encoding()：默认编码格式为 "binary";
 
+    @Headers({
+        "X-Foo: Bar",
+        "X-Ping: Pong"
+    })
+    @GET("deleteObject")
+    Call(ResponseBody) deleteObject(@Query("id") String id);
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>标记注解</h2>
+        <ul>
+            <li>@FormUrlEncoded +@Field或者@FieldMap
+                <p>表明是一个表单格式的请求（Content-Type:application/x-www-form-urlencoded）
+                    <br>使用@Field或者@FieldMap注解和参数来指定每个表单项的key，value为参数的值。</p>
+                <pre><code>
+@POST("form")
+@FormUrlEncoded
+Call&lt;ResponseBody> testFormUrlEncoded1(@Field("username") String name, @Field("age") int age);
+
+
+//Map的key作为表单的键
+@POST("form")
+@FormUrlEncoded
+Call&lt;ResponseBody> testFormUrlEncoded2(@FieldMap Map&lt;String, Object> map);
+</code></pre>
+            </li>
+            <li>@Multipart +@Part或者@PartMap
+                <p>发送multipart数据，
+                    <br>使用@Part或者@PartMap注解定义即将发送的每一个文件</p>
+                <pre><ode>
+@Part支持类型：
+    RequestBody(带上表单字段)
+    okhttp3.MultipartBody.Part
+    任意类型(带上表单字段)
+
+    @POST("form")
     @Multipart
-    @POST("upload")
-    Call&lt;ResponseBody&gt; upload(
-                @Part("description") String description,
-                @Part(value = "http://blog.csdn.net/IO_Field/article/details/image", encoding = "8-bit") RequestBody image);
-                
-                
-@PartMap
-    String encoding()：默认编码格式为 "binary";
+    Call&lt;ResponseBody> upload1(@Part("name") RequestBody name, @Part MultipartBody.Part file);
 
+
+
+@PartMap支持类型： 
+    RequestBody
+    其它的类型,被retrofit2.Converter转换
+
+    @POST("form")
     @Multipart
-    @POST("upload")
-    Call&lt;ResponseBody&gt; upload(@Part("file") RequestBody file,@PartMap Map&lt;String, RequestBody&gt; params);
+    Call&lt;ResponseBody> upload2(@PartMap Map&lt;String, RequestBody> args);
+</ode></pre>
+            </li>
+            <li>@Streaming
+                <p>将返回值okhttp3.Response.body() body()转换为byte[]</p>
+            </li>
+        </ul>
 
-@Path
-    String value()：参数名称
-    boolean encoded() ：指定的名称和值是否URL编码，默认为false(URL编码)。设置为true时，不进行URL编码
+        <h2>参数级注解</h2>
+        <ul>
+            <li>@Path
+                <p>以接口参数代替URL中的变量 @Path("name") String myName --> {name}</p>
+                <pre><code>
+String value()：参数名称
+boolean encoded() ：指定的名称和值是否URL编码，默认为false(URL编码)。设置为true时，不进行URL编码
 
-    @GET("image/{id}")
-    Call&lt;ResponseBody&gt; getInfo(@Path("id") int id);
+@GET("image/{id}")
+Call&lt;ResponseBody&gt; getInfo(@Path("id") int id);
 
-    // 指定的名称和值默认URL编码
-    @GET("user/{name}")
-    Call&lt;ResponseBody&gt; encoded(@Path("name") String name);
+// 指定的名称和值默认URL编码
+@GET("user/{name}")
+Call&lt;ResponseBody&gt; encoded(@Path("name") String name);
 
-    // 指定的名称和值取消URL编码
-    @GET("user/{name}")
-    Call&lt;ResponseBody&gt; notEncoded(@Path(value="http://blog.csdn.net/IO_Field/article/details/name", encoded=true) String name);
-
+// 指定的名称和值取消URL编码
+@GET("user/{name}")
+Call&lt;ResponseBody&gt; notEncoded(@Path(value="http://blog.csdn.net/IO_Field/article/details/name", encoded=true) String name);
+</code></pre>
+            </li>
+            <li>@Query @QueryMap
+                <p>组合Url的查询字段 ？</p>
+                <pre><code>
 @Query  
     String value：默认为""，参数名称
     bolean encoded：指定的名称和值是否已URL编码，默认为false，
@@ -256,39 +274,102 @@ call.cancel();
 
     @GET("search")
     Call&lt;ResponseBody&gt; list(@QueryMap(encoded=true) Map&lt;String, String&gt; filters);
-
-@Url
-    注解的值为请求的相对URL路径
-    @GET
-    Call&lt;ResponseBody&gt; list(@Url String url);
 </code></pre>
             </li>
-            <li>请求头
+            <li>@Url
+                <p>注解的值为请求的相对URL路径 不用设置请求方法的path值</p>
                 <pre><code>
-@Headers
-    String[] value();
-
-    @Headers({
-        "X-Foo: Bar",
-        "X-Ping: Pong"
-    })
-    @GET("deleteObject")
-    Call(ResponseBody) deleteObject(@Query("id") String id);
-
-@Header
+@GET
+Call&lt;ResponseBody&gt; list(@Url String url);
+</code></pre>
+            </li>
+            <li>@Field @FieldMap
+                <p></p>
+                <pre><code>
+@Field
     String value：默认为""，参数名称
+    bolean encoded：指定的名称和值是否已URL编码，默认为false，
+
+    @FormUrlEncoded
+    @POST("login")
+    Call&lt;ResponseBody&gt; login(@Field("name") String name,
+                                                @Field("pwd") String pwd);
+    // {@code name=Bob+Smith&pwd=123}
+
+    @FormUrlEncoded
+    @POST("queryScore")
+    Call&lt;ResponseBody&gt; queryScore(@Field("name") String... name);               
+    // {@code name=Bob&name=Jane}
+
+@FieldMap
+    bolean encoded：指定的名称和值是否已URL编码，默认为false，
+
+    @FormUrlEncoded
+    @POST("things")
+    Call&lt;ResponseBody&gt; things(@FieldMap Map&lt;String, String&gt; fields);
+</code></pre>
+            </li>
+            <li>@Part @PartMap
+                <p></p>
+                <pre><code>
+@Part   
+    String value()：默认为""，参数名称
+    String encoding()：默认编码格式为 "binary";
+
+    @Multipart
+    @POST("upload")
+    Call&lt;ResponseBody&gt; upload(
+                @Part("description") String description,
+                @Part(value = "http://blog.csdn.net/IO_Field/article/details/image", encoding = "8-bit") RequestBody image);
+                
+                
+@PartMap
+    String encoding()：默认编码格式为 "binary";
+
+    @Multipart
+    @POST("upload")
+    Call&lt;ResponseBody&gt; upload(@Part("file") RequestBody file,@PartMap Map&lt;String, RequestBody&gt; params);
+</code></pre>
+            </li>
+            <li>@Header @HeaderMap
+                <p>通过接口参数设置header : @Header("Accept-Language") String lang</p>
+                <pre><code>
+@Header
+    String value：默认为""，header的key
 
     @GET("query")
     Call&lt;ResponseBody&gt; query(@Header("Accept-Language") String lang);
-
+    
 @HeaderMap
 
-@GET("query")
-Call&lt;ResponseBody&gt; query(@HeaderMap Map&lt;String, String&gt; headers);
+    @GET("query")
+    Call&lt;ResponseBody&gt; query(@HeaderMap Map&lt;String, String&gt; headers);
+</code></pre>
+            </li>
+            <li>@Body
+                <p>设置一个对象作为请求体发送到服务器，用于POST/PUT : @Body User user</p>
+                <pre><code>
+@POST("users/new")
+Call&lt;ResponseBody&gt; getInfo(@Body User user);  
 </code></pre>
             </li>
         </ul>
 
+        <h2>Retrofit.Builder</h2>
+        <ul>
+            <li>callbackExecutor(Executor)
+                <p>指定Call.enqueue时使用的Executor，所以该设置只对返回值为Call的方法有效</p>
+            </li>
+            <li>callFactory(Factory)
+                <p>设置一个自定义的okhttp3.Call.Factory，那什么是Factory呢?OkHttpClient就实现了okhttp3.Call.Factory接口，下面的client(OkHttpClient)最终也是调用了该方法，也就是说两者不能共用</p>
+            </li>
+            <li>client(OkHttpClient)
+                <p>设置自定义的OkHttpClient,以前的Retrofit版本中不同的Retrofit对象共用同OkHttpClient,在2.0各对象各自持有不同的OkHttpClient实例，所以当你需要共用OkHttpClient或需要自定义时则可以使用该方法，如：处理Cookie、使用stetho 调式等</p>
+            </li>
+            <li>validateEagerly(boolean)
+                <p>是否在调用create(Class)时检测接口定义是否正确，而不是在调用方法才检测，适合在开发、测试时使用</p>
+            </li>
+        </ul>
 
     </main>
 </body>
