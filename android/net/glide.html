@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android Glide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android Glide</h1>
+
+        <a href="https://github.com/bumptech/glide">Github glide</a>
+        <br>
+        <a href="http://limuzhi.com/2016/01/24/Android%E5%9B%BE%E7%89%87%E5%BA%93-Glide/">Night Piece
+:Android图片库--Glide Wiki中文翻译</a>
+        <a href="http://mrfu.me/2016/02/27/Glide_Getting_Started/">MrFu Blog:Glide - 开始！</a>
+
+        <h2>配置</h2>
+        <pre><code>
+//
+//Glide
+compile 'com.github.bumptech.glide:glide:3.7.0'
+compile 'com.android.support:support-v4:19.1.0'
+  
+//
+//网络请求库
+OkHttp：compile 'com.github.bumptech.glide:okhttp-integration:1.3.1@aar'
+Volley：compile 'com.github.bumptech.glide:volley-integration:1.3.1@aar'
+
+//
+//特效库
+compile 'jp.wasabeef:glide-transformations:2.0.1'
+// If you want to use the GPU Filters
+compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+
+
+//
+//
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+
+</code></pre>
+
+
+        <h2>使用 Glide.with(context).load(imgSource).into(targetImageView)</h2>
+        <p><li>将Activity/Fragment作为with(),图片加载会和Activity/Fragment的生命周期保持一致，比如 Paused状态在暂停加载，在Resumed的时候又自动重新加载</li></p>
+        <pre><code>
+ImageView targetImageView = (ImageView) findViewById(R.id.imageView);
+String internetUrl = "http://i.imgur.com/DvpvklR.png";
+
+Glide
+    .with(context)
+    .load(internetUrl)
+    .into(targetImageView);
+</code></pre>
+
+        <h2>加载图片</h2>
+        <ul>
+            <li>从资源中加载 .load(resourceId)</li>
+            <li>从文件中加载 .load(file)</li>
+            <li>从 Uri 中加载 .load(uri)
+                <pre><code>
+public static final String ANDROID_RESOURCE = "android.resource://";
+public static final String FOREWARD_SLASH = "/";
+
+private static Uri resourceIdToUri(Context context, int resourceId) {
+    return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
+}
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>占位符</h2>
+        <ul>
+            <li>使用已初始化的Drawable 或resource图片资源</li>
+            <li>等待 .placeholder(R.mipmap.ic_launcher)</li>
+            <li>错误 .error(R.mipmap.ic_error)</li>
+        </ul>
+
+        <h2>动画</h2>
+        <ul>
+            <li>图片更换动画仅仅用于不从缓存中加载的情况</li>
+            <li>crossFade()默认激活 , crossFade(int duration)默认的持续时间是 300毫秒</li>
+            <li>dontAnimate()直接显示图片而没有任何淡入淡出效果</li>
+            <li></li>
+            <li>自定义动画</li>
+            <li>animate( R.anim.zoom_in )</li>
+            <li>animate( animationObject ) 自定义targetView时</li>
+        </ul>
+
+        <h2>gif处理</h2>
+        <ul>
+            <li>相同加载方式,自动开始播放</li>
+            <li>asGif() 检查是否是 Gif,用于支持.error()</li>
+            <li>asBitmap() 作为一个常规的图片显示,显示Gif的第一帧</li>
+        </ul>
+
+        <li>本地视频</li>
+        <ul>
+            <li>.load( Uri.fromFile( new File( filePath ) ) )</li>
+        </ul>
+
+        <h2>缓存</h2>
+        <ul>
+            <li>skipMemoryCache( true ) 跳过内存缓存</li>
+            <li>diskCacheStrategy( DiskCacheStrategy.NONE ) 跳过磁盘缓存</li>
+            <li>diskCacheStrategy( DiskCacheStrategy.ALL ) 默认行为 既缓存全尺寸又缓存其他尺寸</li>
+            <li>diskCacheStrategy( DiskCacheStrategy.SOURCE ) 只缓存原来的全分辨率的(load)图像</li>
+            <li>diskCacheStrategy( DiskCacheStrategy.RESULT ) 只缓存最终的图像，即降低分辨率后的或转换后的(into)</li>
+        </ul>
+
+        <h2>请求优先级</h2>
+        <ul>
+            <li>priority( Priority.HIGH )</li>
+            <li>Priority.LOW</li>
+            <li>Priority.NORMAL</li>
+            <li>Priority.HIGH</li>
+            <li>Priority.IMMEDIATE</li>
+        </ul>
+
+        <h2>缩略图</h2>
+        <ul>
+            <li>thumbnail( 0.1f ) 显示原始图像的10%的大小</li>
+            <li>thumbnail( thumbnailRequest ) 使用一个完全新的 Glide 请求</li>
+        </ul>
+
+        <h2>回调：Targets , into( target )</h2>
+        <ul>
+            <li>注意使用.asBitmap()强制转换</li>
+            <li>非显示 ： SimpleTarget&lt;Bitmap>(w,h) onResourceReady(Bitmap, GlideAnimation)</li>
+            <li>自定义view ： ViewTarget
+                <pre><code>
+FutureStudioView customView = (FutureStudioView) findViewById( R.id.custom_view );
+
+viewTarget = new ViewTarget&lt;FutureStudioView, GlideDrawable>( customView ) {
+    @Override
+    public void onResourceReady(GlideDrawable resource, GlideAnimation&lt;? super GlideDrawable> glideAnimation) {
+        this.view.setImage( resource.getCurrent() );
+    }
+};
+
+Glide
+    .with( context.getApplicationContext() ) // safer!
+    .load( eatFoodyImages[2] )
+    .into( viewTarget );
+</code></pre>
+            </li>
+            <li>RemoteViews ： NotificationTarget</li>
+            <li>AppWidget : AppWidgetTarget</li>
+        </ul>
+
+        <h2>调整图片大小</h2>
+        <ul>
+            <li>override(horizontalSize, verticalSize)</li>
+            <li>centerCrop() 缩放图像让它填充到 ImageView 界限内并且裁剪额外的部分</li>
+            <li>fitCenter() 缩放图像让图像都测量出来等于或小于 ImageView 的边界范围</li>
+        </ul>
+
+        <h2>transformations(转换) 图片变换,特效</h2>
+        <ul>
+            <li>transform( new MyTransformation1( context ) , new MyTransformation2( context ) )</li>
+            <li>确保只调用了一次 .transform() 或 .bitmapTransform()，否则，之前的配置就会被覆盖掉的</li>
+            <li>用了转换后就不能使用 .centerCrop() 或 .fitCenter()</li>
+            <li>自定义 extends BitmapTransformation</li>
+            <li><a href="https://github.com/wasabeef/glide-transformations">Glide 转换集合</a>
+            </li>
+        </ul>
+
+        <h2>异常：调试和错误处理</h2>
+        <ul>
+            <li>日志 adb shell setprop log.tag.GenericRequest DEBUG
+                <pre><code>
+VERBOSE    DEBUG    INFO    WARN    ERROR
+
+//
+adb shell setprop log.tag.GenericRequest DEBUG 
+//
+io.futurestud.tutorials.glide D/GenericRequest: load failed  
+io.futurestud.tutorials.glide D/GenericRequest: java.io.IOException: Request failed 404: Not Found  
+...
+</code></pre>
+            </li>
+            <li>listener( requestListener )
+                <pre><code>
+private RequestListener&lt;String, GlideDrawable> requestListener = new RequestListener&lt;String, GlideDrawable>() {  
+    @Override
+    public boolean onException(Exception e, String model, Target&lt;GlideDrawable> target, boolean isFirstResource) {
+        // todo log exception
+
+        // important to return false so the error placeholder can be placed
+        return false;
+    }
+
+    @Override
+    public boolean onResourceReady(GlideDrawable resource, String model, Target&lt;GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        return false;
+    }
+};
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>Glide Modules</h2>
+        <ul>
+            <li>通过AndroidManifest meta_data配置 MyGlideModule implements GlideModule{}
+                <pre><code>
+public class SimpleGlideModule implements GlideModule {  
+    @Override public void applyOptions(Context context, GlideBuilder builder) {
+        // todo
+    }
+
+    @Override public void registerComponents(Context context, Glide glide) {
+        // todo
+    }
+}
+
+&lt;application>
+
+    &lt;meta-data
+        android:name="io.futurestud.tutorials.glide.glidemodule.SimpleGlideModule"
+        android:value="GlideModule" />
+
+    ...
+
+&lt;/application>
+</code></pre>
+            </li>
+            <li>applyOptions(Context context, GlideBuilder builder) ， GlideBuilder:
+                <ul>
+                    <li>.setMemoryCache(MemoryCache memoryCache)</li>
+                    <li>.setBitmapPool(BitmapPool bitmapPool)</li>
+                    <li>内存缓存
+                        <pre><code>
+MemorySizeCalculator calculator = new MemorySizeCalculator(context);
+int defaultMemoryCacheSize = calculator.getMemoryCacheSize();
+int defaultBitmapPoolSize = calculator.getBitmapPoolSize();
+
+int customMemoryCacheSize = (int) (1.2 * defaultMemoryCacheSize);
+int customBitmapPoolSize = (int) (1.2 * defaultBitmapPoolSize);
+
+builder.setMemoryCache( new LruResourceCache( customMemoryCacheSize );
+builder.setBitmapPool( new LruBitmapPool( customBitmapPoolSize );
+</code></pre>
+                    </li>
+                    <li>.setDiskCache(DiskCache.Factory diskCacheFactory)
+                        <br>磁盘缓存
+                        <pre><code>
+int cacheSize100MegaBytes = 104857600;  //100M
+builder.setDiskCache(
+            //设置磁盘缓存到应用的内部存储,私用目录
+            new InternalCacheDiskCacheFactory(context, cacheSize100MegaBytes)
+            //设置磁盘缓存到外部存储,公有目录
+            //new ExternalCacheDiskCacheFactory(context, cacheSize100MegaBytes));
+            //
+            //new DiskLruCacheFactory( "downloadDirectoryPath", "glidecacheFileName", cacheSize100MegaBytes ) 
+        );
+</code></pre>
+                    </li>
+                    <li>.setDiskCacheService(ExecutorService service)
+                        <p></p>
+                    </li>
+                    <li>.setResizeService(ExecutorService service)
+                        <p></p>
+                    </li>
+                    <li>图片格式 .setDecodeFormat(DecodeFormat decodeFormat)
+                        <p>DecodeFormat.PREFER_RGB_565(默认) , DecodeFormat.PREFER_ARGB_8888</p>
+                    </li>
+                </ul>
+            </li>
+            <li>registerComponents(Context context, Glide glide)</li>
+        </ul>
+
+        <h2>配合服务端 请求适合imageView尺寸的图片</h2>
+        <ul>
+            <li>load(myRequest)
+                <br>-->BaseGlideUrlLoader&lt;MyRequest>
+                <br>   :getUrl(MyRequest myRequest, int width, int height)
+                <br>   :return "url";
+            </li>
+            <li>load(request):
+                <br>request(特定class)(包含img的source)
+                <br>-->ModelLoaderFactory(针对request.class, 已经在registerComponents中全局注册, 并初始化) 
+                <br>   :build()
+                <br>   :return new BaseGlideUrlLoader() 
+                <br>-->BaseGlideUrlLoader&lt;MyRequest>
+                <br>   :getUrl(MyRequest myRequest, int width, int height)
+                <br>   :return "url";
+            </li>
+            <li>全局配置 
+                <pre><code>
+-keepnames class com.mypackage.MyGlideModule
+# or more generally:
+#-keep public class * implements com.bumptech.glide.module.GlideModule
+
+# for DexGuard only
+-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+
+
+
+//0,配置  CustomImageSizeModel转换size-->url , CustomImageSizeModelFactory
+public class CustomImageSizeGlideModule implements GlideModule {  
+    @Override public void applyOptions(Context context, GlideBuilder builder) {
+        // nothing to do here
+    }
+
+    @Override public void registerComponents(Context context, Glide glide) {
+        glide.register(CustomImageSizeModel.class, InputStream.class, new CustomImageSizeModelFactory());
+    }
+}
+
+//1, 接收size,返回url的接口
+public interface CustomImageSizeModel {  
+    String requestCustomSizeUrl(int width, int height);
+}
+public class CustomImageSizeModelFutureStudio implements CustomImageSizeModel {  
+    String baseImageUrl;
+
+    public CustomImageSizeModelFutureStudio(String baseImageUrl) {
+        this.baseImageUrl = baseImageUrl;
+    }
+
+    @Override
+    public String requestCustomSizeUrl(int width, int height) {
+        // previous way: we directly accessed the images
+        // https://futurestud.io/images/logo.png
+
+        // new way, server could handle additional parameter and provide the image in a specific size
+        // in this case, the server would serve the image in 400x300 pixel size
+        // https://futurestud.io/images/logo.png?w=400&h=300
+        return baseImageUrl + "?w=" + width + "&h=" + height;
+    }
+}
+
+//2, 加载图像
+public class CustomImageSizeUrlLoader extends BaseGlideUrlLoader&lt;CustomImageSizeModel> {  
+    public CustomImageSizeUrlLoader(Context context) {
+        super( context );
+    }
+
+    @Override
+    protected String getUrl(CustomImageSizeModel model, int width, int height) {
+        return model.requestCustomSizeUrl( width, height );
+    }
+}
+private class CustomImageSizeModelFactory implements ModelLoaderFactory&lt;CustomImageSizeModel, InputStream> {  
+    @Override
+    public ModelLoader&lt;CustomImageSizeModel, InputStream> build(Context context, GenericLoaderFactory factories) {
+        return new CustomImageSizeUrlLoader( context );
+    }
+
+    @Override
+    public void teardown() {
+
+    }
+}
+
+
+//3, 使用
+String baseImageUrl = "https://futurestud.io/images/example.png";  
+CustomImageSizeModel customImageRequest = new CustomImageSizeModelFutureStudio( baseImageUrl );
+
+Glide.with( context )
+     .load( customImageRequest )
+     .into( imageView2 );
+</code></pre>
+            </li>
+            <li>动态使用 
+                <pre><code>
+String baseImageUrl = "https://futurestud.io/images/example.png";  
+CustomImageSizeModel customImageRequest = new CustomImageSizeModelFutureStudio( baseImageUrl );
+
+Glide  
+        .with( context )
+        .using( new CustomImageSizeUrlLoader( context ) )
+        .load( customImageRequest )
+        .into( imageView1 );
+</code></pre>
+            </li>
+        </ul>
+
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
