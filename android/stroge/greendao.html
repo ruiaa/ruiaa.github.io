@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>greenDAO3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>greenDAO3</h1>
+        <a href="https://github.com/greenrobot/greenDAO">Github greenDAO</a>
+
+        <h2>配置</h2>
+        <pre><code>
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
+    }
+}
+
+
+
+apply plugin: 'org.greenrobot.greendao'
+
+dependencies {
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile'org.greenrobot:greendao-generator:3.2.0'
+}     
+
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.anye.greendao.gen'
+    targetGenDir 'src/main/java'
+}
+//schemaVersion--> 指定数据库schema版本号，迁移等操作会用到;
+//daoPackage --> dao的包名，包名默认是entity所在的包；
+//targetGenDir --> 生成数据库文件的目录;
+</code></pre>
+
+        <h2>使用</h2>
+        <ul>
+            <li>实体类
+                <pre><code>
+@Entity
+public class User {
+    @Id 
+    private Long id; 
+    private String name; 
+    @Transient 
+    private int tempUsageCount; // not persisted  
+}
+</code></pre>
+            </li>
+            <li>编译MakeProject</li>
+            <li>Application设置
+                <pre><code>
+ public class MyApplication extends Application {
+ 
+ private DaoMaster.DevOpenHelper mHelper;
+ private SQLiteDatabase db;
+ private DaoMaster mDaoMaster;
+ private DaoSession mDaoSession;
+ public static MyApplication instances;
+ 
+ @Override    
+ public void onCreate() {
+     super.onCreate();
+     instances = this;
+     setDatabase();
+ }
+ public static MyApplication getInstances(){
+     return instances;
+ }
+
+/**
+ * 设置greenDao
+ */
+private void setDatabase() {
+    // 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对象。
+    // 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 greenDAO 已经帮你做了。
+    // 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
+    // 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
+    mHelper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
+    db = mHelper.getWritableDatabase();
+    // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。 
+    mDaoMaster = new DaoMaster(db); 
+    mDaoSession = mDaoMaster.newSession();
+}
+public DaoSession getDaoSession() {
+      return mDaoSession;
+}
+public SQLiteDatabase getDb() {
+      return db;
+  }
+}
+</code></pre>
+            </li>
+            <li>增删改查
+                <pre><code>
+ mUserDao = MyApplication.getInstances().getDaoSession().getUserDao();
+ 
+//增
+mUser = new User((long)2,"anye3");
+mUserDao.insert(mUser);
+
+//删
+mUserDao.deleteByKey(id);
+
+//改
+mUser = new User((long)2,"anye0803");
+mUserDao.update(mUser);
+
+//查
+List&lt;User> users = mUserDao.loadAll();
+String userName = "";
+for (int i = 0; i &lt; users.size(); i++) {
+    userName += users.get(i).getName()+",";
+}
+mContext.setText("查询全部数据==>"+userName);
+
+</code></pre>
+            </li>
+        </ul>
+        
+        <h2>greendao中的注解</h2>
+        <ul>
+
+           
+            
+            
+            
+            
+@nameInDb 在数据库中的名字，如不写则为实体中类名
+@indexes 索引
+@createInDb 是否创建表，默认为true,false时不创建
+@schema 指定架构名称为实体
+@active 无论是更新生成都刷新
+            
+            
+            
+            
+            
+属性/字段/列说明
+@Id 
+标明主键，括号里可以指定是否自增 @Id(autoincrement = true)
+@Property 
+用于设置属性在数据库中的列名（默认不写就是保持一致）@Property(nameInDb = "USERNAME")
+@NotNull 
+不为null
+@Transient 
+标识这个字段是自定义的不会创建到数据库表里
+@Index 
+通过这个字段建立索引
+@Unique
+唯一约束 
+@ToMany
+一对多
+@OrderBy
+排序
+@ToOne
+一对一
+@Transient
+不存储在数据库中
+@generated
+由greendao产生的构造函数或方法
+</ul>
+
+        <ul>
+            <li>实体类注解 @Entity
+                <pre><code>
+@Entity(
+    
+    //一个项目中有多个schema时 标明要让这个dao所属schema        
+    schema = "myschema",
+    
+    //标明是否支持实体类之间update，refresh，delete等操作        
+    active = true,
+    
+    //存在数据库里的表名（不写默认是一致）        
+    nameInDb = "AWESOME_USERS",
+    
+    //定义索引，这里可跨越多个列        
+    indexes = {
+    @Index(value = "name DESC", unique = true)
+    },
+    
+    如果是有多个实体都关联这个表，可以把多余的实体里面设置为false避免重复创建（默认是true）        
+    createInDb = false
+) 
+public class User {
+  ...
+}
+</code></pre>
+            </li>
+            <li>索引注解 @Index索引 , @Unique添加唯一约束
+                <pre><code>
+@Entity
+public class User {
+    @Id 
+    private Long id;
+    
+    @Index(unique = true)
+    private String name;
+}
+ 
+@Entity
+public class User {
+    @Id 
+    private Long id;
+    
+    @Unique 
+    private String name;
+}
+</code></pre>
+            </li>
+            <li>关系注解 
+                <br>@ToOne 是将自身的一个属性与另一个表建立关联
+                <pre><code>
+@Entity
+public class Order {
+    @Id 
+    private Long id;
+  
+    private long customerId;
+  
+    @ToOne(joinProperty = "customerId")
+    private Customer customer;
+}
+  
+@Entity
+public class Customer {
+    @Id 
+    private Long id;
+}
+</code></pre>
+            </li>
+            <li>派生注解 @Generated : build后greendao自动生成的</li>
+        </ul>
+
+        
+        <h2>数据库加密</h2>
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
