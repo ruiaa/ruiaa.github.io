@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android AppWidget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android AppWidget</h1>
+
+        <a href="http://glgjing.github.io/blog/2015/11/05/android-kai-fa-zhi-app-widget-xiang-jie/">GLGJing’s Blog:Android 开发之 App Widget 详解</a>
+
+        <h2>概念</h2>
+        <ul>
+            <li>App Widget：应用小窗口，微型的应用程序视图，可被嵌入到其它应用中，如桌面，并接收周期性的更新</li>
+            <li>App Widget Provider : 发布 Widget</li>
+            <li>App Widget Host : 容纳 Widget</li>
+        </ul>
+
+        <h2>创建</h2>
+        <ul>
+            <li>1,在 AndroidManifest 中声明 App Widget
+                <pre><code>
+&lt;receiver android:name=".sample.MyWidgetProvider" >
+    &lt;intent-filter>
+        &lt;action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    &lt;/intent-filter>
+    &lt;meta-data android:name="android.appwidget.provider"
+               android:resource="@xml/appwidget_provider"/>
+&lt;/receiver>  
+
+1,
+&lt;receiver>的 android:name 属性声明的就是 Widget 所用的 AppWidgetProvider 类
+
+2,
+Widget 的 broadcast 都是通过APPWIDGET_UPDATE 来接收
+ 
+3,
+AppWidgetProviderInfo类描述Widget的meta信息，包括Widget的xml布局文件、刷新频率、最小宽高等等
+
+4,
+&lt;meta-data>声明Widget的AppWidgetProviderInfo对应的资源xml的位置
+</code></pre>
+            </li>
+            <li>2,在xml目录定义App Widget的初始化xml文件(描述Widget的meta信息)
+                <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?>
+
+&lt;appwidget-provider
+  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="200dp"
+    android:minHeight="50dp"
+    android:updatePeriodMillis="86400000"
+    android:previewImage="@drawable/app_icon"
+    android:initialLayout="@layout/widget"
+    android:configure="com.example.android.ExampleAppWidgetConfigure"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen|keyguard"/>  
+    
+    
+1,
+minWidth & minHeight：定义Widget的最小宽高,Widge的宽高会被阔至与其最接近的cell整数倍大小
+
+2,
+updatePeriodMillis：定义Widget的刷新频率,AppWidgetProvider.onUpdate()请求频率,Android 系统默认最小更新周期是 30 分钟
+                    实时更新数据：采用Service和 AlarmManager对Widget进行更新
+
+3,
+previewImage：当用户选择添加 Widget 时的预览图片。如果该属性没有定义，则展示 application 的 launcher icon
+
+4,
+initialLayout：Widget 的布局 Layout 文件
+
+5,
+configure：定义了用户在添加 Widget 时弹出的配置页面的 Activity
+
+6,
+resizeMode：Widget 在水平和垂直方向是否可以调整大小 : horizontal|vertical,none
+
+7,
+widgetCategory：5.0 Widget可以显示的位置，包括home_screen（桌面），keyguard（锁屏）
+</code></pre>
+            </li>
+            <li>3,实现Widget具体布局的Layout xml
+            </li>
+            <li>4,继承 AppWidgetProvider 类，实现具体的 Widget 业务逻辑
+                <ul>
+                    <li>onUpdate()：
+                        <p>根据 updatePeriodMillis 定义的定期刷新操作会调用该函数
+                            <br>此外当用户添加 Widget 时 也会调用该函数，可以在这里进行必要的初始化操作。
+                            <br>但如果在&lt;appwidget-provider>中声明了 android:configure 的 Activity，在用户添加 Widget 时，不会调用 onUpdate()，需要由 configure Activity 去负责去调用 AppWidgetManager.updateAppWidget() 完成 Widget 更新，后续的定时更新还是会继续调用 onUpdate() 的。</p>
+                    </li>
+                    <li>onDeleted()：
+                        <p>当 Widget 被删除时调用该方法。</p>
+                    </li>
+                    <li>onEnabled()：
+                        <p>当 Widget 第一次被添加时调用，例如用户添加了两个你的 Widget，那么只有在添加第一个 Widget 时该方法会被调用。所以该方法比较适合执行你所有 Widgets 只需进行一次的操作。</p>
+                    </li>
+                    <li>onDisabled()：
+                        <p>与 onEnabled 恰好相反，当你的最后一个 Widget 被删除时调用该方法，所以这里用来清理之前在 onEnabled() 中进行的操作。</p>
+                    </li>
+                    <li>onAppWidgetOptionsChanged()：
+                        <p>当 Widget 第一次被添加或者大小发生变化时调用该方法，可以在此控制 Widget 元素的显示和隐藏。</p>
+                    </li>
+                </ul>
+            </li>
+            <li>5,创建 App Widget Configuration Activity
+                <pre><code>
+1,AndroidManifest.xml
+&lt;activity android:name=".ExampleAppWidgetConfigure">
+    &lt;intent-filter>
+        &lt;action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+    &lt;/intent-filter>
+&lt;/activity>
+
+2,appwidget_provider.xml
+&lt;appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    ...
+    android:configure="com.example.android.ExampleAppWidgetConfigure"
+    ... >
+&lt;/appwidget-provider>
+
+3,App Widget Configuration Activity
+必须返回带 EXTRA_APPWIDGET_ID 的 result
+调用 AppWidgetManager.updateAppWidget()完成Widget第一次更新
+
+Intent intent = getIntent();
+Bundle extras = intent.getExtras();
+if (extras != null) {
+    mAppWidgetId = extras.getInt(
+        AppWidgetManager.EXTRA_APPWIDGET_ID,
+        AppWidgetManager.INVALID_APPWIDGET_ID);
+}
+
+AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.example_appwidget);
+appWidgetManager.updateAppWidget(mAppWidgetId, views);
+
+Intent resultValue = new Intent();
+resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+setResult(RESULT_OK, resultValue);
+finish();
+</code></pre>
+            </li>
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

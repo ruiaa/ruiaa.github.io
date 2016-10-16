@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android notification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android notification</h1>
+
+        <a href="http://glgjing.github.io/blog/2015/11/18/android-kai-fa-zhi-notification-xiang-jie/">GLGJing’s Blog: Android 开发之 Notification 详解</a>
+        <a href="http://blog.csdn.net/vipzjyno1/article/details/25248021">vipra:Android 通知栏Notification的整合 全面学习 （一个DEMO让你完全了解它）</a>
+        
+        
+        <p>RemoteViews</p>
+        <a href="http://www.jianshu.com/p/23041852bd85"> HuDP Android开发艺术探索 第5章 理解RemoteViews 读书笔记</a>
+        <a href="http://www.voidcn.com/blog/joke124/article/p-5027316.html">  _风_的专栏  android remoteView原理</a>
+
+        <h2>通知的基础用法</h2>
+        <ul>
+            <li>创建通知
+                <pre><code>
+NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+
+// 设置通知的基本信息：icon、标题、内容
+builder.setSmallIcon(R.drawable.notification_icon)
+builder.setContentTitle("My notification")
+builder.setContentText("Hello World!");
+
+// 设置通知的点击行为：这里启动一个 Activity
+Intent intent = new Intent(this, ResultActivity.class);
+PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+builder.setContentIntent(pendingIntent);
+
+// 发送通知 id 需要在应用内唯一
+NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+notificationManager.notify(id, builder.build());
+</code></pre>
+            </li>
+
+            <li>更新通知
+                <p>要想更新通知，需要利用 NotificationManager.notify() 的 id 参数，该 id 在应用内需要唯一。要想更新特定 id 的通知，只需要创建新的 Notification，并发出与之前所用 id 相同的 Notification。如果之前的通知仍然可见，则系统会根据新的 Notification 对象的内容更新该通知。相反，如果之前的通知已被清除，系统则会创建一个新通知。</p>
+            </li>
+
+            <li>删除通知
+                <p>删除通知可以有多种方式： 1. 通过 NotificationCompat.Builder 设置 setAutoCancel(true)，这样当用户点击通知后，通知自动删除。 2. 通过 NotificationManager.cancel(id) 方法，删除指定 id 的通知 3. 通过 NotificationManager.cancelAll() 方法，删除该应用的所有通知</p>
+            </li>
+        </ul>
+
+        <h2>浮动通知</h2>
+        <pre><code>
+NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+
+builder.setSmallIcon(R.drawable.notification_icon)
+builder.setContentTitle("My notification")
+builder.setContentText("Hello World!");
+// 设置通知的优先级
+builder.setPriority(NotificationCompat.PRIORITY_MAX);
+Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+// 设置通知的提示音
+builder.setSound(alarmSound);
+
+NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+notificationManager.notify(id, builder.build());        
+</code></pre>
+
+        <h2>setVisibility()</h2>
+        <ul>
+            <li>VISIBILITY_PUBLIC 显示通知的完整内容</li>
+            <li>VISIBILITY_SECRET 不会在锁定屏幕上显示此通知的任何部分</li>
+            <li>VISIBILITY_PRIVATE 显示通知图标和内容标题等基本信息，但是隐藏通知的完整内容,可setPublicVersion() 方法为其附加替换通知</li>
+        </ul>
+
+        <h2>扩展样式 setStyle()  BigPictureStyle,BigTextStyle,InboxStyle</h2>
+        
+        <h2>自定义布局样式 setContent() </h2>
+        <pre><code>
+RemoteViews bigView;
+RemoteViews smallView;
+
+// 构建 bigView 和 smallView。
+...
+
+NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+
+// 设置自定义 RemoteViews
+builder.setContent(smallView).setSmallIcon(R.drawable.icon_notification);
+Notification notification = builder.build();
+
+// 如果系统版本 >= Android 4.1，设置大视图 RemoteViews
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+  notification.bigContentView = bigView;
+}
+NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+notificationManager.notify(DAILY_PUSH_NOTIFICATION_ID, notification);        
+</code></pre>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
