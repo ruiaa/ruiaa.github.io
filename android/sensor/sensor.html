@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android sensor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android sensor</h1>
+
+        <h2>传感器类型</h2>
+        <ul>
+            <li>运动传感器 Motion sensors</li>
+            <li>环境传感器 Environmental sensors</li>
+            <li>位置传感器 Position sensors</li>
+            <li></li>
+            <li>type_accelerometer 加速度 m/s2</li>
+            <li>type_ambient_temperature 环境温度</li>
+            <li>type_rotation_vector 旋转矢量</li>
+            <li>type_game_rotation_vector 未校准旋转矢量</li>
+            <li>type_geomagnetic_rotation_vector 地磁旋转矢量</li>
+            <li>type_gravity 重力</li>
+            <li>type_gyroscope 陀螺仪 rad/s</li>
+            <li>type_gyroscope_uncalibrated 未校准陀螺仪</li>
+            <li>type_heart_rate 心率</li>
+            <li>type_light 光</li>
+            <li>type_linear_acceleration 线性加速度</li>
+            <li>type_magnetic_field 磁场</li>
+            <li>type_magnetic_field_uncalibrated 未校准磁场</li>
+            <li>type_pressure 压力</li>
+            <li>type_proximity 距离</li>
+            <li>type_relative_humidity 相对湿度</li>
+            <li>type_significant_motion 重要运动触发传感器</li>
+            <li>type_step_counter 步进计数器</li>
+            <li>type_step_detector 步进检测器</li>
+        </ul>
+
+        <h2>Sensor</h2>
+        <pre><code>
+&lt;uses-feature
+  android:name="string"
+  android:required=["true" | "false"]
+  android:glEsVersion="integer" />
+
+SensorManager mSensorManager = (SensorManager) mContext
+        .getSystemService(Context.SENSOR_SERVICE);        
+
+Sensor sensor = mSensorManager
+         .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+if (null != sensor){
+    mSensorManager.registerListener(sensorEventListener , sensor,SensorManager.SENSOR_DELAY_NORMAL);
+}
+mSensorManager.unregisterListener(sensorEventListener);
+
+//SensorEventListener
+@Override
+public void onSensorChanged(SensorEvent event) {
+ //当传感器的数值发生变化时调用
+}
+@Override
+public void onAccuracyChanged(Sensor sensor, int accuracy) {
+ //传感器的精度发生变化时调用
+}
+
+//传感器数据更新的速度
+sensor_delay_ui
+sensor_delay_normal
+sensor_delay_game
+sensor_delay_fastest
+</code></pre>
+
+        <h2>SensorManager</h2>
+        <ul>
+            <li>List
+                <Sensor>getSensorList(int type)</li>
+            <li>Sensor getDefaultSensor (int type)</li>
+            <li>registerListener</li>
+            <li>unregisterListener</li>
+            <li>requestTriggerSensor</li>
+            <li></li>
+            <li>getAltitude 海拔高度</li>
+            <li>getAngleChange 角度变化</li>
+            <li>getInclination 计算以弧度表示的地磁倾角</li>
+            <li>getOrientation 基于旋转矩阵计算设备的方向</li>
+            <li>getQuaternionFromVector 将旋转矢量转换为规范化的四元数</li>
+            <li>getRotationMatrix 从设备坐标系到正交的世界坐标系的矢量变换</li>
+            <li>getRotationMatrixFromVector</li>
+        </ul>
+
+        <h2>SensorEvent</h2>
+        <ul>
+            <li>accuracy 精度
+                <ul>
+                    <li>sensor_status_accuracy_low</li>
+                    <li>sensor_status_accuracy_medium</li>
+                    <li>sensor_status_accuracy_high</li>
+                    <li>sensor_status_unreliable 无效</li>
+                </ul>
+            </li>
+            <li>timestamp 时间间隔，单位纳秒</li>
+            <li>values 数组的长度和内容取决于要监视的传感器类型</li>
+        </ul>
+        
+        <h2>传感器数据</h2>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
