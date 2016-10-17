@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android SoundPool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android SoundPool</h1>
+
+        <h2>方法</h2>
+        <ul>
+            <li>SoundPool(int maxStreams,int streamType,int srcQuality)
+                <p>音频池的大小; 声音的类型AudioManager.STREAM_MUSIC; 音频的质量0</p>
+            </li>
+            <li>int load() 加载 返回值为音频资源在SoundPool的ID
+            </li>
+            <li>play(int soundID,float leftVolume,float rightVolume,int priority,int loop,float rate)
+                <p>播放;leftVolume和rightVolume为左右声道音量，0.0f~1.0f;
+                    <br>loop为循环次数，0为播放一次，-1为无限循环，其他正数为播放次数
+                    <br>rate为播放速率，0.5f~2.0f，1.0f为正常速率播放</p>
+            </li>
+            <li>pause(int streamID) 暂停</li>
+            <li>resume(int streamID)继续</li>
+            <li>stop(int streamID)停止</li>
+            <li>unload(int soundID) 从音频池中卸载音频资源ID为soundID的资源</li>
+            <li>release()释放音频池资源</li>
+        </ul>
+
+        <h2>监听</h2>
+        <ul>
+            <li>OnLoadCompleteListener 装载完成
+                <p>onLoadComplete(SoundPool soundPool, int sampleId, int status)
+                    <br>sampleId：当前装载完成的音频资源在音频池中的ID
+                </p>
+            </li>
+            <li></li>
+        </ul>
+
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

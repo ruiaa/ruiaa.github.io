@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android MediaPlayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android MediaPlayer</h1>
+
+        <h2>MediaPlayer的状态变换</h2>
+        <ul>
+            <li>
+                <img src="/picture/android-media-player-status.png" />
+            </li>
+            <li>Idle-->Initializae-->Prepared</li>
+            <li>Prepared-->(Started&lt;-->Paused)-->Stopped-->Prepared</li>
+            <li>end: 在不需要继续使用时，使用release()回收资源。</li>
+            <li>error: setOnErrorListener()，监听MediaPlayer发生错误</li>
+        </ul>
+
+        <h2>常用方法</h2>
+        <ul>
+            <li>void reset() : 重置</li>
+            <li>void setDataSource(String path)：设置资源源</li>
+            <li>void prepare()：同步的方式装载流媒体文件。</li>
+            <li>void prepareAsync()：异步的方式装载流媒体文件。</li>
+            <li>void start()：开始或恢复播放。</li>
+            <li>void stop()：停止播放。</li>
+            <li>void pause()：暂停播放。</li>
+            <li>void release ()：回收流媒体资源。</li>
+            <li></li>
+            <li>int getDuration()：获取流媒体的总播放时长，单位是毫秒。</li>
+            <li>int getCurrentPosition()：获取当前流媒体的播放的位置，单位是毫秒。</li>
+            <li>boolean isLooping()：判断是否循环播放。</li>
+            <li>boolean isPlaying()：判断是否正在播放。</li>
+            <li></li>
+            <li>void seekTo(int msec)：设置当前MediaPlayer的播放位置，单位是毫秒。</li>
+            <li>void setLooping(boolean looping)：设置是否循环播放。</li>
+            <li>void setAudioStreamType(int streamtype)：设置播放流媒体类型。</li>
+            <li>void setNextMediaPlayer(MediaPlayer next)：设置当前流媒体播放完毕，下一个播放的MediaPlayer。</li>
+        </ul>
+
+        <h2>状态监听</h2>
+        <ul>
+            <li>MediaPlayer.OnPreparedListener：当装载流媒体完毕的时候回调。</li>
+            <li>MediaPlayer.OnSeekCompleteListener：当使用seekTo()设置播放位置的时候回调。</li>
+            <li>MediaPlayer.OnCompletionListener：当流媒体播放完毕的时候回调。</li>
+            <li>MediaPlayer.OnErrorListener：当播放中发生错误的时候回调。</li>
+        </ul>
+
+        <h2>使用 操作MediaPlayer应该放在Service中完成</h2>
+        <pre><code>
+public class MainActivity extends Activity {
+    private EditText et_path;
+    private Button btn_play, btn_pause, btn_replay, btn_stop;
+    private MediaPlayer mediaPlayer;
+
+    private View.OnClickListener click = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+            case R.id.btn_play:
+                play();
+                break;
+            case R.id.btn_pause:
+                pause();
+                break;
+            case R.id.btn_replay:
+                replay();
+                break;
+            case R.id.btn_stop:
+                stop();
+                break;
+            default:
+                break;
+            }
+        }
+    };
+    /**
+     * 播放音乐
+     */
+    protected void play() {
+        String path = et_path.getText().toString().trim();
+        File file = new File(path);
+        if (file.exists() && file.length() > 0) {
+            try {
+                mediaPlayer = new MediaPlayer();
+                // 设置指定的流媒体地址
+                mediaPlayer.setDataSource(path);
+                // 设置音频流的类型
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                // 通过异步的方式装载媒体资源
+                mediaPlayer.prepareAsync();
+                mediaPlayer.setOnPreparedListener(new OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        // 装载完毕 开始播放流媒体
+                        mediaPlayer.start();
+                        Toast.makeText(MainActivity.this, "开始播放", 0).show();
+                        // 避免重复播放，把播放按钮设置为不可用
+                        btn_play.setEnabled(false);
+                    }
+                });
+                // 设置循环播放
+                // mediaPlayer.setLooping(true);
+                mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        // 在播放完毕被回调
+                        btn_play.setEnabled(true);
+                    }
+                });
+
+                mediaPlayer.setOnErrorListener(new OnErrorListener() {
+
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        // 如果发生错误，重新播放
+                        replay();
+                        return false;
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "播放失败", 0).show();
+            }
+        } else {
+            Toast.makeText(this, "文件不存在", 0).show();
+        }
+
+    }
+    /**
+     * 暂停
+     */
+    protected void pause() {
+        if (btn_pause.getText().toString().trim().equals("继续")) {
+            btn_pause.setText("暂停");
+            mediaPlayer.start();
+            Toast.makeText(this, "继续播放", 0).show();
+            return;
+        }
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            btn_pause.setText("继续");
+            Toast.makeText(this, "暂停播放", 0).show();
+        }
+
+    }
+    
+    /**
+     * 重新播放
+     */
+    protected void replay() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.seekTo(0);
+            Toast.makeText(this, "重新播放", 0).show();
+            btn_pause.setText("暂停");
+            return;
+        }        
+        play();
+    }
+    
+    /**
+     * 停止播放
+     */
+    protected void stop() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            btn_play.setEnabled(true);
+            Toast.makeText(this, "停止播放", 0).show();
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 在activity结束的时候回收资源
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onDestroy();
+    }
+}        
+</code></pre>
+
+        <h2>唤醒锁:保证硬件在系统睡眠的时候正常运行</h2>
+        <pre><code>
+//权限 uses-permission android:name="android.permission.WAKE_LOCK"
+
+
+//CUP锁定
+MediaPlayer.setWakeMode(Context context, int mode)
+//mode: PowerManager.PARTIAL_WAKE_LOCK CUP锁定
+//解锁：唤醒锁与MediaPlayer关联，只需在使用后release()释放MediaPlayer
+
+
+//wifi锁定 
+WifiManager.WifiLock wifiLock= ((WifiManager) getSystemService(this.WIFI_SERVICE)).
+                createWifiLock(WifiManager.WIFI_MODE_FULL, "mylock");
+wifiLock.acquire();
+//解锁 Activity.onDestory()
+wifiLock.acquire();
+</code></pre>
+
+        <h2>MediaPlayer的音频焦点</h2>
+        <pre><code>
+//获取音频焦点
+int AudioManager.requestAudioFocus(
+            AudioManager.OnAudioFocusChangeListener l,  //音频焦点变化的回调函数
+            int streamType,  //媒体流的类型
+            int durationHint //持续的状态
+            )
+//返回：AUDIOFOCUS_REQUEST_FAILED获取音频焦点成功、AUDIOFOCUS_REQUEST_GRANTED获取音频焦点失败
+            
+            
+//监听音频焦点变换
+AudioManager.OnAudioFocusChangeListener.onAudioFocusChange(int focusChange)
+focusChange:
+            AUDIOFOCUS_GAIN：获得音频焦点
+            AUDIOFOCUS_LOSS：失去音频焦点，并持续很长时间，应停止播放
+            AUDIOFOCUS_LOSS_TRANSIENT：失去音频焦点，持续很短时间，应暂停播放，等待重新获得
+            AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK：暂时失去音频焦点，但无需停止播放，只需降低声音
+            
+
+
+
+audioManager = (AudioManager) getSystemService(this.AUDIO_SERVICE);
+
+int result = audioManager.requestAudioFocus(
+        new OnAudioFocusChangeListener() {
+
+            @Override
+            public void onAudioFocusChange(int focusChange) {
+                switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    // 获得音频焦点
+                    if (!mediaPlayer.isPlaying()) {
+                        mediaPlayer.start();
+                    }
+                    // 还原音量
+                    mediaPlayer.setVolume(1.0f, 1.0f);
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    // 长久的失去音频焦点，释放MediaPlayer
+                    if (mediaPlayer.isPlaying()){
+                        mediaPlayer.stop();
+                    }
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    // 展示失去音频焦点，暂停播放等待重新获得音频焦点
+                    if (mediaPlayer.isPlaying()){
+                        mediaPlayer.pause();
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    // 失去音频焦点，无需停止播放，降低声音即可
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.setVolume(0.1f, 0.1f);
+                    }
+                    break;
+                }
+            }
+        }, 
+        AudioManager.STREAM_MUSIC, 
+        AudioManager.AUDIOFOCUS_GAIN
+        );
+        
+</code></pre>
+        
+        <h2>SurfaceView + MediaPlayer--->video</h2>
+        <p>mediaPlayer.setDisplay(surfaceView.getHolder());</p>
+        <pre><code>
+ &lt;SurfaceView  
+     android:id="@+id/surfaceView1"  
+     android:layout_width="wrap_content"  
+     android:layout_height="360dp"  
+     android:layout_alignParentLeft="true"  
+     android:layout_alignParentRight="true"  
+     android:layout_alignParentTop="true" />   
+     
+public class SurfaceMediaPlayer extends Activity {  
+      
+    SurfaceView surfaceView;  
+    MediaPlayer mediaPlayer;  
+  
+    @Override  
+    public void onCreate(Bundle savedInstanceState) {  
+        super.onCreate(savedInstanceState);  
+        setContentView(R.layout.activity_surface_media_player);  
+          
+        mediaPlayer=new MediaPlayer();  
+        surfaceView=(SurfaceView) this.findViewById(R.id.surfaceView1);  
+          
+        surfaceView.getHolder().addCallback(new Callback() {                  
+            @Override  
+            public void surfaceDestroyed(SurfaceHolder holder) {  
+       
+            }  
+            @Override  
+            public void surfaceCreated(SurfaceHolder holder) {  
+                //开始播放  
+                play();  
+            }                          
+            @Override  
+            public void surfaceChanged(SurfaceHolder holder, int format, int width,  
+                            int height) {  
+  
+            }  
+    });     
+}  
+  
+    private void play() {  
+    try {  
+            String path = Environment.getExternalStorageDirectory().getPath()+"/Movies/run_to_you.3gp";  
+            mediaPlayer.setDataSource(path);  
+            //把视频画面输出到SurfaceView  
+            mediaPlayer.setDisplay(surfaceView.getHolder());  
+            mediaPlayer.prepare();  
+            //开始播放  
+            mediaPlayer.start();                  
+    } catch (Exception e) {  
+            // TODO: handle exception  
+    }  
+}     
+  
+    @Override  
+    public boolean onCreateOptionsMenu(Menu menu) {  
+        getMenuInflater().inflate(R.menu.activity_surface_media_player, menu);  
+        return true;  
+    }  
+}
+</code></pre>
+
+        <h2>android.widget.VideoView</h2>
+        <pre><code>
+&lt;VideoView  
+     android:id="@+id/videoView1"  
+     android:layout_width="wrap_content"  
+     android:layout_height="wrap_content" /> 
+     
+     
+public class MainActivity extends Activity {  
+
+    VideoView videoView ;    
+  
+    @Override  
+    public void onCreate(Bundle savedInstanceState) {  
+        super.onCreate(savedInstanceState);  
+        setContentView(R.layout.activity_main);  
+        videoView = (VideoView)this.findViewById(R.id.videoView1);  
+          
+        Uri uri = Uri
+            .parse(Environment.getExternalStorageDirectory()
+            .getPath()+"/Movies/run_to_you.3gp");         
+            
+       //Log.d(ALARM_SERVICE, Environment.getExternalStorageDirectory().getPath());    
+        videoView.setVideoURI(uri);     
+        videoView.start();  
+    }  
+  
+    @Override  
+    public boolean onCreateOptionsMenu(Menu menu) {  
+        getMenuInflater().inflate(R.menu.activity_main, menu);  
+        return true;  
+    }  
+}
+</code></pre>
+        
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

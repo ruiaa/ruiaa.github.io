@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android AudioManager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android AudioManager</h1>
+        <p>AudioManager audioManage = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);</p>
+
+
+        <ul>
+            <li>adjustVolume(int direction, int flags) 以步长调节手机音量大小
+                <p>direction:
+                    <br>调小AudioManager.ADJUST_LOWER
+                    <br>调大AudioManager.ADJUST_RAISE
+                    <br>不变AudioManager.ADJUST_SAME
+                </p>
+            </li>
+            <li>adjustStreamVolume(int streamType, int direction, intflags)
+                <p>streamType:
+                    <br>系统声音STREAM_SYSTEM
+                    <br>通话STREAM_VOICE_CALL
+                    <br>铃声STREAM_RING
+                    <br>音乐STREAM_MUSIC
+                    <br>闹铃声STREAM_ALARM
+                </p>
+            </li>
+            <li>getStreamMaxVolume（int streamType）</li>
+            <li>getStreamVolume(int streamType)</li>
+            <li>setStreamVolume(int streamType, int index, intflags)</li>
+        </ul>
+
+        <ul>
+            <li>getMode() ——返回当前音频模式，如 NORMAL（普通）, RINGTONE（铃声）, orIN_CALL（通话）</li>
+            <li>setMode()——设置声音模式</li>
+            <li>getRingerMode()——返回当前的铃声模式。RINGER_MODE_NORMAL（普通）、RINGER_MODE_SILENT（静音）、RINGER_MODE_VIBRATE（震动）</li>
+            <li>setRingerMode(int ringerMode) ——改变铃声模式</li>
+        </ul>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
