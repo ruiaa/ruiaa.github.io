@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android bluetooth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>      
+     
+    <script type="text/javascript" src="/js-base.js"></script>
+     
+</head>
+
+<body>
+    <main role="main">
+        <h1>android.bluetooth</h1>
+        
+        <a href="http://www.codeceo.com/article/android-bluetooth-dev.html">Android蓝牙开发全面总结</a>
+        <a href="http://blog.csdn.net/zhangphil/article/details/50524809">zhangphil Android Bluetooth蓝牙开发</a>
+        
+        <h2>使用</h2>
+        <ul>
+            <li>0、权限,允许设备能够被搜索
+                <pre><code>
+&lt;uses-permissionandroid:name="android.permission.BLUETOOTH_ADMIN" />
+&lt;uses-permissionandroid:name="android.permission.BLUETOOTH" />  
+
+Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+startActivityForResult(enabler,REQUEST_DISCOVERABLE);
+</code></pre>
+            </li>
+            <li>1、获取本地蓝牙适配器
+                <pre><code>
+BluetoothAdapter mAdapter= BluetoothAdapter.getDefaultAdapter();
+if(mAdapter==null){
+    finish();
+}
+</code></pre>
+            </li>
+            <li>2、打开蓝牙
+                <pre><code>
+if(!mAdapter.isEnabled()){
+  //弹出对话框提示用户是后打开
+  Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+  startActivityForResult(enabler, REQUEST_ENABLE);
+  
+  //不做提示，强行打开，此方法需要权限android.permission.BLUETOOTH_ADMIN" 
+  // mAdapter.enable();
+}
+</code></pre>
+            </li>
+            <li>3、搜索设备
+                <pre><code>
+//开始搜索 12秒
+mAdapter.startDiscovery()
+
+// 创建一个接收ACTION_FOUND广播的BroadcastReceiver
+private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+ 
+  public void onReceive(Context context, Intent intent) {
+	 String action = intent.getAction();
+    
+    if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+        // 发现设备
+        // 从Intent中获取设备对象
+        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        // 将设备名称和地址放入array adapter，以便在ListView中显示
+        mArrayAdapter.add(device.getName() + "/n" + device.getAddress());
+        
+    }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED .equals(action)) {  
+            if (mNewDevicesAdapter.getCount() == 0) {  
+                Log.v(TAG, "find over");  
+            }  
+     }  
+     
+};
+
+// 注册BroadcastReceiver
+IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+registerReceiver(mReceiver, filter); 
+// 不要忘了之后解除绑定
+</code></pre>
+            </li>
+            <li>4、建立连接
+                <pre><code>
+//服务器端：
+//UUID格式一般是"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+//可到 http://www.uuidgenerator.com 申请
+BluetoothServerSocket serverSocket = mAdapter.listenUsingRfcommWithServiceRecord(serverSocketName,UUID);
+serverSocket.accept();
+
+//客户端：
+//通过BroadcastReceiver获取了BLuetoothDevice
+BluetoothSocket clienSocket=dcvice. createRfcommSocketToServiceRecord(UUID);
+clienSocket.connect();
+</code></pre>
+            </li>
+            <li>5、数据传递
+                <pre><code>
+inputStream = socket.getInputStream();
+outputStream = socket.getOutputStream();
+
+</code></pre>
+            </li>
+        </ul>
+       
+       <h2>BluetoothAdapter 本地蓝牙的开闭与基本信息</h2>
+        <ul>
+           <li>getDefaultAdapter: 获取本地的蓝牙适配器</li>
+           <li></li>
+           <li>enable(); 打开蓝牙（需要ADMIN权限）</li>
+           <li>isEnabled(): 本地蓝牙是否使可用</li>
+           <li>disable(); 关闭蓝牙</li>
+           <li></li>
+           <li>startDiscovery()异步 开始搜索
+              <pre><code>
+//系统搜索蓝牙设备中，会发送以下三个广播
+ACTION_DISCOVERY_START：开始搜索
+ACTION_DISCOVERY_FINISHED：搜索结束
+ACTION_FOUND：找到设备，
+              Intent中包含EXTRA_DEVICE[BluetooDevice]和EXTRA_CLASS[BluetoothClass]
+</code></pre>
+           </li>
+           <li>isDiscovering()判断当前是否正在查找设备</li>
+           <li>cancelDiscovery()取消查找设备</li>
+           <li>getRemoteDevice(String address)根据蓝牙地址获取远程蓝牙设备</li>
+            <li></li>
+            <li>getAddress(); 获取蓝牙MAC地址</li>
+            <li>getName(); 获取蓝牙名字</li>
+            <li>getState()获取本地蓝牙适配器当前状态</li>
+            
+      </ul>
+       
+       <h2>BluetoothDevice 描述远程蓝牙设备</h2>
+       <ul>
+           <li>createRfcommSocketToServiceRecord(UUIDuuid)根据UUID创建并返回一个BluetoothSocket</li>
+       </ul>
+       
+       <h2>BluetoothServerSocket 服务端</h2>
+       
+       <h2>BluetoothSocket 客户端</h2>
+       <ul>
+           <li>close()关闭</li>
+           <li>connect()连接</li>
+           <li>getInptuStream()获取输入流</li>
+           <li>getOutputStream()获取输出流</li>
+           <li>getRemoteDevice()获取远程设备，这里指的是获取bluetoothSocket指定连接的那个远程蓝牙设备</li>      
+       </ul>
+        
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

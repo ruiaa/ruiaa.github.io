@@ -6,17 +6,49 @@
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">     </script>
-    </script>
-    <script type="text/javascript" src="/js-base.js">
-    </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+
+    <script type="text/javascript" src="/js-base.js"></script>
+
 </head>
 
 <body>
     <main role="main">
-        <h1></h1>
-        
-        
+        <h1>反射reflection</h1>
+
+        <h2>Class</h2>
+        <p>Java运行时系统始终为所有的对象维护一个被称为运行时的类型标识。这个信息保存着每个对象所属的类足迹。虚拟机利用运行时信息选择相应的方法执行。</p>
+        <ul>
+            <li>Class object.getClass();</li>
+            <li>Class Class.forname("ClassName");</li>
+            <li>o.getClass()==Object.class;虚拟机为每个类型管理一个Class对象</li>
+            <li>Class.forname("ClassName").newInstance();创建一个类的实例</li>
+            <li>getConstructor,getMethod,getField</li>
+            <li>getDeclareFields,getDeclareMethods,getDeclaredConstructors</li>
+        </ul>
+        <code><pre>
+try {
+    Constructor constructor = MyClass.class.getConstructor(int.class); //获取构造方法
+    MyClass myClassReflect = constructor.newInstance(10); //创建对象
+    Method method = MyClass.class.getMethod("increase", int.class);  //获取方法
+    method.invoke(myClassReflect, 5); //调用方法
+    Field field = MyClass.class.getField("count"); //获取域
+    System.out.println("Reflect -> " + field.getInt(myClassReflect)); //获取域的值
+} catch (Exception e) { 
+    e.printStackTrace();
+} </pre></code>
+    
+    
+    <h2>Field</h2>
+    <ul><li>getName()</li><li>getModifiers()</li></ul>
+    <h2>Method</h2>
+    <ul><li>getName()</li><li>getModifiers()</li></ul>
+    <h2>Constructor</h2>
+    <ul><li>getName()</li><li>getModifiers()</li></ul>
+    
+    <h2>Modifier</h2>
+    <p>isPublic,isPrivate,isFinal</p>
+
     </main>
 </body>
 

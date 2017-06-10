@@ -6,11 +6,11 @@
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
-    </script>
-    </script>
-    <script type="text/javascript" src="/js-base.js">
-    </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+
+
+    <script type="text/javascript" src="/js-base.js"></script>
+
 </head>
 
 <body>
@@ -36,6 +36,13 @@
             <li>StaggeredGridLayoutManager 瀑布流式布局。</li>
         </ul>
         <h2>ItemDecoration</h2>
+        <ul>
+            <li>getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state)
+                <p>为outRect设置的4个方向的值,作为decoration,计入item的padding</p>
+            </li>
+            <li>onDraw(Canvas c, RecyclerView parent, RecyclerView.State state)</li>
+            <li>onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state)</li>
+        </ul>
         <h2>ItemAnimator</h2>
 
 

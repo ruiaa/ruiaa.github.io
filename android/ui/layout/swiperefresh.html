@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android SwipeRefreshLayout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android SwipeRefreshLayout</h1>
+
+        <h2>xml,可滚动的view，如ScrollView或ListView</h2>
+        <pre><code>
+&lt;android.support.v4.widget.SwipeRefreshLayout  
+    android:id="@+id/swipe_container"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent" >  
+
+    &lt;ListView  
+        android:id="@+id/list"  
+        android:layout_width="match_parent"  
+        android:layout_height="match_parent" >  
+    &lt;/ListView>  
+
+&lt;/android.support.v4.widget.SwipeRefreshLayout>           
+</code></pre>
+
+
+
+        <h2>方法</h2>
+        <ul>
+            <li>setOnRefreshListener(OnRefreshListener): Listener</li>
+            <li>setRefreshing(boolean): 显示或隐藏刷新进度条</li>
+            <li>isRefreshing(): 检查是否处于刷新状态</li>
+            <li>setColorScheme(): 设置进度条的颜色主题，最多能设置四种</li>
+        </ul>
+        <pre><code>
+//设置下拉出现小圆圈是否是缩放出现，出现的位置，最大的下拉位置
+mySwipeRefreshLayout.setProgressViewOffset(true, 50, 200);
+
+//设置下拉圆圈的大小，两个值 LARGE， DEFAULT
+mySwipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
+
+// 设置下拉圆圈上的颜色，蓝色、绿色、橙色、红色
+mySwipeRefreshLayout.setColorSchemeResources(
+    android.R.color.holo_blue_bright,
+    android.R.color.holo_green_light,
+    android.R.color.holo_orange_light,
+    android.R.color.holo_red_light);
+
+// 通过 setEnabled(false) 禁用下拉刷新
+mySwipeRefreshLayout.setEnabled(false);
+
+// 设定下拉圆圈的背景
+mSwipeLayout.setProgressBackgroundColor(R.color.red);
+
+/*
+ * 设置手势下拉刷新的监听
+ */
+mySwipeRefreshLayout.setOnRefreshListener(
+    new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            // 刷新动画开始后回调到此方法
+        }
+    }
+);            
+</code></pre>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

@@ -6,11 +6,11 @@
     <title>android http</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
-    </script>
-    </script>
-    <script type="text/javascript" src="/js-base.js">
-    </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+     
+     
+    <script type="text/javascript" src="/js-base.js"></script>
+     
 </head>
 
 <body>
@@ -48,7 +48,7 @@ public class NetUtils {
             byte[] data = content.getBytes(charsetName);
             // 获得一个输出流,向服务器写数据,默认情况下,系统不允许向服务器输出内容
             OutputStream out = conn.getOutputStream();// 获得一个输出流,向服务器写数据
-            for(int i = 0; i < data.length; i++)
+            for(int i = 0; i &lt; data.length; i++)
             {
                 out.write(data);
                 if(i % 4096 == 0)

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android WebView</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+     
+     
+    <script type="text/javascript" src="/js-base.js"></script>
+     
+</head>
+
+<body>
+    <main role="main">
+        <h1>android.webkit.WebView</h1>
+
+        <h2>使用</h2>
+        <pre><code>
+//1,联网时需要权限
+&lt;uses-permission android:name="android.permission.INTERNET"/>
+
+//2,
+&lt;WebView
+    android:id="@+id/my_webview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    />
+    
+    
+//3,
+webView = (WebView)findViewById(R.id.my_webview);
+webview.loadUrl("http://www.baidu.com/");
+</code></pre>
+
+        <h2>设置 WebSettings	WebView.getSettings()</h2>
+        <ul>
+            <li>setJavaScriptEnabled(false);</li>
+            <li>setDefaultFontSize(18); 默认为16，有效值区间在1-72之间</li>
+            <li>setSupportZoom(false);缩放</li>
+            <li>setBuiltInZoomControls(false); 显示缩放工具</li>
+            <li>setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+                <p>NORMAL：正常显示，没有渲染变化。
+                    <br>SINGLE_COLUMN：把所有内容放到WebView组件等宽的一列中。
+                    <br>NARROW_COLUMNS：可能的话，使所有列的宽度不超过屏幕宽度。
+                </p>
+            </li>
+        </ul>
+
+        <h2>加载内容</h2>
+        <ul>
+            <li>加载assets目录下的本地网页
+                <p>loadUrl("file:///android_asset/html/test1.html");</p>
+            </li>
+            <li>加载远程网页
+                <p>loadUrl("http://www.google.com");</p>
+            </li>
+            <li>加载html片段
+                <p>loadData("&lt;html>&lt;body>xxxx&lt;/body>&lt;/html>", "text/html", null);
+                    <br>loadDataWithBaseURL ("baseUrl", "data", "mimeType", "encoding", "historyUrl")
+                </p>
+            </li>
+        </ul>
+        
+        <h2>设置WebViewClient 点击链接继续在当前browser中响应</h2>
+        <pre><code>
+webView.setWebViewClient(new WebViewClient(){
+	public boolean shouldOverrideUrlLoading(WebView view, String url){ 
+		view.loadUrl(url);
+		return true;
+	}
+});
+</code></pre>
+        
+        <h2>处理Back键</h2>
+        <pre><code>
+//点击系统“Back”键,整个 Browser 会调用 finish()
+//如果希望浏览的网页回退,需要在当前Activity中处理并消费掉该 Back 事件
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+	if ((keyCode == KEYCODE_BACK) && mWebView.canGoBack()) { 
+		mWebView.goBack();
+		return true;
+	}
+	return super.onKeyDown(keyCode, event);
+}        
+</code></pre>
+        
+        <h2>与js互调</h2>
+        <pre><code>
+private Handler mHandler = new Handler(); 
+
+mWebView.getSettings().setJavaScriptEnabled(true); 
+mWebView.addJavascriptInterface(
+    new Object() {
+	  public void clickOnAndroid() {
+        //线程不一致
+        mHandler.post(new Runnable() {
+			  public void run() { 
+				  mWebView.loadUrl("javascript:wave()");
+			  }
+		  });
+	  }
+	}, 
+    "demo"
+    );        
+    
+    
+addJavascriptInterface(Object obj,String interfaceName)
+//将java对象[obj]绑定到一个javascript对象[interfaceName]中
+
+
+//在js里调用
+&lt;a onClick="window.demo.clickOnAndroid()">
+
+</code></pre>
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

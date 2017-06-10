@@ -6,11 +6,11 @@
     <title>android window</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
-    </script>
-    </script>
-    <script type="text/javascript" src="/js-base.js">
-    </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+
+
+    <script type="text/javascript" src="/js-base.js"></script>
+
 </head>
 
 <body>
@@ -73,6 +73,19 @@ getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.L
             </li>
             <li>feature_options_panel：启用“选项面板”功能，默认已启用。
             </li>
+        </ul>
+
+        <h2>keyboard</h2>
+        <ul>
+            <li>stateUnspecified：软键盘的状态并没有指定，系统将选择一个合适的状态或依赖于主题的设置</li>
+            <li>stateUnchanged：当这个activity出现时，软键盘将一直保持在上一个activity里的状态，无论是隐藏还是显示</li>
+            <li>stateHidden：用户选择activity时，软键盘总是被隐藏</li>
+            <li>stateAlwaysHidden：当该Activity主窗口获取焦点时，软键盘也总是被隐藏的</li>
+            <li>stateVisible：软键盘通常是可见的</li>
+            <li>stateAlwaysVisible：用户选择activity时，软键盘总是显示的状态</li>
+            <li>adjustUnspecified：默认设置，通常由系统自行决定是隐藏还是显示</li>
+            <li>adjustResize：该Activity总是调整屏幕的大小以便留出软键盘的空间</li>
+            <li>adjustPan：当前窗口的内容将自动移动以便当前焦点从不被键盘覆盖和用户能总是看到输入内容的部分</li>
         </ul>
 
     </main>

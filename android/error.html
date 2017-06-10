@@ -6,16 +6,18 @@
     <title>android error</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
-    </script>
-    </script>
-    <script type="text/javascript" src="/js-base.js">
-    </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+     
+     
+    <script type="text/javascript" src="/js-base.js"></script>
+     
 </head>
 
 <body>
     <main role="main">
         <h1>android error</h1>
+        
+        <h2>compiler选项 --info --stacktrace --debug</h2>
 
         <h2>Sql</h2>
         <ul>
@@ -64,6 +66,14 @@
         </ul>
 
 
+<p> 在Studio开发环境中，使用真机开发经常会出现waiting for debugger，卡死不动了，让人很崩溃啊，现在我就总结下几种解决方法，希望能帮到出现同样情况的朋友！
+
+问题出现及解决办法：
+
+多开Studio，导致调试器多开，可能模拟器无法辨别是谁在调试，关掉其他的Studio，剩下要debug那一个！
+在Studio中的Android Monitor 出现了多个模拟器，也是模拟器无法辨别是谁在调试，这时候需要重新启动Studio了。
+在Connected Devices出现了非正常机子名字（变成一串英文和数字的设备名字），这时候需要重新拔插真机设备，如果不行，启动任务管理器关闭adb.exe
+以上应该如果还没有解决，可以重启adb，步骤：cmd进入命令行，进入adb所在目录先后执行adb kill-server，adb start-server。</p>
 
 
 

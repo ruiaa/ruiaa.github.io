@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>java8 Lambda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+
+
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+
+
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>Lambda</h1>
+        <p>没有声明的方法，也即没有访问修饰符、返回值声明和名字</p>
+        <ul>
+            <li>(arguments) -> {body;}</li>
+            <li>参数的类型既可以明确声明，也可以根据上下文来推断。(a, b) 或 (int a, int b)</li>
+            <li>只有一个参数，且其类型可推导时，圆括号（）可省略。例如：a -> return a*a</li>
+            <li>主体只有一条语句，花括号{}可省略。返回类型与该主体表达式一致</li>
+            <li>关键词 this 解读为写就 Lambda 的外部类,Java 编译器编译 Lambda 表达式并将他们转化为类里面的私有函数</li>
+        </ul>
+
+        <h2>函数式接口 @FunctionalInterface</h2>
+        <ul>
+           <li>函数式接口只能有一个抽象方法</li>
+            <li>Lambda表达式能隐式地赋值给函数式接口:Runnable r = () -> System.out.println("h");</li>
+        </ul>
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

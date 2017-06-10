@@ -6,11 +6,8 @@
     <title>android Glide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
-    </script>
-    </script>
-    <script type="text/javascript" src="/js-base.js">
-    </script>
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script> 
+    <script type="text/javascript" src="/js-base.js"></script>
 </head>
 
 <body>
@@ -55,7 +52,9 @@ compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
 
 
         <h2>使用 Glide.with(context).load(imgSource).into(targetImageView)</h2>
-        <p><li>将Activity/Fragment作为with(),图片加载会和Activity/Fragment的生命周期保持一致，比如 Paused状态在暂停加载，在Resumed的时候又自动重新加载</li></p>
+        <p>
+            <li>将Activity/Fragment作为with(),图片加载会和Activity/Fragment的生命周期保持一致，比如 Paused状态在暂停加载，在Resumed的时候又自动重新加载</li>
+        </p>
         <pre><code>
 ImageView targetImageView = (ImageView) findViewById(R.id.imageView);
 String internetUrl = "http://i.imgur.com/DvpvklR.png";
@@ -102,6 +101,9 @@ private static Uri resourceIdToUri(Context context, int resourceId) {
 
         <h2>gif处理</h2>
         <ul>
+            <li>为其添加缓存策略,其中缓存策略可以为:Source及None,None及为不缓存,Source缓存原型.如果为ALL和Result就不行.然后几个issue的连接:
+https://github.com/bumptech/glide/issues/513 https://github.com/bumptech/glide/issues/281 https://github.com/bumptech/glide/issues/600 </li>
+            <li>.diskCacheStrategy(DiskCacheStrategy.SOURCE)</li>
             <li>相同加载方式,自动开始播放</li>
             <li>asGif() 检查是否是 Gif,用于支持.error()</li>
             <li>asBitmap() 作为一个常规的图片显示,显示Gif的第一帧</li>
@@ -286,19 +288,19 @@ builder.setDiskCache(
         <ul>
             <li>load(myRequest)
                 <br>-->BaseGlideUrlLoader&lt;MyRequest>
-                <br>   :getUrl(MyRequest myRequest, int width, int height)
-                <br>   :return "url";
+                <br> :getUrl(MyRequest myRequest, int width, int height)
+                <br> :return "url";
             </li>
             <li>load(request):
                 <br>request(特定class)(包含img的source)
-                <br>-->ModelLoaderFactory(针对request.class, 已经在registerComponents中全局注册, 并初始化) 
-                <br>   :build()
-                <br>   :return new BaseGlideUrlLoader() 
+                <br>-->ModelLoaderFactory(针对request.class, 已经在registerComponents中全局注册, 并初始化)
+                <br> :build()
+                <br> :return new BaseGlideUrlLoader()
                 <br>-->BaseGlideUrlLoader&lt;MyRequest>
-                <br>   :getUrl(MyRequest myRequest, int width, int height)
-                <br>   :return "url";
+                <br> :getUrl(MyRequest myRequest, int width, int height)
+                <br> :return "url";
             </li>
-            <li>全局配置 
+            <li>全局配置
                 <pre><code>
 -keepnames class com.mypackage.MyGlideModule
 # or more generally:
@@ -376,7 +378,7 @@ Glide.with( context )
      .into( imageView2 );
 </code></pre>
             </li>
-            <li>动态使用 
+            <li>动态使用
                 <pre><code>
 String baseImageUrl = "https://futurestud.io/images/example.png";  
 CustomImageSizeModel customImageRequest = new CustomImageSizeModelFutureStudio( baseImageUrl );
