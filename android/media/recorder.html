@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>MediaRecorder AudioRecord</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+
+
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+
+
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>MediaRecorder AudioRecord</h1>
+        <p>android.permission.RECORD_AUDIO,android.permission.CAMERA</p>
+
+        <h2>MediaRecorder</h2>
+        <ul>
+            <li>Initial：初始状态,new()或reset().
+            </li>
+            <li>Initialized：已初始化状态,setAudioSource()或setVideoSource().
+            </li>
+            <li>DataSourceConfigured：数据源配置状态,setOutputFormat().可以设定编码方式、输出文件、屏幕旋转、预览显示等
+            </li>
+            <li>Prepared：就绪状态,prepare().
+            </li>
+            <li>Recording：录制状态,start().通过stop()方法或reset()方法回到Initial状态.
+            </li>
+            <li>Released：释放状态,在Initial状态调用release()进入该状态，释放所有绑定的资源.不能调用reset()
+            </li>
+            <li>Error：错误状态,当错误发生的时候进入这个状态，它可以通过reset()方法进入Initial状态。</li>
+        </ul>
+        <ul>
+            <li>final static int getAudioSourceMax()获取音频源的最大值。</li>
+            <li>int getMaxAmplitude() 获取在前一次调用此方法之后录音中出现的最大振幅。</li>
+            <li>void setAudioChannels(int numChannels) 设置录制的音频通道数。</li>
+            <li>void setAudioEncoder(int audio_encoder) 设置所录制的声音的编码格式。</li>
+            <li>void setAudioEncodingBitRate(int bitRate) 设置所录制的声音的编码位率。</li>
+            <li>void setAudioSamplingRate(int samplingRate) 设置所录制的声音的采样率。</li>
+            <li>void setAudioSource(int audio_source) 设置声音来源，一般传入 MediaRecorder. AudioSource.MIC参数指定录制来自麦克风的声音。</li>
+            <li>void setCamera(Camera c) 设置一个摄像头用于录制。</li>
+            <li>void setCaptureRate(double fps) 设置视频帧捕获率。</li>
+            <li>void setLocation(float latitude, float longitude) 设置并存储在输出文件中的地理数据（经度和纬度）。</li>
+            <li>void setMaxDuration(int max_duration_ms) 设置录制会话的最长持续时间ms</li>
+            <li>void setMaxFileSize(long max_filesize_bytes) 设置录制文件的最大文件大小。</li>
+            <li>void setOnErrorListener(MediaRecorder.OnErrorListener l) 注册一个用于记录录制时出现的错误的监听器。</li>
+            <li>void setOnInfoListener(MediaRecorder.OnInfoListener listener) 注册一个用于记录录制时出现的信息事件。</li>
+            <li>void setOrientationHint(int degrees) 设置输出的视频播放的方向提示。</li>
+            <li>void setOutputFile(FileDescriptor fd) 设置录制的音频文件的保存位置。</li>
+            <li>void setOutputFile(String path) 设置录制的音频文件的保存位置。</li>
+            <li>void setOutputFormat(int output_format) 设置所录制的音视频文件的格式。</li>
+            <li>void setPreviewDisplay(Surface sv) 设置使用哪个SurfaceView来显示视频预览。</li>
+            <li>void setProfile(CamcorderProfile profile) 指定CamcorderProfile对象。</li>
+            <li>void setVideoEncoder(int video_encoder) 设置所录制视频的编码格式。</li>
+            <li>void setVideoEncodingBitRate(int bitRate) 设置所录制视频的编码位率。</li>
+            <li>void setVideoFrameRate(int rate) 设置录制视频的捕获帧速率。</li>
+            <li>void setVideoSize(int width, int height) 设置要拍摄的宽度和视频的高度。</li>
+            <li>void setVideoSource(int video_source) 设置用于录制的视频来源。</li>
+        </ul>
+        <pre><code>
+File soundFile;
+MediaRecorder mRecorder;
+
+//录音
+try
+{
+	// 创建保存录音的音频文件
+	soundFile = new File(Environment
+		.getExternalStorageDirectory().getCanonicalFile()
+		+ "/sound.amr");
+	mRecorder = new MediaRecorder();
+	// 设置录音的声音来源
+	mRecorder.setAudioSource(MediaRecorder
+		.AudioSource.MIC);
+	// 设置录制的声音的输出格式（必须在设置声音编码格式之前设置）
+	mRecorder.setOutputFormat(MediaRecorder
+		.OutputFormat.AMR_NB);
+	// 设置声音编码的格式
+	mRecorder.setAudioEncoder(MediaRecorder
+		.AudioEncoder.AMR_NB);
+	mRecorder.setOutputFile(soundFile.getAbsolutePath());
+	mRecorder.prepare();
+	// 开始录音
+	mRecorder.start(); 
+}
+catch (Exception e)
+{
+	e.printStackTrace();
+}
+
+
+//停止
+if (soundFile != null && soundFile.exists())
+{
+	// 停止录音
+	mRecorder.stop(); 
+	// 释放资源
+	mRecorder.release();
+	mRecorder = null;
+}
+			
+//释放资源
+@Override
+public void onDestroy()
+{
+	if (soundFile != null && soundFile.exists())
+	{
+		// 停止录音
+		mRecorder.stop();
+		// 释放资源
+		mRecorder.release();
+		mRecorder = null;
+	}
+	super.onDestroy();
+}
+
+
+
+
+File videoFile ;
+MediaRecorder mRecorder;
+// 显示视频预览的SurfaceView
+SurfaceView sView;
+// 记录是否正在进行录制
+private boolean isRecording = false;
+
+@Override
+public void onCreate(Bundle savedInstanceState)
+{
+	super.onCreate(savedInstanceState);
+	// 去掉标题栏 ,必须放在setContentView之前
+	requestWindowFeature(Window.FEATURE_NO_TITLE);
+	setContentView(R.layout.main);		
+    // 设置横屏显示   
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
+    // 设置全屏   
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    // 选择支持半透明模式,在有surfaceview的activity中使用。   
+    getWindow().setFormat(PixelFormat.TRANSLUCENT);   
+	// 获取程序界面中的两个按钮
+	record = (ImageButton) findViewById(R.id.record);
+	stop = (ImageButton) findViewById(R.id.stop);
+	// 让stop按钮不可用。
+	stop.setEnabled(false);
+	// 为两个按钮的单击事件绑定监听器
+	record.setOnClickListener(this);
+	stop.setOnClickListener(this);
+	// 获取程序界面中的SurfaceView
+	sView = (SurfaceView) this.findViewById(R.id.sView);
+    // 设置分辨率
+    sView.getHolder().setFixedSize(1280, 720);
+    // 设置该组件让屏幕不会自动关闭
+    sView.getHolder().setKeepScreenOn(true);
+}
+    
+try
+{
+	// 创建保存录制视频的视频文件
+	videoFile = new File(Environment
+		.getExternalStorageDirectory()
+		.getCanonicalFile() + "/testvideo.3gp");
+	// 创建MediaPlayer对象
+	mRecorder = new MediaRecorder();
+	mRecorder.reset();
+	// 设置从麦克风采集声音(或来自录像机的声音AudioSource.CAMCORDER)
+	mRecorder.setAudioSource(MediaRecorder
+		.AudioSource.MIC);
+	// 设置从摄像头采集图像
+	mRecorder.setVideoSource(MediaRecorder
+		.VideoSource.CAMERA);
+	// 设置视频文件的输出格式
+	// 必须在设置声音编码格式、图像编码格式之前设置
+	mRecorder.setOutputFormat(MediaRecorder
+		.OutputFormat.THREE_GPP);
+	// 设置声音编码的格式
+	mRecorder.setAudioEncoder(MediaRecorder
+		.AudioEncoder.AMR_NB);
+	// 设置图像编码的格式
+	mRecorder.setVideoEncoder(MediaRecorder
+		.VideoEncoder.H264);
+	mRecorder.setVideoSize(1280, 720);
+	// 每秒 4帧
+	mRecorder.setVideoFrameRate(20);
+	mRecorder.setOutputFile(videoFile.getAbsolutePath());
+	// 指定使用SurfaceView来预览视频
+	mRecorder.setPreviewDisplay(sView
+		.getHolder().getSurface());
+	mRecorder.prepare();
+	// 开始录制
+	mRecorder.start();
+	isRecording = true;
+}
+catch (Exception e)
+{
+	e.printStackTrace();
+}
+
+
+// 停止
+if (isRecording)
+{
+	mRecorder.stop();
+	mRecorder.release();
+	mRecorder = null;
+}
+	    
+
+package com.jph.recordvideo;
+
+import java.io.File;
+
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.graphics.PixelFormat;
+import android.media.MediaRecorder;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+/**
+ * Description:
+ * 使用MediaRecorder录制视频
+ * @author jph
+ * Date:2014.08.14
+ * <br/>
+ */
+public class RecordVideo extends Activity
+	implements OnClickListener
+{
+	// 程序中的两个按钮
+	ImageButton record , stop;
+	// 系统的视频文件
+	File videoFile ;
+	MediaRecorder mRecorder;
+	// 显示视频预览的SurfaceView
+    SurfaceView sView;
+    // 记录是否正在进行录制
+    private boolean isRecording = false;
+
+    @Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		// 去掉标题栏 ,必须放在setContentView之前
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.main);		
+		 // 设置横屏显示   
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
+        // 设置全屏   
+	    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
+	                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	    // 选择支持半透明模式,在有surfaceview的activity中使用。   
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);   
+		// 获取程序界面中的两个按钮
+		record = (ImageButton) findViewById(R.id.record);
+		stop = (ImageButton) findViewById(R.id.stop);
+		// 让stop按钮不可用。
+		stop.setEnabled(false);
+		// 为两个按钮的单击事件绑定监听器
+		record.setOnClickListener(this);
+		stop.setOnClickListener(this);
+		// 获取程序界面中的SurfaceView
+		sView = (SurfaceView) this.findViewById(R.id.sView);
+        // 设置分辨率
+        sView.getHolder().setFixedSize(1280, 720);
+        // 设置该组件让屏幕不会自动关闭
+        sView.getHolder().setKeepScreenOn(true);
+	}
+
+	@Override
+	public void onClick(View source)
+	{
+		switch (source.getId())
+		{
+			// 单击录制按钮
+			case R.id.record:
+				if (!Environment.getExternalStorageState().equals(
+					android.os.Environment.MEDIA_MOUNTED))
+				{
+					Toast.makeText(RecordVideo.this
+						, "SD卡不存在，请插入SD卡！"
+						, Toast.LENGTH_SHORT).show();
+					return;
+				}
+			break;
+		}
+	}
+}
+
+</code></pre>
+
+
+        <h2>AudioRecord AudioTrack</h2>
+        <ul>
+            <li>AudioRecord(int audioSource, int sampleRateInHz, int channelConfig, int audioFormat, int bufferSizeInBytes)</li>
+        </ul>
+        <pre><code>
+AudioRecord(
+int audioSource,         //MediaRecorder.AudioSource.MIC
+int sampleRateInHz,      //录制频率,8000hz或者11025hz等，不同的硬件设备不同
+int channelConfig,       //录制通道,AudioFormat.CHANNEL_CONFIGURATION_MONO,STEREO
+int audioFormat,         //录制编码格式,AudioFormat.ENCODING_16BIT,8BIT;16BIT的仿真性比8BIT好
+int bufferSizeInBytes    //录制缓冲大小,可以通过getMinBufferSize来获取
+)
+
+//1,保存录音的文件，输出流
+File fpath = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/data/files/");
+fpath.mkdirs();
+//创建临时文件,注意这里的格式为.pcm
+audioFile = File.createTempFile("recording", ".pcm", fpath);
+DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(audioFile)));
+
+
+//2,实例化一个AudioRecord对象
+//根据定义好的几个配置，来获取合适的缓冲大小
+int bufferSize = AudioRecord.getMinBufferSize(frequence, channelConfig, audioEncoding);
+AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, frequence, channelConfig, audioEncoding, bufferSize);
+short[] buffer = new short[bufferSize];
+
+//3,开始录制
+record.startRecording();
+
+int r = 0; //存储录制进度
+//定义循环，根据isRecording的值来判断是否继续录制
+while(isRecording){
+    //从bufferSize中读取字节，返回读取的short个数
+    //这里老是出现buffer overflow，不知道是什么原因，试了好几个值，都没用，TODO：待解决
+    int bufferReadResult = record.read(buffer, 0, buffer.length);
+    //循环将buffer中的音频数据写入到OutputStream中
+    for(int i=0; i&lt; i++){
+        dos.writeShort(buffer[i]);
+    }
+    publishProgress(new Integer(r)); //向UI线程报告当前进度
+    r++; //自增进度值
+}
+
+
+//3,录制结束
+record.stop();
+dos.close();
+
+
+
+
+ * 这样我们就可以实例化一个AudioRecord对象了
+ * 二、创建一个文件，用于保存录制的内容
+ * 同上篇
+ * 三、打开一个输出流，指向创建的文件
+ * DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))
+ * 四、现在就可以开始录制了，我们需要创建一个字节数组来存储从AudioRecorder中返回的音频数据，但是
+ * 注意，我们定义的数组要小于定义AudioRecord时指定的那个BufferSize
+ * short[]buffer = new short[BufferSize/4];
+ * startRecording();
+ * 然后一个循环，调用AudioRecord的read方法实现读取
+ * 另外使用MediaPlayer是无法播放使用AudioRecord录制的音频的，为了实现播放，我们需要
+ * 使用AudioTrack类来实现
+ * AudioTrack类允许我们播放原始的音频数据
+ * 
+ * 
+ * 一、实例化一个AudioTrack同样要传入几个参数
+ * 1、StreamType:在AudioManager中有几个常量，其中一个是STREAM_MUSIC;
+ * 2、SampleRateInHz：最好和AudioRecord使用的是同一个值
+ * 3、ChannelConfig：同上
+ * 4、AudioFormat：同上
+ * 5、BufferSize：通过AudioTrack的静态方法getMinBufferSize来获取
+ * 6、Mode：可以是AudioTrack.MODE_STREAM和MODE_STATIC，关于这两种不同之处，可以查阅文档
+ * 二、打开一个输入流，指向刚刚录制内容保存的文件，然后开始播放，边读取边播放
+ * 
+ * 实现时，音频的录制和播放分别使用两个AsyncTask来完成 
+ */
+public class MyAudioRecord2 extends Activity{
+    
+    private TextView stateView;
+    
+    private Button btnStart,btnStop,btnPlay,btnFinish;
+    
+    private RecordTask recorder;
+    private PlayTask player;
+    
+    private File audioFile;
+    
+    private boolean isRecording=true, isPlaying=false; //标记
+    
+    private int frequence = 8000; //录制频率，单位hz.这里的值注意了，写的不好，可能实例化AudioRecord对象的时候，会出错。我开始写成11025就不行。这取决于硬件设备
+    private int channelConfig = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+    private int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+    
+    
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.my_audio_record);
+        
+        stateView = (TextView)this.findViewById(R.id.view_state);
+        stateView.setText("准备开始");
+        btnStart = (Button)this.findViewById(R.id.btn_start);
+        btnStop = (Button)this.findViewById(R.id.btn_stop);
+        btnPlay = (Button)this.findViewById(R.id.btn_play);
+        btnFinish = (Button)this.findViewById(R.id.btn_finish);
+        btnFinish.setText("停止播放");
+        btnStop.setEnabled(false);
+        btnPlay.setEnabled(false);
+        btnFinish.setEnabled(false);
+        
+        //在这里我们创建一个文件，用于保存录制内容
+        File fpath = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/data/files/");
+        fpath.mkdirs();//创建文件夹
+        try {
+            //创建临时文件,注意这里的格式为.pcm
+            audioFile = File.createTempFile("recording", ".pcm", fpath);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }       
+    }
+    
+    
+    public void onClick(View v){
+        int id = v.getId();
+        switch(id){
+        case R.id.btn_start:
+            //开始录制
+            
+            //这里启动录制任务
+            recorder = new RecordTask();
+            recorder.execute();
+            
+            break;
+        case R.id.btn_stop:
+            //停止录制
+            this.isRecording = false;
+            //更新状态
+            //在录制完成时设置，在RecordTask的onPostExecute中完成
+            break;
+        case R.id.btn_play:
+            
+            player = new PlayTask();
+            player.execute();
+            break;
+        case R.id.btn_finish:
+            //完成播放
+            this.isPlaying = false;
+            break;
+            
+        }
+    }
+    
+    class RecordTask extends AsyncTask&lt;Void, Integer, Void>{
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            isRecording = true;
+            try {
+                //开通输出流到指定的文件
+                DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(audioFile)));
+                //根据定义好的几个配置，来获取合适的缓冲大小
+                int bufferSize = AudioRecord.getMinBufferSize(frequence, channelConfig, audioEncoding);
+                //实例化AudioRecord
+                AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, frequence, channelConfig, audioEncoding, bufferSize);
+                //定义缓冲
+                short[] buffer = new short[bufferSize];
+                
+                //开始录制
+                record.startRecording();
+                
+                int r = 0; //存储录制进度
+                //定义循环，根据isRecording的值来判断是否继续录制
+                while(isRecording){
+                    //从bufferSize中读取字节，返回读取的short个数
+                    //这里老是出现buffer overflow，不知道是什么原因，试了好几个值，都没用，TODO：待解决
+                    int bufferReadResult = record.read(buffer, 0, buffer.length);
+                    //循环将buffer中的音频数据写入到OutputStream中
+                    for(int i=0; i&lt; i++){
+                        dos.writeShort(buffer[i]);
+                    }
+                    publishProgress(new Integer(r)); //向UI线程报告当前进度
+                    r++; //自增进度值
+                }
+                //录制结束
+                record.stop();
+                Log.v("The DOS available:", "::"+audioFile.length());
+                dos.close();
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            return null;
+        }
+        
+        //当在上面方法中调用publishProgress时，该方法触发,该方法在UI线程中被执行
+        protected void onProgressUpdate(Integer...progress){
+            stateView.setText(progress[0].toString());
+        }
+        
+        protected void onPostExecute(Void result){
+            btnStop.setEnabled(false);
+            btnStart.setEnabled(true);
+            btnPlay.setEnabled(true);
+            btnFinish.setEnabled(false);
+        }
+        
+        protected void onPreExecute(){
+            //stateView.setText("正在录制");
+            btnStart.setEnabled(false);
+            btnPlay.setEnabled(false);
+            btnFinish.setEnabled(false);
+            btnStop.setEnabled(true);       
+        }
+        
+    }
+    
+    class PlayTask extends AsyncTask&lt;Void, Integer, Void&gt;{
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            isPlaying = true;
+            int bufferSize = AudioTrack.getMinBufferSize(frequence, channelConfig, audioEncoding);
+            short[] buffer = new short[bufferSize/4];
+            try {
+                //定义输入流，将音频写入到AudioTrack类中，实现播放
+                DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(audioFile)));
+                //实例AudioTrack
+                AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, frequence, channelConfig, audioEncoding, bufferSize, AudioTrack.MODE_STREAM);
+                //开始播放
+                track.play();
+                //由于AudioTrack播放的是流，所以，我们需要一边播放一边读取
+                while(isPlaying && dis.available()>0){
+                    int i = 0;
+                    while(dis.available()>0 && i&lt;buffer.length){
+                        buffer[i] = dis.readShort();
+                        i++;
+                    }
+                    //然后将数据写入到AudioTrack中
+                    track.write(buffer, 0, buffer.length);
+                    
+                }
+                
+                //播放结束
+                track.stop();
+                dis.close();
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            return null;
+        }
+        
+        protected void onPostExecute(Void result){
+            btnPlay.setEnabled(true);
+            btnFinish.setEnabled(false);
+            btnStart.setEnabled(true);
+            btnStop.setEnabled(false);
+        }
+        
+        protected void onPreExecute(){  
+            
+            //stateView.setText("正在播放");
+            btnStart.setEnabled(false);
+            btnStop.setEnabled(false);
+            btnPlay.setEnabled(false);
+            btnFinish.setEnabled(true);         
+        }
+        
+    }
+}
+</code></pre>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

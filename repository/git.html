@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
-     
-     
+
+
     <script type="text/javascript" src="/js-base.js"></script>
-     
+
 </head>
 
 <body>
@@ -22,10 +22,20 @@
             <a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000"><em>廖雪峰 gre</em></a>
             <h2>Git安装</h2>
 
-            <h2>SSH</h2>
+            <h2>config</h2>
             <ul>
+                <li>--system 选项: /etc/gitconfig文件,系统中对所有用户都普遍适用的配置</li>
+                <li>--global 选项:~/.gitconfig 文件,用户目录下的配置文件只适用于该用户</li>
+                <li>当前项目Git目录中的配置文件,也就是工作目录中的 .git/config 文件,仅仅针对当前项目有效</li>
+                <li>$ git config --list</li>
                 <li>$ git config --global user.name "xxx"</li>
                 <li>$ git config --global user.email "xxx@qq.com"</li>
+                <li>$ git config --global core.editor 文本编辑器</li>
+                <li>$ git config --global merge.tool 差异分析工具</li>
+            </ul>
+
+            <h2>SSH</h2>
+            <ul>
                 <li>$ ssh-keygen -t rsa -C "xxx@qq.com"</li>
             </ul>
 
@@ -60,7 +70,10 @@
                 <li>$ git reset HEAD &lt;filename&gt;</li>
                 <br>
                 <li>$ git reset --hard commit_id</li>
+                <li>$ git commit --amend 修改最后一次提交</li>
             </ul>
+            
+            
 
             <h2>删除</h2>
             <ul>
@@ -166,7 +179,7 @@
             <h2>远程同步</h2>
             <ul>
                 <li>远程与本地分别进行修改和提交</li>
-                <li>git fetch origin  同步远程服务器上的数据到本地</li>
+                <li>git fetch origin 同步远程服务器上的数据到本地</li>
                 <li>origin/master和master分别指向一个分支，合并点在上一次同步处</li>
             </ul>
 
