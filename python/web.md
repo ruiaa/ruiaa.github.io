@@ -60,7 +60,7 @@
 
 +	Cheetah：也是用<% ... %>和${xxx}的一个模板；
 
-+	Django：Django是一站式框架，内置一个用{% ... %}和{{ xxx }}的模板。
++	Django：
 
 
 
