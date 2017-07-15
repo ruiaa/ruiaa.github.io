@@ -19,7 +19,17 @@
         <p>uses-permission android:name="android.permission.INTERNET"</p>
 
         <h2>HttpURLConnection</h2>
-        <pre><code>    
+        <ul>
+            <li>创建一个URL对象
+                <br>获取HttpURLConnection对象  URL.openConnection()
+                <br>设置connection参数 请求方法，连接网络超时，读取超时
+                <br>post 获取输出流 conn.getOutputStream();对输出流写数据即向服务器写数据
+                <br>连接，conn.connect();
+                <br>获取返回状态码，conn.getResponseCode();
+                <br>获取返回数据，getStringFromInputStream(conn.getInputStream());
+                <br>关闭连接，conn.disconnect();
+            </li>
+            <pre><code>    
 public class NetUtils {
    
 
@@ -232,10 +242,19 @@ public class NetUtils {
     }
 }
 </code></pre>
-
+        </ul>
+        
         <h2>HttpClient</h2>
-        <pre><code>  
-//Android 2.2及以下版本，使用HttpClient  
+        <ul>
+            <li>Android 2.2及以下版本，使用HttpClient </li>
+            <li>获取Client，httpClient = new DefaultHttpClient();
+                <br>获取post请求，httpPost=new HttpPost(url); 获取get请求，httpGet = new HttpGet(url);
+                <br>设置数据，httpPost.setEntity(new UrlEncodedFormEntity(data, "utf-8"));
+                <br>获取返回，httpResponse = httpClient.execute(httpPost);
+                <br>状态码，httpResponse.getStatusLine().getStatusCode()
+                <br>返回的数据，httpEntity = httpResponse.getEntity()
+            </li>
+                 <pre><code>   
 //AndroidHttpClient DefaultHttpClient
 public class NetUtils {
    
@@ -282,6 +301,7 @@ public class NetUtils {
     }
 }
 </code></pre>
+        </ul>
    
         <h2>URL</h2>
         

@@ -6,15 +6,413 @@
     <title>android view</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>      
-     
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+
     <script type="text/javascript" src="/js-base.js"></script>
-     
+
 </head>
 
 <body>
     <main role="main">
         <h1>android view</h1>
+
+        <h2>控件树</h2>
+        <ul>
+            <li>activity->PhoneWindow->DecorView(根view,LinearLayout)->TitleView+ContentView(FrameLayout)</li>
+        </ul>
+
+        <h2>LayoutInflater 加载布局</h2>
+        <ul>
+            <li>创建：
+                <br>LayoutInflater.from(context);
+                <br>即(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            </li>
+            <li>加载xml布局：layoutInflater.inflate(resourceId, root);
+                <br>pull方式解析xml,根据节点反射创建view
+            </li>
+            <li>inflate(int resource, ViewGroup root, boolean attachToRoot)
+                <br>如果root为null，attachToRoot将失去作用，设置任何值都没有意义。
+                <br>如果root不为null，attachToRoot为true，则会给加载的布局文件的指定父布局root。
+                <br>如果root不为null，attachToRoot为false，则会将布局文件最外层的所有layout属性进行设置，当该view被添加到父view当中时，这些layout属性会自动生效。
+                <br>在不设置attachToRoot参数的情况下，如果root不为null，attachToRoot参数默认为true。
+            </li>
+
+        </ul>
+
+        <h2>view绘制流程 ViewRootImpl</h2>
+        <ul>
+            <li>ActivityThread中,Activity创建完成后,将DecorView添加到Window中,同时创建ViewRootImpl对象,并建立两者的关联</li>
+            <li>View的绘制流程从ViewRoot的performTraversals方法开始,经过measure、layout和draw三大流程
+                <pre><code>
+private void performTraversals() {
+    ......
+    //最外层的根视图的widthMeasureSpec和heightMeasureSpec由来
+    //lp.width和lp.height在创建ViewGroup实例时等于MATCH_PARENT
+    int childWidthMeasureSpec = getRootMeasureSpec(mWidth, lp.width);
+    int childHeightMeasureSpec = getRootMeasureSpec(mHeight, lp.height);
+    ......
+    mView.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+    ......
+    mView.layout(0, 0, mView.getMeasuredWidth(), mView.getMeasuredHeight());
+    ......
+    mView.draw(canvas);
+    ......
+}</code></pre>
+            </li>
+            <li>measure过程决定了view的宽高，在几乎所有的情况下这个宽高都等同于view最终的宽高,通过getMeasuredHeight()获取
+                <br>layout过程决定了view的四个顶点的坐标和view实际的宽高,通过getWidth和getHeight方法可以得到最终的宽高
+                <br>draw过程决定了view的显示
+            </li>
+        </ul>
+
+        <h2>测量</h2>
+        <ul>
+            <li>MeasureSpec
+                <ul>
+                    <li>specMode：
+                        <br>exactly精确模式:父视图希望子视图的大小应该是由specSize的值来决定的
+                        <br>at_most最大模式:子视图最多只能是specSize中指定的大小
+                        <br>unspecified:可以将视图按照自己的意愿设置成任意的大小,没有任何限制
+                    </li>
+                    <li>父容器的MeasureSpec和自身的LayoutParams-->MeasureSpec-->确定View测量后的宽高
+                        <br>固定宽高:精确模式，大小是LayoutParams中的大小
+                        <br>match_parent+父容器精确模式:精确模式，大小是父容器的剩余空间
+                        <br>match_parent+父容器最大模式:最大模式，大小不会超过父容器的剩余空间
+                        <br>wrap_content:最大模式，大小不超过父容器的剩余空间
+                    </li>
+                </ul>
+            </li>
+            <li>measure()
+                <pre><code>
+public final void measure(int widthMeasureSpec, int heightMeasureSpec) {  
+    if ((mPrivateFlags &amp; FORCE_LAYOUT) == FORCE_LAYOUT ||  
+            widthMeasureSpec != mOldWidthMeasureSpec ||  
+            heightMeasureSpec != mOldHeightMeasureSpec) {  
+        mPrivateFlags &amp;= ~MEASURED_DIMENSION_SET;  
+        if (ViewDebug.TRACE_HIERARCHY) {  
+            ViewDebug.trace(this, ViewDebug.HierarchyTraceType.ON_MEASURE);  
+        }  
+        onMeasure(widthMeasureSpec, heightMeasureSpec);  
+        if ((mPrivateFlags &amp; MEASURED_DIMENSION_SET) != MEASURED_DIMENSION_SET) {  
+            throw new IllegalStateException("onMeasure() did not set the"  
+                    + " measured dimension by calling"  
+                    + " setMeasuredDimension()");  
+        }  
+        mPrivateFlags |= LAYOUT_REQUIRED;  
+    }  
+    mOldWidthMeasureSpec = widthMeasureSpec;  
+    mOldHeightMeasureSpec = heightMeasureSpec;  
+}</code></pre>
+            </li>
+            <li>onMeasure() 设置大小setMeasuredDimension()
+               <br>layout中会遍历视图树调用layout.measureChild(childView, widthMeasureSpec, heightMeasureSpec);
+                <pre><code>    
+//View.onMeasure()
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    setMeasuredDimension(
+            getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
+            getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec)
+    );
+}
+public static int getDefaultSize(int size, int measureSpec) {  
+    int result = size;  
+    int specMode = MeasureSpec.getMode(measureSpec);  
+    int specSize = MeasureSpec.getSize(measureSpec);  
+    switch (specMode) {  
+    case MeasureSpec.UNSPECIFIED:  
+        result = size;  
+        break;  
+    case MeasureSpec.AT_MOST:  
+    case MeasureSpec.EXACTLY:  
+        result = specSize;  
+        break;  
+    }  
+    return result;  
+}</code></pre>
+            </li>
+            <li>自定义的view原有的onMeasure不支持wrap_content
+            <pre><code>
+//重写 支持wrap_content
+//match_parent,wrap_content  由系统测量并传入match_parent值
+//exactly 设置明确的宽度和高度时,传入设置的值
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)  
+{  
+    int widthMode = MeasureSpec.getMode(widthMeasureSpec);  
+    int widthSize = MeasureSpec.getSize(widthMeasureSpec);  
+    int heightMode = MeasureSpec.getMode(heightMeasureSpec);  
+    int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+      
+    int width;  
+    int height;
+    
+     
+    if (widthMode == MeasureSpec.EXACTLY)  
+    {  
+        //传入准确值 
+        width = widthSize;  
+    } else  
+    {  
+        mPaint.setTextSize(mTitleTextSize);  
+        mPaint.getTextBounds(mTitle, 0, mTitle.length(), mBounds);
+        
+        //内容大小  
+        float textWidth = mBounds.width();
+        //内容+边距  
+        int desired = (int) (getPaddingLeft() + textWidth + getPaddingRight());
+          
+        width = desired;  
+    }  
+  
+    if (heightMode == MeasureSpec.EXACTLY)  
+    {  
+        //传入准确值 
+        height = heightSize;  
+    } else  
+    {  
+        mPaint.setTextSize(mTitleTextSize);  
+        mPaint.getTextBounds(mTitle, 0, mTitle.length(), mBounds);  
+        float textHeight = mBounds.height();  
+        int desired = (int) (getPaddingTop() + textHeight + getPaddingBottom());  
+        height = desired;  
+    }  
+      
+    //调用设置大小的接口
+    setMeasuredDimension(width, height); 
+     
+}
+</code></pre>
+            </li>
+        </ul>
+
+        <h2>布局</h2>
+        <ul>
+            <li>layout()
+            <pre><code>
+public void layout(int l, int t, int r, int b) {  
+    int oldL = mLeft;  
+    int oldT = mTop;  
+    int oldB = mBottom;  
+    int oldR = mRight;  
+    boolean changed = setFrame(l, t, r, b);  
+    if (changed || (mPrivateFlags &amp; LAYOUT_REQUIRED) == LAYOUT_REQUIRED) {  
+        if (ViewDebug.TRACE_HIERARCHY) {  
+            ViewDebug.trace(this, ViewDebug.HierarchyTraceType.ON_LAYOUT);  
+        }  
+        onLayout(changed, l, t, r, b);  
+        mPrivateFlags &amp;= ~LAYOUT_REQUIRED;  
+        if (mOnLayoutChangeListeners != null) {  
+            ArrayList&lt;OnLayoutChangeListener> listenersCopy =  
+                    (ArrayList&lt;OnLayoutChangeListener>) mOnLayoutChangeListeners.clone();  
+            int numListeners = listenersCopy.size();  
+            for (int i = 0; i &lt; numListeners; ++i) {  
+                listenersCopy.get(i).onLayoutChange(this, l, t, r, b, oldL, oldT, oldR, oldB);  
+            }  
+        }  
+    }  
+    mPrivateFlags &amp;= ~FORCE_LAYOUT;  
+} </code></pre>
+            </li>
+            <li>onLayout() 由ViewGroup的子类根据各自的规则重写
+            <br>遍历视图树调用childView.layout(childLeft, childTop, childLeft + childView.getMeasuredWidth(), childTop + childHeight)
+            <pre><code>
+@Override  
+protected void onLayout(boolean changed, int l, int t, int r, int b) {  
+    //遍历childView.layout()
+    if (getChildCount() > 0) {  
+        View childView = getChildAt(0);  
+        childView.layout(0, 0, childView.getMeasuredWidth(), childView.getMeasuredHeight());  
+    }  
+} 
+</code></pre>
+            </li>
+            <li>getWidth()与getMeasureWidth()
+            <br>setMeasuredDimension()-->getMeasureWidth()
+            <br>childView.layout()------>getWidth()视图右边的坐标减去左边的坐标
+            </li>
+        </ul>
+
+        <h2>绘制</h2>
+        <ul>
+            <li>draw()
+                <pre><code>
+//绘制背景
+//绘制内容   onDraw(canvas)由子类实现
+//绘制子视图 dispatchDraw(canvas)由ViewGroup实现
+//绘制滚动条 onDrawScrollBars(canvas)
+public void draw(Canvas canvas) {  
+    if (ViewDebug.TRACE_HIERARCHY) {  
+        ViewDebug.trace(this, ViewDebug.HierarchyTraceType.DRAW);  
+    }  
+    final int privateFlags = mPrivateFlags;  
+    final boolean dirtyOpaque = (privateFlags &amp; DIRTY_MASK) == DIRTY_OPAQUE &amp;&amp;  
+            (mAttachInfo == null || !mAttachInfo.mIgnoreDirtyState);  
+    mPrivateFlags = (privateFlags &amp; ~DIRTY_MASK) | DRAWN;  
+    
+    
+    //对视图的背景进行绘制  
+    int saveCount;  
+    if (!dirtyOpaque) {  
+        final Drawable background = mBGDrawable;  
+        if (background != null) {  
+            final int scrollX = mScrollX;  
+            final int scrollY = mScrollY;  
+            if (mBackgroundSizeChanged) {  
+                background.setBounds(0, 0,  mRight - mLeft, mBottom - mTop);  
+                mBackgroundSizeChanged = false;  
+            }  
+            if ((scrollX | scrollY) == 0) {  
+                background.draw(canvas);  
+            } else {  
+                canvas.translate(scrollX, scrollY);  
+                background.draw(canvas);  
+                canvas.translate(-scrollX, -scrollY);  
+            }  
+        }  
+    }  
+    final int viewFlags = mViewFlags;  
+    boolean horizontalEdges = (viewFlags &amp; FADING_EDGE_HORIZONTAL) != 0;  
+    boolean verticalEdges = (viewFlags &amp; FADING_EDGE_VERTICAL) != 0;  
+    if (!verticalEdges &amp;&amp; !horizontalEdges) { 
+        
+        //对视图的内容进行绘制
+        if (!dirtyOpaque) onDraw(canvas);  
+        
+        // draw the children  
+        dispatchDraw(canvas);  
+        
+        // 对视图的滚动条进行绘制
+        onDrawScrollBars(canvas);  
+
+        return;  
+    }  
+}</code></pre>
+            </li>
+            
+        </ul>
+        
+        
+
+        <h2>视图重绘</h2>
+        <ul>
+            <li>视图状态变化 setVisibility()...  -->invalidate()
+                <ul>
+                    <li>enabled表示当前视图是否可用,不可用的视图是无法响应onTouch事件的</li>
+                    <li>focused表示当前视图是否获得到焦点
+                        <br>通常情况下有两种方法可以让视图获得焦点，即通过键盘的上下左右键切换视图，以及调用requestFocus()方法
+                        <br>一般只有视图在focusable和focusable in touch mode同时成立的情况下才能成功获取焦点
+                    </li>
+                    <li>window_focused表示当前视图是否处于正在交互的窗口中，由系统自动决定，应用程序不能进行改变。</li>
+                    <li>selected表示当前视图是否处于选中状态。一个界面当中可以有多个视图处于选中状态</li>
+                    <li>pressed表示当前视图是否处于按下状态。通常情况下由系统自动赋值</li>
+                </ul>
+            </li>
+            <li>invalidate()-->performTraversals()只进行draw流程（可以requestLayout()强制重新走一遍）
+                <pre><code>
+void invalidate(boolean invalidateCache) {  
+    if (ViewDebug.TRACE_HIERARCHY) {  
+        ViewDebug.trace(this, ViewDebug.HierarchyTraceType.INVALIDATE);  
+    }  
+    
+    //skipInvalidate()判断当前View是否需要重绘
+    //如果View是不可见的且没有执行任何动画，就认为不需要重绘
+    if (skipInvalidate()) {  
+        return;  
+    }  
+    if ((mPrivateFlags & (DRAWN | HAS_BOUNDS)) == (DRAWN | HAS_BOUNDS) ||  
+            (invalidateCache && (mPrivateFlags & DRAWING_CACHE_VALID) == DRAWING_CACHE_VALID) ||  
+            (mPrivateFlags & INVALIDATED) != INVALIDATED || isOpaque() != mLastIsOpaque) {  
+        mLastIsOpaque = isOpaque();  
+        mPrivateFlags &= ~DRAWN;  
+        mPrivateFlags |= DIRTY;  
+        if (invalidateCache) {  
+            mPrivateFlags |= INVALIDATED;  
+            mPrivateFlags &= ~DRAWING_CACHE_VALID;  
+        }  
+        final AttachInfo ai = mAttachInfo;  
+        final ViewParent p = mParent;  
+        if (!HardwareRenderer.RENDER_DIRTY_REGIONS) {  
+            if (p != null && ai != null && ai.mHardwareAccelerated) {  
+                p.invalidateChild(this, null);  
+                return;  
+            }  
+        }  
+        if (p != null && ai != null) {  
+            final Rect r = ai.mTmpInvalRect;  
+            r.set(0, 0, mRight - mLeft, mBottom - mTop);  
+            p.invalidateChild(this, r);  
+        }  
+    }  
+}
+</code></pre>
+            </li>
+        </ul>
+
+
+        <h2>自定义控件</h2>
+        <ul>
+            <li>绘制视图
+                <br>重写onDraw(canvas) 
+            </li>
+            <li>布局
+                <br>重写onMeasure()  测量子控件measureChild()  设置大小setMeasuredDimension()
+                <br>onLayout() 设置子控件位置childView.layout()
+            </li>
+            <li>组合控件
+                <br>定义xml布局
+                <br>在构造器中加载布局进父布局 LayoutInflater.from(context).inflate(R.layout.layout_name, this);  
+            </li>
+            <li>自定义属性
+               <br>定义命名空间 xmlns:app="http://schemas.android.com/apk/res-auto" 
+               <br>获取属性集合 TypedArray typeArray = context.obtainStyledAttributes(attrs,R.styleable.MyView); 
+               <br>获取属性 int textColor = typeArray.getColor(R.styleable.MyView_textColor,defaultValue);
+               <br>关闭资源 typeArray.recycle(); 
+                <pre><code>
+//定义命名空间
+xmlns:app="http://schemas.android.com/apk/res-auto" 
+
+//使用
+&lt;com.test.MyView  
+        app:textColor="#ff0000"
+/&gt; 
+         
+//自定义View
+public MyView(Context context,AttributeSet attrs, int defStyle)    
+{    
+    super(context,attrs); 
+    
+    /*这里取得declare-styleable集合*/  
+    TypedArray typeArray = context.
+            obtainStyledAttributes(attrs,R.styleable.MyView); 
+    //TypedArray typeArray = context.getTheme().
+    //      obtainStyledAttributes(attrs,R.styleable.MyView, defStyle, 0); 
+        
+    /*这里从集合里取出相对应的属性值,第二参数是如果使用者没用配置该属性时所用的默认值*/  
+    int textColor = typeArray.getColor(R.styleable.MyView_textColor,0XFFFFFFFF);    
+    float textSize = typeArray.getDimension(R.styleable.MyView_textSize, 36); 
+    //
+    int n = typeArray.getIndexCount();  
+    for (int i = 0; i &lt; n; i++)  
+    {  
+        int attr = typeArray.getIndex(i);  
+        switch (attr)  
+        {  
+            case R.styleable.MyView_textSize: 
+                { 
+                    textSize = a.Dimension(attr);  
+                    break;
+                }
+        }  
+  
+    }
+    
+    /*关闭资源*/  
+    typeArray.recycle();    
+}    
+</code></pre>
+            </li>
+        </ul>
+
+        
 
         <h2>Implementing a Custom View</h2>
         <ul>
@@ -99,7 +497,7 @@
             </li>
         </ul>
 
-        <h2>Position Size padding  margins</h2>
+        <h2>Position Size padding margins</h2>
         <ul>
             <li>Position
                 <p>getLeft() and getTop() getRight() and getBottom()</p>
@@ -228,7 +626,7 @@ android:focusableInTouchMode="true"
             <li>显示/唤醒
                 <ul>
                     <li>android:visibility visible,invisible,gone(不显示,不占用空间)
-                        </p>
+                        
                     </li>
                     <li>android:keepScreenOn View在可见的情况下是否保持唤醒状态</li>
                 </ul>
@@ -316,7 +714,7 @@ android:focusableInTouchMode="true"
                 </ul>
             </li>
         </ul>
-        
+
         <h2>methon</h2>
 
 

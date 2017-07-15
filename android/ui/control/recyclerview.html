@@ -16,16 +16,66 @@
 <body>
     <main role="main">
         <h1>android RecyclerView</h1>
+        
+        <pre><code>
+mRecyclerView = findView(R.id.id_recyclerview);
+//设置布局管理器
+mRecyclerView.setLayoutManager(layout);
+//设置adapter
+mRecyclerView.setAdapter(adapter)
+//设置Item增加、移除动画
+mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//添加分割线
+mRecyclerView.addItemDecoration(new DividerItemDecoration(
+                getActivity(), DividerItemDecoration.HORIZONTAL_LIST));
+</code></pre>
 
-        <h2>ViewHolder</h2>
         <h2>Adapter</h2>
         <ul>
-            <li>OnCreateViewHolder,返回一个ViewHolder对象。
+            <li>OnCreateViewHolder(),需要创建并返回一个ViewHolder对象,inflate view,findViewById。
             </li>
-            <li>onBindViewHolder,绑定控件数据。
+            <li>onBindViewHolder(),绑定控件数据,ViewHolder+Position。
             </li>
-            <li>getItemCount,返回数据项个数</li>
+            <li>getItemCount(),返回数据项个数</li>
+            <li>ViewHolder</li>
         </ul>
+        <pre><code>
+class MyAdapter extends RecyclerView.Adapter&lt;MyAdapter.MyViewHolder>
+    {
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+        {
+            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
+                    HomeActivity.this).inflate(R.layout.item_home, parent,
+                    false));
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position)
+        {
+            holder.tv.setText(mDatas.get(position));
+        }
+
+        @Override
+        public int getItemCount()
+        {
+            return mDatas.size();
+        }
+
+        class MyViewHolder extends ViewHolder
+        {
+
+            TextView tv;
+
+            public MyViewHolder(View view)
+            {
+                super(view);
+                tv = (TextView) view.findViewById(R.id.id_num);
+            }
+        }
+    }</code></pre>
 
         <h2>LayoutManager</h2>
         <ul>
@@ -44,7 +94,8 @@
             <li>onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state)</li>
         </ul>
         <h2>ItemAnimator</h2>
-
+        <ul><li>更新数据使用notifyItemInserted(position)与notifyItemRemoved(position) </li></ul>
+        <h2>Click and LongClick</h2>
 
     </main>
 </body>

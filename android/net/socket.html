@@ -16,17 +16,26 @@
 <body>
     <main role="main">
         <h1>android socket</h1>
-        <h2>server:ServerSocket</h2>
-        <ul>
-            <li></li>
-        </ul>
         
         <h2>client:Socket</h2>
         <ul>
-            <li></li>
+            <li>创建socket对象，socket = new Socket(netAddress, port);
+                <br>数据输入，socket.getInputStream();
+                <br>数据输出，socket.getOutputStream();
+                <br>释放，client.close();
+            </li>
         </ul>
         
-        <h2></h2>
+        <h2>server:ServerSocket</h2>
+        <ul>
+            <li>创建SocketServer对象，serverSocket = new ServerSocket(port,10);
+                <br>获取已经连接到服务器上的Socket对象，client = serverSocket.accept();
+                <br>对socket进行输入输出
+                <br>释放，serverSocket.close();
+            </li>
+        </ul>
+        
+        <h2>SocketHelper</h2>
         <pre><code>
 public class SocketHelper {
     private static ServerSocket serverSocket = null;

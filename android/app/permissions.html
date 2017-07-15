@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android permissions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+
+
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+
+
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android permissions</h1>
+        <p>在默认情况下任何应用都没有权限执行对其他应用、操作系统或用户有不利影响的任何操作。</p>
+
+        <h2>正常权限和危险权限</h2>
+        <ul>
+            <li>protection_normal 系统在安装时授予权限<br>
+                <pre><code>
+access_location_extra_commands
+access_network_state
+access_notification_policy
+access_wifi_state
+bluetooth
+bluetooth_admin
+broadcast_sticky
+change_network_state
+change_wifi_multicast_state
+change_wifi_state
+disable_keyguard
+expand_status_bar
+get_package_size
+install_shortcut
+internet
+kill_background_processes
+modify_audio_settings
+nfc
+read_sync_settings
+read_sync_stats
+receive_boot_completed
+reorder_tasks
+request_ignore_battery_optimizations
+request_install_packages
+set_alarm
+set_time_zone
+set_wallpaper
+set_wallpaper_hints
+transmit_ir
+uninstall_shortcut
+use_fingerprint
+vibrate
+wake_lock
+write_sync_settings
+</code></pre>
+            </li>
+            <li>危险权限和权限组
+                <br>同一个权限组的任何一个权限被授权了，这个权限组的其他权限也自动被授权
+                <br>申请某一个权限的时候系统弹出的Dialog是对整个权限组的说明，而不是单个权限
+                <pre><code>
+calendar	
+read_calendar
+write_calendar
+
+
+camera	
+camera
+
+
+contacts	
+read_contacts
+write_contacts
+get_accounts
+
+
+location	
+access_fine_location
+access_coarse_location
+
+
+microphone	
+record_audio
+
+
+phone	
+read_phone_state
+call_phone
+read_call_log
+write_call_log
+add_voicemail
+use_sip
+process_outgoing_calls
+
+
+sensors	
+body_sensors
+
+
+sms	
+send_sms
+receive_sms
+read_sms
+receive_wap_push
+receive_mms
+
+
+storage	
+read_external_storage
+write_external_storage
+
+</code></pre>
+            </li>
+            <li>特殊权限<br>
+            <pre><code>
+system_alert_window 设置悬浮窗
+write_settings 修改系统设置
+
+
+申请SYSTEM_ALERT_WINDOW权限
+private static final int REQUEST_CODE = 1;
+private  void requestAlertWindowPermission() {
+    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+    intent.setData(Uri.parse("package:" + getPackageName()));
+    startActivityForResult(intent, REQUEST_CODE);
+}
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_CODE) {
+        if (Settings.canDrawOverlays(this)) {
+            Log.i(LOGTAG, "onActivityResult granted");
+        }
+    }
+}
+
+
+申请WRITE_SETTINGS权限
+private static final int REQUEST_CODE_WRITE_SETTINGS = 2;
+private void requestWriteSettings() {
+    Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+    intent.setData(Uri.parse("package:" + getPackageName()));
+    startActivityForResult(intent, REQUEST_CODE_WRITE_SETTINGS );
+}
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_CODE_WRITE_SETTINGS) {
+        if (Settings.System.canWrite(this)) {
+            Log.i(LOGTAG, "onActivityResult write settings granted" );
+        }
+    }
+}
+</code></pre></li>
+        </ul>
+
+        <h2>动态权限</h2>
+        <ul>
+            <li>checkSelfPermission() 检查权限</li>
+            <li>requestPermissions() 申请权限</li>
+            <li>onRequestPermissionsResult() 处理权限结果回调</li>
+            <li>shouldShowRequestPermissionRationale() 再次申请时可以提醒该权限的重要性</li>
+            <li><pre><code>
+if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+    // 没有权限。
+    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+            // 用户拒绝过这个权限了，应该提示用户，为什么需要这个权限。
+    } else {
+        // 申请授权。
+        ActivityCompat.requestPermissions(thisActivity, new String[]{Manifest.permission.READ_CONTACTS}, MMM);
+    }
+}
+
+...
+
+@Override
+public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    switch (requestCode) {
+        case MMM: {
+            if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 权限被用户同意，可以去放肆了。
+            } else {
+                // 权限被用户拒绝了，洗洗睡吧。
+            }
+            return;
+        }
+    }
+}
+</code></pre></li>
+        </ul>
+
+        <h2><a href="https://github.com/yanzhenjie/AndPermission">AndPermission</a></h2>
+        
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android JNI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+
+
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+
+
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>JNI</h1>
+        <p>java---jni--native</p>
+        <p>MediaScanner---libmedia_jni.so---libmedia.so</p>
+
+
+        <h2>Java层</h2>
+        <ul>
+            <li>在调用native函数前,运行时加载JNI库
+                <br>static{System.loadLibrary("media_jni");}
+            </li>
+            <li>native函数</li>
+        </ul>
+        <pre><code>
+public class MediaScanner{
+    static{
+        //①加载对应的JNI库，media_jni是JNI库的名字。
+        //实际加载动态库的时候会拓展成libmedia_jni.so，在Windows平台上将拓展为media_jni.dll。
+        System.loadLibrary("media_jni");
+        native_init();//调用native_init函数
+    }
+.......
+//非native函数
+publicvoid scanDirectories(String[] directories, String volumeName){
+  ......
+} 
+//②声明一个native函数。native为Java的关键字，表示它将由JNI层完成。
+privatestatic native final void native_init();
+    ......
+privatenative void processFile(String path, String mimeType,
+ MediaScannerClient client);
+    ......
+}
+</code></pre>
+
+        <h2></h2>
+        <ul>
+            <li>Include C++ Support
+                
+            </li>
+        </ul>
+
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>

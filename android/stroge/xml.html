@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>android xml</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js">
+    </script>
+    <script type="text/javascript" src="/js-base.js">
+    </script>
+</head>
+
+<body>
+    <main role="main">
+        <h1>android xml</h1>
+        
+        <h2>xml语法</h2>
+        <ul>
+            <li>元素要关闭标签</li>
+            <li>对大小写敏感</li>
+            <li>必须要有根元素(父元素）</li>
+            <li>属性值必须加引号</li>
+            <li>实体引用</li>
+        </ul>
+        
+        <h2>DOM 基于文档驱动方式</h2>
+        <ul>
+            <li>首先解析器读入整个XML文档到内存中，然后解析全部文件，并将文件分为独立的元素、属性等，以树结构的形式在内存中对XML文件进行表示，通过使用DOM API遍历XML树，根据需要修改文档或检索所需数据</li>
+            <li>DocumentBuilderFactory -->  DocumentBuilder --> Document </li>
+            <pre><code>
+public static List&lt;subject> getSubjectList(InputStream stream)
+ { tv = (TextView)findViewById(R.id.tv);
+      try {
+          //打开xml文件到输入流
+          InputStream stream = getAssets().open("subject.xml");
+          //得到 DocumentBuilderFactory 对象
+          DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+          //得到DocumentBuilder对象
+          DocumentBuilder builder = builderFactory.newDocumentBuilder();
+          //建立Document存放整个xml的Document对象数据
+          Document document = builder.parse(stream);
+          //得到 XML数据的"根节点" 
+          Element element = document.getDocumentElement();
+          //获取根节点的所有language的节点
+          NodeList list = element.getElementsByTagName("language");
+           //遍历所有节点
+          for (int i= 0;i&lt;=list.getLength();i++){
+          //获取lan的所有子元素
+              Element language = (Element) list.item(i);
+          //获取language的属性（这里即为id）并显示
+              tv.append(lan.getAttribute("id")+"\n");
+        //获取language的子元素 name 并显示                       tv.append(sub.getElementsByTagName("name").item(0).getTextContent()+"\n");
+       //获取language的子元素usage 并显示                    tv.append(sub.getElementsByTagName("usage").item(0).getTextContent()+"\n");
+          }
+
+</code></pre>
+        </ul>
+        
+        <h2>PULL </h2>
+        <ul>
+          <li>PULL提供了开始元素和结束元素。当某个元素开始时，我们可以调用parser．nextText从XML文档中提取所有字符数据，与SAX不同的是，在PULL解析过程中触发相应的事件调用方法返回的是数字，且我们需要自己获取产生的事件然后做相应的操作，而不像SAX那样由处理器触发一种事件的方法从而执行代码。当解释到一个文档结束时，自动生成EndDocument事件。</li>
+           <li>android解析xml的方式  xmlResourceParser = resources.getXml(R.xml.subject);</li>
+           <li>判断标签类型 xrp.getEventType() start/end_document,start/end_tag,text</li>
+           <li>读取数据 getName() getAttributeValue() nextText()</li>
+           <li>解析下一个事件 xrp.next();</li>
+            <li></li>
+            <pre><code>
+public class MainActivity extends Activity {
+  private EditText et;
+  private Button myButton;
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+       myButton = (Button) this.findViewById(R.id.btn01);
+      et = (EditText) this.findViewById(R.id.edittext01);
+      myButton.setOnClickListener(new OnClickListener() {
+      //可变字符序列，比StringBuffer块
+          StringBuilder sb = new StringBuilder("");
+          Resources res = getResources();
+          XmlResourceParser xrp = res.getXml(R.xml.subject);
+          @Override
+          public void onClick(View v) {
+              int counter = 0;
+              try {
+
+                  // 判断是否到了文件的结尾
+                  while (xrp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                      //文件的内容的起始标签开始，这里的起始标签是subject.xml文件里面&lt;subjects>标签下面的第一个标签
+                      int eventType=xrp.getEventType();
+                      switch (eventType) {
+                          case XmlPullParser.START_DOCUMENT:
+                              break;
+                          case  XmlPullParser.START_TAG:
+                              String tagname = xrp.getName();
+                              if (tagname.endsWith("language")) {
+                                  counter++;
+                                  sb.append("这是第" + counter + "种语言"+"\n");
+                                  //可以调用XmlPullParser的getAttributte()方法来获取属性的值
+                                  sb.append("语言id是："+xrp.getAttributeValue(0)+"\n");
+                              }
+                              else if(tagname.equals("name")){
+                                  //可以调用XmlPullParser的nextText()方法来获取节点的值
+                                  sb.append("语言名称是："+xrp.nextText()+"\n");
+                              }
+                              else if(tagname.equals("teacher")){
+                                  sb.append("用途是："+xrp.nextText()+"\n");
+                              }
+                              break;
+                          case XmlPullParser.END_TAG:
+                              break;
+                          case XmlPullParser.TEXT:
+                              break;
+                      }
+                      //解析下一个事件
+                      xrp.next();
+                  }
+                  //StringBuilder要调用toString()方法并显示
+                  et.setText(sb.toString());
+              } catch (XmlPullParserException e) {
+
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+          }
+      });
+  }
+</code></pre>
+        </ul>
+        
+        <h2>SAX</h2>
+        <ul><li>基于事件驱动，在读取XML文档内容时，事件源顺序地对文档进行扫描，当扫描到文档的开始与结束(Document)标签、节点元素的开始与结束(Element)标签时，直接调用对应的方法，并将状态信息以参数的形式传递到方法中，然后我们可以依据状态信息来执行相关的自定义操作。</li></ul>
+        
+    </main>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
