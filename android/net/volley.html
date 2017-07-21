@@ -6,23 +6,168 @@
     <title>Volley</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>      
-     
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+
     <script type="text/javascript" src="/js-base.js"></script>
-     
+
 </head>
 
 <body>
     <main role="main">
         <h1>Volley</h1>
+
+        <h2>RequestQueue+Request</h2>
+        <ul>
+            <li>RequestQueue请求队列，缓存所有的HTTP请求，并发地发出这些请求。在Application中创建单例
+                <br>RequestQueue mQueue = Volley.newRequestQueue(context);
+            </li>
+            <li>Request,Http请求
+                <pre><code>
+//StringRequest
+//get
+new StringRequest(url,new Response.Listener&lt;String>(),new Response.ErrorListener());
+//post
+new StringRequest(Method.POST, url,  listener, errorListener) {  
+    @Override  
+    protected Map&lt;String, String> getParams() throws AuthFailureError {  
+        Map&lt;String, String> map = new HashMap&lt;String, String>();  
+        map.put("params1", "value1");  
+        map.put("params2", "value2");  
+        return map;  
+    }  
+};  
+
+
+//JsonRequest JsonObjectRequest和JsonArrayRequest
+new JsonObjectRequest(url, null,new Response.Listener&lt;JSONObject>(), new Response.ErrorListener());
+
+//
+new ImageRequest(url,new Response.Listener&lt;Bitmap>(), 
+                0, 0,  //指定最大的宽度和高度，如网络图片大于这里的最大值，将对图片进行压缩，0表示不会进行压缩
+                Config.RGB_565, 
+                new Response.ErrorListener()
+                );  
+</code></pre>
+            </li>
+            <li>发送请求
+                <br>mQueue.add(request);
+            </li>
+        </ul>
+        <h2>RequestQueue+ImageCache+imageLoader</h2>
+        <pre><code>
+public class BitmapCache implements ImageCache {  
+  
+    private LruCache&lt;String, Bitmap> mCache;  
+  
+    public BitmapCache() {  
+        int maxSize = 10 * 1024 * 1024;  
+        mCache = new LruCache&lt;String, Bitmap>(maxSize) {  
+            @Override  
+            protected int sizeOf(String key, Bitmap bitmap) {  
+                return bitmap.getRowBytes() * bitmap.getHeight();  
+            }  
+        };  
+    }  
+  
+    @Override  
+    public Bitmap getBitmap(String url) {  
+        return mCache.get(url);  
+    }  
+  
+    @Override  
+    public void putBitmap(String url, Bitmap bitmap) {  
+        mCache.put(url, bitmap);  
+    }  
+  
+} 
+
+ImageLoader imageLoader = new ImageLoader(mQueue, new BitmapCache());  
+
+ImageListener listener = ImageLoader.getImageListener(imageView,  
+        R.drawable.default_image, R.drawable.failed_image);  
         
-        
+imageLoader.get(url, listener, maxWidt, maxHeight);  
+</code></pre>
+       
+        <h2>NetworkImageView</h2>
+        <pre><code>
+&lt;com.android.volley.toolbox.NetworkImageView   
+        android:id="@+id/network_image_view"  
+        android:layout_width="200dp"  
+        android:layout_height="200dp"  
+        android:layout_gravity="center_horizontal"  
+        />  
+
+networkImageView = (NetworkImageView) findViewById(R.id.network_image_view);
+networkImageView.setDefaultImageResId(R.drawable.default_image);  
+networkImageView.setErrorImageResId(R.drawable.failed_image);  
+networkImageView.setImageUrl(url,imageLoader); 
+</code></pre>
+       
+        <h2>自定义GsonRequest</h2>
+        <pre><code>
+public class GsonRequest&lt;T> extends Request&lt;T> {  
+  
+    private final Listener&lt;T> mListener;  
+  
+    private Gson mGson;  
+  
+    private Class&lt;T> mClass;  
+  
+    public GsonRequest(int method, String url, Class&lt;T> clazz, Listener&lt;T> listener,  
+            ErrorListener errorListener) {  
+        super(method, url, errorListener);  
+        mGson = new Gson();  
+        mClass = clazz;  
+        mListener = listener;  
+    }  
+  
+    public GsonRequest(String url, Class&lt;T> clazz, Listener&lt;T> listener,  
+            ErrorListener errorListener) {  
+        this(Method.GET, url, clazz, listener, errorListener);  
+    }  
+  
+    @Override  
+    protected Response&lt;T> parseNetworkResponse(NetworkResponse response) {  
+        try {  
+            String jsonString = new String(response.data,  
+                    HttpHeaderParser.parseCharset(response.headers));  
+            return Response.success(mGson.fromJson(jsonString, mClass),  
+                    HttpHeaderParser.parseCacheHeaders(response));  
+        } catch (UnsupportedEncodingException e) {  
+            return Response.error(new ParseError(e));  
+        }  
+    }  
+  
+    @Override  
+    protected void deliverResponse(T response) {  
+        mListener.onResponse(response);  
+    }  
+  
+} 
+
+
+GsonRequest&lt;Weather> gsonRequest = new GsonRequest&lt;Weather>(  
+        "http://www.weather.com.cn/data/sk/101010100.html", Weather.class,  
+        new Response.Listener&lt;Weather>() {  
+            @Override  
+            public void onResponse(Weather weather) {  
+                WeatherInfo weatherInfo = weather.getWeatherinfo();  
+                Log.d("TAG", "city is " + weatherInfo.getCity());  
+                Log.d("TAG", "temp is " + weatherInfo.getTemp());  
+                Log.d("TAG", "time is " + weatherInfo.getTime());  
+            }  
+        }, new Response.ErrorListener() {  
+            @Override  
+            public void onErrorResponse(VolleyError error) {  
+                Log.e("TAG", error.getMessage(), error);  
+            }  
+        });  
+mQueue.add(gsonRequest);
+</code></pre>
+   
     </main>
 </body>
-
-
-
-
 
 
 
