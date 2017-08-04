@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
     <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
-     
-     
+
+
     <script type="text/javascript" src="/js-base.js"></script>
-     
+
 </head>
 
 <body>
@@ -22,293 +22,276 @@
             <a href="https://developer.android.com/guide/index.html"> Develop
 API Guides</a>
 
+            <h1>android架构</h1>
+            <ul>
+                <h2>系统架构</h2>
+                <ul>
+                    <li>参考
+                        <br>
+                        <a href="http://blog.csdn.net/spy19881201/article/details/5775484">android系统体系结构</a>
+                    </li>
+                    <li>
+                        <img src="/picture/android_system_architecture.jpg" />
+                    </li>
+                    <li>4、应用程序(Applications)</li>
+                    <li>3、应用程序框架(Application Frameworks)</li>
+                    <li>2、系统运行库与Android运行环境(Libraris , Android Runtime)</li>
+                    <li>1、Linux内核(Linux Kernel)</li>
+                </ul>
 
-            <h2>系统架构</h2>
-            <ul>
-                <li>参考
-                    <br>
-                    <a href="http://blog.csdn.net/spy19881201/article/details/5775484">android系统体系结构</a>
-                </li>
-                <li>
-                    <img src="/picture/android_system_architecture.jpg" />
-                </li>
-                <li>4、应用程序(Applications)</li>
-                <li>3、应用程序框架(Application Frameworks)</li>
-                <li>2、系统运行库与Android运行环境(Libraris , Android Runtime)</li>
-                <li>1、Linux内核(Linux Kernel)</li>
-            </ul>
-            
-            <h2>软件架构</h2>
-            <ul>
-                <li><a>MVC MVP MVVM</a></li>
-            </ul>
+                <h2>软件架构</h2>
+                <ul>
+                    <li><a>MVC MVP MVVM</a></li>
 
-            <h2>manifest</h2>
-            <ul>
-                <li><a>permission</a></li>
-            </ul>
+                    <h3>依赖注入</h3>
+                    <ul>
+                        <li><a href="/java/java/di.html">DI</a>
+                        </li>
+                        <li><a href="lib/dragger2.html">Dragger2</a>
+                        </li>
+                        <li><a href="annotate/butterknife.html">View的绑定注解Butter Knife</a> </li>
+                    </ul>
+                </ul>
 
-            <h2>app</h2>
-            <ul>
-                <li><a href="app/context.html">context</a>
-                </li>
-                <li><a href="app/application.html">application</a>
-                </li>
-                <li><a href="app/activity.html">activity</a>
-                </li>
-                <li><a href="app/fragment.html">fragment</a>
-                </li>
-                <li><a href="app/service.html">service</a>
-                </li>
-            </ul>
-            
-            <h2>framework</h2>
-            <ul>
-                <li>PackageManager</li>
-                <li>ActivityManager</li>
-                <li>ResourceManager</li>
-                <li>WindowManager</li>
-                <li>ViewSystem</li>
-                <li>NotificationManager</li>
-                
-                <li>TelephonyManager</li>
-                <li>LocationManager</li>
-                <li>XMPP Service</li>
-            </ul>
-            
-            
+                <h2>app</h2>
+                <ul>
+                    <li><a href="app/context.html">context</a>
+                    </li>
+                    <li><a href="app/application.html">application</a>
+                    </li>
+                    <li><a href="app/activity.html">activity</a>
+                    </li>
+                    <li><a href="app/fragment.html">fragment</a>
+                    </li>
+                    <li><a href="app/service.html">service</a>
+                    </li>
+                </ul>
 
-            <h2>组件/应用通信</h2>
-            <ul>
-                <li><a href="communication/intent.html">Intent</a>
-                </li>
-                <li><a href="communication/broadcastreceiver.html">BroadcastReceiver</a>
-                </li>
-                <li><a href="communication/binder.html">Binder</a>
-                </li>
-                <li><a href="app/service.html">service</a>
-                </li>
-                <li><a href="communication/aidl.html">AIDL</a>
-                </li>
-                <li><a href="communication/messenger.html">messenger</a>
-                </li>
-                <li><a href="communication/contentprovider.html">ContentProvider</a>
-                </li>
-            </ul>
-            
-            <h2>事件总线</h2>
-            <ul>
-                <li><a href="lib/eventbus.html">EventBus</a>
-                </li>
-                <li><a href="lib/rxbus.html">RxBus</a>
-                </li>
-            </ul>
-            
-            <h2>多线程/多进程</h2>
-            <ul>
-                <li><a href="thread/multiprocess.html">multiProcess</a>
-                </li>
-                <li><a href="thread/asynctask.html">asyncTask</a>
-                </li>
-                <li><a href="thread/handlerthread.html">handlerThread</a>
-                </li>
-                <li><a href="thread/threadpool.html">threadPool</a>
-                </li>
+                <h2>framework</h2>
+                <ul>
+                    <li>PackageManager</li>
+                    <li>ActivityManager</li>
+                    <li>ResourceManager</li>
+                    <li>WindowManager</li>
+                    <li>ViewSystem</li>
+                    <li>NotificationManager</li>
+
+                    <li>TelephonyManager</li>
+                    <li>LocationManager</li>
+                    <li>XMPP Service</li>
+                </ul>
+
+                <h2>硬件</h2>
+                <ul>
+                    <li><a href="media/mediaplayer.html">音视频播放：MediaPlayer</a></li>
+                    <li><a href="media/soundpool.html">密集音频池：SounPool</a></li>
+                    <li><a href="media/audiomanager.html">音量管理：AudioManager</a></li>
+                    <li><a href="media/recorder.html">MediaRecorder</a></li>
+                    <li><a href="media/recorder.html">AudioRecord</a></li>
+                    <li><a href="media/camera.html">camera</a></li>
+                    <li><a href="sensor/sensor.html">传感器</a></li>
+                </ul>
             </ul>
 
-            <h2>异步操作库</h2>
-            <ul>
-                <li><a href="/reactivex/reactivex.html">ReactiveX</a></li>
-            </ul>
-            
-            
-            
-            <h2>数据存储</h2>
-            <ul>
-                <li><a href="stroge/sharepreferences.html">SharePreferences</a>
-                </li>
-                <li><a href="stroge/sqlite.html">SQLite</a>
-                </li>
-                <li><a href="stroge/file.html">File</a>
-                </li>
-                <li><a href="communication/contentprovider.html">ContentProvider</a>
-                </li>
-            </ul>
-
-            <h2>ORM</h2>
-            <ul>
-                <li>greenDAO</li>
-            </ul>
-            
-            <h2>数据加密</h2>
-            
-            <h2>缓存管理</h2>
-            
-            <h2>网络通信</h2>
-            <ul>
-                <li><a>bluethooth</a>
-                </li>
-                <li><a>wifi</a>
-                </li>
-                <li><a>NFC</a>
-                </li>
-                <li><a>http https</a>
-                </li>
-            </ul>
-            
-            <h2>网络请求库</h2>
-            <ul>
-                <li><a href="net/okhttp.html">okhttp</a></li>
-                <li><a href="net/retrofit.html">Retrofit</a></li>
-                <li><a href="net/volley.html">volley</a></li>
-            </ul>
-            
-            <h2>Json转换</h2>
-            <ul>
-                <li><a href="/javascript/json.html">Json</a>
-                </li>
-                <li><a href="net/gson.html">Gson</a>
-                </li>
-            </ul>
-            
-            <h2>图片加载</h2>
-            <ul>
-                <li>Glide</li>
-                <li>Fresco</li>
-                <li>七牛与阿里云存储 图片管理方案</li>
-                <li>网络图片加载优化</li>
-            </ul>
-            
-            <h2>WebKit</h2>
-            <ul>
-                <li>WedView</li>
-            </ul>
-            
-            
-            
-
-            <h2>应用资源</h2>
-            <ul>
-                <li><a href="resource/resource.html">resource</a>
-                </li>
-                <li><a href="resource/attrs.html">attrs</a>
-                </li>
-                <li><a href="resource/values.html">values</a>
-                </li>
-                <li><a href="resource/drawable.html">drawable</a>
-                </li>
-                <li><a href="resource/animation.html">animation</a>
-                </li>
-                <li><a href="resource/colors.html">colors</a>
-                </li>
-                <li><a href="resource/style.html">styly theme</a>
-                </li>
-                <li><a href="resource/menu.html">menu</a>
-                </li>
-
-            </ul>
-
-            <h2>View</h2>
-            <ul>
-                <li><a href="view/view.html">View</a>
-                </li>
-                <li><a href="view/viewgroup.html">Layout</a>
-                </li>
-                <li><a href="view/window.html">window</a>
-                </li>
-                <li><a href="view/remoteview.html">RemoteViews</a>
-                </li>
-                <li><a href="view/draw.html">View绘制</a>
-                </li>
-                <li><a href="view/event.html">View事件体系</a>
-                </li>
-            </ul>
-
-            <h2>控件</h2>
-            <ul>
-                <li><a href="ui/controls.html">控件</a></li>
-                <li><a href="ui/adaptation.html">适配</a></li>
-                <li><a href="ui/notification.html">通知</a></li>
-                <li><a href="ui/appwidget.html">应用小窗口</a></li>
-                <li><a href="ui/statusbar.html">状态栏</a></li>
-            </ul>
-
-            <h2>UI-数据绑定</h2>
-            <ul>
-                <li><a href="databinding/databindinglibrary.html">android Data Binding Library</a>
-                </li>
-                <li>RxBing
-                    <p>UI --> Observable
-                        <br>UIEvent --> onNext()
-                        <br>Listener --> Observer</p>
-                </li>
-                <li><a>KBinding</a></li>
-            </ul>
-
-            <h2>图像处理</h2>
-            <ul>
-                <li><a href="https://www.oschina.net/question/231733_44154">Android实战经验之图像处理及特效处理的集锦（总结版）</a></li>
-                <li><a href="graphical.html/canvas.html">绘图 canvas path </a></li>
-            </ul>
-
-           
-            
-            
-            
-            <h2>硬件</h2>
-            <ul>
-                <li><a href="media/mediaplayer.html">音视频播放：MediaPlayer</a></li>
-                <li><a href="media/soundpool.html">密集音频池：SounPool</a></li>
-                <li><a href="media/audiomanager.html">音量管理：AudioManager</a></li>
-                <li><a href="media/recorder.html">MediaRecorder</a></li>
-                <li><a href="media/recorder.html">AudioRecord</a></li>
-                <li><a href="media/camera.html">camera</a></li>
-                <li><a href="sensor/sensor.html">传感器</a></li>
-            </ul>
-
-            
-            
-            
-
-            <h2>注解</h2>
-            <ul>
-                <li><a href="/java/java/annotate.html">annotate</a>
-                </li>
-                <li><a href="annotate/supportlib.html">Android Support Annotations Library </a>
-                </li>
-                <li><a href="annotate/butterknife.html">View的绑定注解Butter Knife</a>
-                </li>
-            </ul>
-
-            <h2>依赖注入</h2>
-            <ul>
-                <li><a href="/java/java/di.html">DI</a>
-                </li>
-                <li><a href="lib/dragger2.html">Dragger2</a>
-                </li>
-            </ul>
-
-            <h2>retrolambda</h2>
-            <ul>
-                <li><a href="lib/retrolambda.html">gradle-retrolambda</a>
-                </li>
-            </ul>
-            
-            
-            
-            <h2>开发工具</h2>
-            <ul>
-                <li><a href="tool/androidstudio.html">Android Studio</a></li>
-            </ul>
-            
-            <h2>测试</h2>
 
 
-            
-            
-            
-            
-            <h2>NDK</h2>
+            <h1>组件通信 多线程</h1>
+            <ul>
+                <h2>组件/应用通信</h2>
+                <ul>
+                    <li><a href="communication/intent.html">Intent</a>
+                    </li>
+                    <li><a href="communication/broadcastreceiver.html">BroadcastReceiver</a>
+                    </li>
+                    <li><a href="communication/binder.html">Binder</a>
+                    </li>
+                    <li><a href="app/service.html">service</a>
+                    </li>
+                    <li><a href="communication/aidl.html">AIDL</a>
+                    </li>
+                    <li><a href="communication/messenger.html">messenger</a>
+                    </li>
+                    <li><a href="communication/contentprovider.html">ContentProvider</a>
+                    </li>
+                </ul>
+
+                <h2>事件总线</h2>
+                <ul>
+                    <li><a href="lib/eventbus.html">EventBus</a>
+                    </li>
+                    <li><a href="lib/rxbus.html">RxBus</a>
+                    </li>
+                </ul>
+
+                <h2>多线程/多进程</h2>
+                <ul>
+                    <li><a href="thread/multiprocess.html">multiProcess</a>
+                    </li>
+                    <li><a href="thread/asynctask.html">asyncTask</a>
+                    </li>
+                    <li><a href="thread/handlerthread.html">handlerThread</a>
+                    </li>
+                    <li><a href="thread/threadpool.html">threadPool</a>
+                    </li>
+                </ul>
+
+                <h2>异步操作库</h2>
+                <ul>
+                    <li><a href="/reactivex/reactivex.html">ReactiveX</a></li>
+                </ul>
+            </ul>
+
+
+            <h1>网络 数据</h1>
+            <ul>
+                <h2>网络通信</h2>
+                <ul>
+                    <li><a>bluethooth</a>
+                    </li>
+                    <li><a>wifi</a>
+                    </li>
+                    <li><a>NFC</a>
+                    </li>
+                    <li><a>http https</a>
+                    </li>
+                </ul>
+
+                <h2>网络请求库</h2>
+                <ul>
+                    <li><a href="net/okhttp.html">okhttp</a></li>
+                    <li><a href="net/retrofit.html">Retrofit</a></li>
+                    <li><a href="net/volley.html">volley</a></li>
+                </ul>
+                <h2>数据存储</h2>
+                <ul>
+                    <li><a href="stroge/sharepreferences.html">SharePreferences</a>
+                    </li>
+                    <li><a href="stroge/sqlite.html">SQLite</a>
+                    </li>
+                    <li><a href="stroge/file.html">File</a>
+                    </li>
+                    <li><a href="communication/contentprovider.html">ContentProvider</a>
+                    </li>
+                </ul>
+
+                <h2>ORM</h2>
+                <ul>
+                    <li>greenDAO</li>
+                </ul>
+
+                <h2>数据加密</h2>
+
+                <h2>缓存管理</h2>
+
+                <h2>Json转换</h2>
+                <ul>
+                    <li><a href="/javascript/json.html">Json</a>
+                    </li>
+                    <li><a href="net/gson.html">Gson</a>
+                    </li>
+                </ul>
+
+                <h2>图片加载</h2>
+                <ul>
+                    <li>Glide</li>
+                    <li>Fresco</li>
+                    <li>七牛与阿里云存储 图片管理方案</li>
+                    <li>网络图片加载优化</li>
+                </ul>
+            </ul>
+
+
+
+
+
+            <h1>视图</h1>
+            <ul>
+                <h2>应用资源</h2>
+                <ul>
+                    <li><a href="resource/resource.html">resource</a>
+                    </li>
+                    <li><a href="resource/attrs.html">attrs</a>
+                    </li>
+                    <li><a href="resource/values.html">values</a>
+                    </li>
+                    <li><a href="resource/drawable.html">drawable</a>
+                    </li>
+                    <li><a href="resource/animation.html">animation</a>
+                    </li>
+                    <li><a href="resource/colors.html">colors</a>
+                    </li>
+                    <li><a href="resource/style.html">styly theme</a>
+                    </li>
+                    <li><a href="resource/menu.html">menu</a>
+                    </li>
+
+                </ul>
+
+                <h2>View</h2>
+                <ul>
+                    <li><a href="view/view.html">View</a>
+                    </li>
+                    <li><a href="view/viewgroup.html">Layout</a>
+                    </li>
+                    <li><a href="view/window.html">window</a>
+                    </li>
+                    <li><a href="view/remoteview.html">RemoteViews</a>
+                    </li>
+                    <li><a href="view/draw.html">View绘制</a>
+                    </li>
+                    <li><a href="view/event.html">View事件体系</a>
+                    </li>
+                </ul>
+
+                <h2>控件</h2>
+                <ul>
+                    <li><a href="ui/controls.html">控件</a></li>
+                    <li><a href="ui/adaptation.html">适配</a></li>
+                    <li><a href="ui/notification.html">通知</a></li>
+                    <li><a href="ui/appwidget.html">应用小窗口</a></li>
+                    <li><a href="ui/statusbar.html">状态栏</a></li>
+                </ul>
+
+                <h2>UI-数据绑定</h2>
+                <ul>
+                    <li><a href="databinding/databindinglibrary.html">android Data Binding Library</a>
+                    </li>
+                    <li>RxBing
+                        <p>UI --> Observable
+                            <br>UIEvent --> onNext()
+                            <br>Listener --> Observer</p>
+                    </li>
+                    <li><a>KBinding</a></li>
+                </ul>
+
+                <h2>图像处理</h2>
+                <ul>
+                    <li><a href="https://www.oschina.net/question/231733_44154">Android实战经验之图像处理及特效处理的集锦（总结版）</a></li>
+                    <li><a href="graphical.html/canvas.html">绘图 canvas path </a></li>
+                </ul>
+            </ul>
+
+
+
+
+            <h1>其他</h1>
+            <ul>
+                <h2>retrolambda</h2>
+                <ul>
+                    <li><a href="lib/retrolambda.html">gradle-retrolambda</a>
+                    </li>
+                </ul>
+
+                <h2>开发工具</h2>
+                <ul>
+                    <li><a href="tool/androidstudio.html">Android Studio</a></li>
+                </ul>
+
+                <h2>测试</h2>
+
+
+                <h2>NDK</h2>
+            </ul>
 
 
         </article>
