@@ -11,7 +11,7 @@
 			statement2
 			return x
 		
-		# 可变参数  传入list或tuple
+		# 传入list或tuple
 		def calc(numbers):
     		sum = 0
     		for n in numbers:
@@ -19,7 +19,7 @@
     		return sum
 		>>> calc([1, 2, 3])
 
-		# 可变参数 *  params-->list,tuple
+		# 可变参数  传入多个参数 *params-->list,tuple
 		def calc(*numbers):
     		sum = 0
     		for n in numbers:
@@ -30,7 +30,7 @@
 		>>> calc(*nums)
 		
 
-		# 关键字参数 ** params-->dict
+		# 关键字参数 ** params-->dict 拷贝
 		def person(name, age, **kw):
     		print('name:', name, 'age:', age, 'other:', kw)
 		>>> person('Michael', 30)

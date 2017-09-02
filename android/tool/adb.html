@@ -6,25 +6,36 @@
     <title>adb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style-base.css">
-    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>      
-     
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+
     <script type="text/javascript" src="/js-base.js"></script>
-     
+
 </head>
 
 <body>
     <main role="main">
         <h1>adb</h1>
+
+        <ul>
+            <li>dataBase adb shell sqlite3 /data/data/package_name/databases/dbName</li>
+        </ul>
+
+        <li>abd devices 列出所有的已连接设备的序列号</li>
+
+
+        <h2>getevent</h2>
+        <ul>
+            <li>pm list packages </li>
+            <li>getevent 获取事件信息 0035和0036代表实际触屏时的绝对坐标x，y，16进制</li>
+        </ul>
         
-        <ul><li>dataBase adb shell sqlite3 /data/data/package_name/databases/dbName</li></ul>
+        
+        
+        
         
         
     </main>
 </body>
-
-
-
-
 
 
 
