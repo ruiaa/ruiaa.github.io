@@ -4,8 +4,16 @@
 	<br>添加 listName.append(val),listName.insert(index,val)
 	<br>删除 list末尾的元素listName.pop(),listName.pop(index)
 	<br>替换 listName[index]=newVal
-	<br>分割 [from:toNext]	[from:toNext:every]	
-
+	<br>分割 [from:toNext]	[from:toNext:every]
+	
++   初始化
+    
+            [n for n in range(5, 10)]
+            # [5, 6, 7, 8, 9]
+            ['x' for n in range(5)]
+            # ['x', 'x', 'x', 'x', 'x']
+            ['z']*5
+            # ['z', 'z', 'z', 'z', 'z']
 
 +	()	tuple元组 (value,) 一旦初始化就不能修改
 	<br>定义一个空的tuple，可以写成()

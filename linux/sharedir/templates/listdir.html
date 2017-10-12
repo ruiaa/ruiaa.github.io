@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" src="/static/css-base.css" />
+
+    <title>share</title>
+</head>
+<body>
+<form action="." method=post enctype=multipart/form-data>
+		<br>
+    <input type=file name=file value="选择文件">
+    <br><br>
+    <input type=submit value="确定上传">
+    <br>
+</form>
+{% for i in dir_infos %}
+<p><a href="./{{ i.name }}">{{ i.display }}</a>
+    {% if i.openable %}
+    <a href="./{{ i.name }}?download=true">  下载  </a>
+    {% endif %}
+    <br>{{ i.get_modify_time_str() }} {{ i.get_size_str() }}</p>
+{% endfor %}
+</body>
+</html>
