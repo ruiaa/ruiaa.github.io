@@ -1,0 +1,26 @@
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+
+
+    @OnEditorAction(R.id.title_input)
+    public boolean onEditAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+            String text = input.getText().toString().trim();
+            if (text.isEmpty()) return false;
+            SearchResultActivity.startSearchResultActivity(text);
+            AppKeyStorage.saveSearchHistory(text, searchType);//键盘搜索键
+            finish();
+            return true;
+        }
+        return false;
+    }
+
+
+    <EditText
+        android:id="@+id/title_input"
+        style="@style/search_edit"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+        />

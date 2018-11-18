@@ -29,13 +29,13 @@ supervisor通过INI格式配置文件进行配置，很容易掌握，它为每�
     
 ##  
 
-+   安装
++   安装 python2
     +   yum install python-setuptools
     +   easy_install pip
     +   pip install supervisor
     
 +   配置
-    +   echo_supervisord_conf > supervisord.conf
+    +   echo_supervisord_conf > /etc/supervisord.conf
     +   [unix_http_server]
         +   file=/home/supervisor/supervisor.sock  默认/tmp目录是存放临时文件的，里面的文件是会被 Linux 系统删除
     +   [supervisord]
@@ -272,9 +272,17 @@ supervisor通过INI格式配置文件进行配置，很容易掌握，它为每�
 
 
 +   启动
-    +   supervisord
+    +   supervisord -c /etc/supervisord.conf
     
 #   supervisorctl
++   进入shell  supervisorctl -c /etc/supervisord.conf
+    +   status    # 查看程序状态
+    +   stop usercenter   # 关闭 usercenter 程序
+    +   start usercenter  # 启动 usercenter 程序
+    +   restart usercenter    # 重启 usercenter 程序
+    +   reread    ＃ 读取有更新（增加）的配置文件，不会启动新添加的程序
+    +   update    ＃ 重启配置文件修改过的程序
+    
 supervisorctl stop programxxx，停止某一个进程(programxxx)，programxxx 为 [program:beepkg] 里配置的值，这个示例就是 beepkg。
 supervisorctl start programxxx，启动某个进程
 supervisorctl restart programxxx，重启某个进程
@@ -283,4 +291,9 @@ supervisorctl stop groupworker:name1 ，结束 groupworker:name1 这个进程 (s
 supervisorctl stop all，停止全部进程，注：start、restart、stop 都不会载入最新的配置文件。
 supervisorctl reload，载入最新的配置文件，停止原有进程并按新的配置启动、管理所有进程。
 supervisorctl update，根据最新的配置文件，启动新配置或有改动的进程，配置没有改动的进程不会受影响而重启。
+
+supervisorctl stop canteendata
+ps -ef | grep supervisor | grep -v grep
+
+
 [参考](http://www.restran.net/2015/10/04/supervisord-tutorial/)

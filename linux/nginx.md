@@ -46,9 +46,9 @@
     +   make && make install
 +   安装 Nginx
     +   cd ~
-    +   wget http://nginx.org/download/nginx-1.13.5.tar.gz
-    +   tar -zxvf nginx-1.13.5.tar.gz
-    +   cd nginx-1.13.5  
+    +   wget http://nginx.org/download/nginx-1.13.6.tar.gz
+    +   tar -zxvf nginx-1.13.6.tar.gz
+    +   cd nginx-1.13.6
     +   ./configure --prefix=/usr/local/nginx --with-pcre=/usr/local/pcre --with-zlib=/usr/local/zlib
     +   make && make install
 #   
@@ -57,9 +57,20 @@
 +   停止： /usr/local/nginx/sbin/nginx –s stop
 +   强制关闭：pkill nginx
 +   测试配置文件是否正常： /usr/local/nginx/sbin/nginx –t
-/usr/local/webserver/nginx/sbin/nginx -s reload            # 重新载入配置文件
-/usr/local/webserver/nginx/sbin/nginx -s reopen            # 重启 Nginx
-/usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
+/usr/local/nginx/sbin/nginx -s reload            # 重新载入配置文件
+/usr/local/nginx/sbin/nginx -s reopen            # 重启 Nginx
+/usr/local/nginx/sbin/nginx -s stop              # 停止 Nginx
+
++   win
+    
+        cd
+        nginx                       # 启动
+        nginx -s reload             # 重新载入配置文件
+        nginx -s stop               # 退出
+        nginx -s quit               # 平滑退出
+        nginx -s reopen             # 重新打开日志文件
+        
+
 
 +   用户及用户组 
     +   /usr/sbin/groupadd groupname

@@ -84,6 +84,8 @@ texture
 纹理
 vertices
 顶点
+captcha
+验证码 全自动区分计算机和人类的图灵测试（Completely Automated Public Turing test to tell Computers and Humans Apart）
 
 
 

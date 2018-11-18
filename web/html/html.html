@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>html学习</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style-base.css">
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>      
+     
+    <script type="text/javascript" src="/js-base.js"></script>
+     
+</head>
+
+<body>
+    <h1>html学习</h1>
+    <h2>转移字符</h2>
+
+<div>
+    <section>
+        <h2>html文档基础结构</h2>
+        <ul>
+            <li>DOCTYPE</li>
+            <li>html
+                <ul>
+                    <li>lang</li>
+                    <br>
+                    <li>head
+                        <ul>
+                            <li>meta
+                                <ul>
+                                    <li>charset</li>
+                                </ul>
+                            </li>
+                            <li>title</li>
+                            <li>link
+                                <ul>
+                                    <li>rel
+                                        <ul>
+                                            <li>stylesheet</li>
+                                        </ul>
+                                    </li>
+                                    <li>href
+                                        <ul>
+                                            <li>url.css</li>
+                                        </ul>
+                                    </li>
+                                    <li>media
+                                        <ul>
+                                            <li>screen</li>
+                                            <li>print</li>
+                                            <li>all</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>body
+                    <ul><li>所有的HTML内容</li>
+                    <li>script
+                    <br>src="script.js"</li></ul></li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+        <aside>
+            <xmp>
+                <!DOCTYPE html>
+                <html lang="zh">
+
+                <head>
+                    <meta charset="utf-8" />
+                    <title>html学习</title>
+                </head>
+
+                <body>
+
+                </body>
+
+                </html>
+            </xmp>
+        </aside>
+    </div>
+
+    <div>
+    <section>
+        <h2>页面基本结构</h2>
+        <ul>
+            <li>header 页眉</li>
+            <li>nav 导航</li>
+            <br>
+            <li>main 主要内容</li>
+            <li>article 文章</li>
+            <li>section 主题内容</li>
+            <br>
+            <li>aside 附注</li>
+            <br>
+            <li>footer 页脚</li>
+            <br>
+            <li>div 块级内容无语义容器</li>
+        </ul>
+    </section>
+    <aside>
+        <xmp>
+
+            ...
+
+            <body>
+                <!-- ===开始页面级页眉=== --->
+                <header rode="banner">
+                    <!-- 站点标识 -->
+                    <!-- 全站导航 -->
+                    <nav role="navigation">
+                        <ul>...</ul>
+                    </nav>
+                </header>
+
+                <!-- ===开始主要内容=== -->
+                <main role="main">
+                    <h1>主标题</h1>
+
+                    <article>
+                        <h2>文章标题</h2>
+                        <p>...文章内容...</p>
+                    </article>
+
+                    <aside>
+                        <h2>文章附注标题</h2>
+                        <p>...文章附注内容...</p>
+                        <ul>...文章相关链接...</ul>
+                    </aside>
+                </main>
+
+                <!-- ===开始附注栏=== -->
+                <aside role="complementary">
+                    <!-- 次级导航 -->
+                    <nav role="navigation">
+                        <ul>...</ul>
+                    </nav>
+                </aside>
+
+                <!-- ===开始页面级页脚=== -->
+                <footer role="contentinfo">
+                    <!-- 全站辅助链接 -->
+                    <ul>...</ul>
+                </footer>
+            </body>
+            ...
+
+        </xmp>
+    </aside>
+        </div>
+
+    <section>
+        <h2>文本</h2>
+        <ul>
+            <li>h1~h6 标题</li>
+            <li>p 段落</li>
+            <br>
+            <li>strong 重要内容</li>
+            <li>em 强调</li>
+            <li>mark 突出显示文本</li>
+            <br>
+            <li>b 粗体 提醒注意</li>
+            <li>i 斜体 样式惯例</li>
+            <li>u 非文本注解</li>
+            <br>
+            <Li>figure 图 figcaption 图的标题</Li>
+            <br>
+            <li>cite 引用参考</li>
+            <br>
+            <li>address 作者联系信息 邮件/链接</li>
+            <br>
+            <li>small 细则</li>
+            <br>
+            <li>blockquote 单独存在的引述 块级</li>
+            <li>q 短的引述 行级</li>
+            <br>
+            <li>time 时间</li>
+            <br>
+            <li>abbr 缩写词</li>
+            <br>
+            <li>dfn 定义术语</li>
+            <br>
+            <li>sub 上标</li>
+            <li>sup 下标</li>
+            <br>
+            <li>ins 新增内容</li>
+            <li>del 已删除内容</li>
+            <li>s 不再准确或不再相关内容</li>
+            <br>
+            <li>code 代码</li>
+            <br>
+            <li>pre 预格式化的文本</li>
+            <br>
+            <li>br 强制换行</li>
+            <li>wbr 可换行</li>
+            <br>
+            <li>span 无语义短语内容容器</li>
+            <br>
+            <li>ruby rp rt 旁注标记</li>
+            <br>
+            <li>bdo bdi 文本方向</li>
+            <br>
+            <li>meter 相对值</li>
+            <br>
+            <li>progress 进度</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>图像 img</h2>
+        <ul>
+            <li>src 图像文件URL</li>
+            <li>alt 图像无法显示时的替代文本</li>
+            <li>width height 图像尺寸</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>链接 a</h2>
+        <ul>
+            <li>href 目标URL 锚#id</li>
+            <li>rel=external 链接指向外部网络</li>
+            <li>target 在新窗口或标签页打开链接</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>列表</h2>
+        <ul>
+            <li>ol li 有序列表</li>
+            <li>ul li 无序列表</li>
+            <li>dl dt dd 描述列表</li>
+        </ul>
+    </section>
+
+<div>
+    <section>
+        <h2>表格 table</h2>
+        <ul>
+            <li>caption 标题</li>
+            <li>thead 表格头部</li>
+            <li>tbody 表格主体</li>
+            <li>tfoot 表格尾部</li>
+            <li>tr 行
+                <ul>
+                    <li>th 标题单元格
+                        <ul>
+                            <li>scope
+                                <ul>
+                                    <li>col 列标题</li>
+                                    <li>row 行标题</li>
+                                    <li>rowgroup</li>
+                                </ul>
+                            </li>
+                            <li>rowspan 跨越行</li>
+                            <li>colspan 跨越列</li>
+                        </ul>
+                    </li>
+                    <li>td 数据单元格
+                        <ul>
+                            <li>rowspan 跨越行</li>
+                            <li>colspan 跨越列</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <aside>
+        <xmp>
+            <table>
+                <caption>标题</caption>
+                <thead>
+                    <!-- 表格头部 -->
+                    <tr>
+                        <th scope="col">Quarter</th>
+                        <th scope="col">1962</th>
+                        <th scope="col">1963</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 表格主体 -->
+                    <tr>
+                        <th scope="row">Q1</th>
+                        <td>$145</td>
+                        <td>$167</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q2</th>
+                        <td>$140</td>
+                        <td>$159</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <!-- 表格尾部 -->
+                    <tr>
+                        <th scope="row">TOTAL</th>
+                        <td>$595</td>
+                        <td>$648</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </xmp>
+    </aside>
+    </div>
+
+    <section>
+        <h2>视频 video</h2>
+        <ul>
+            <li>src=my-video.ext</li>
+            <li>width height</li>
+            <li>autoplay 自动播放</li>
+            <li>controls 添加默认控件</li>
+            <li>muted 静音</li>
+            <li>loop 循环播放</li>
+            <li>poster 加载时显示的图像</li>
+            <li>preload 预加载
+                <ul>
+                    <li>none 不加载</li>
+                    <li>metadata 加载元数据</li>
+                    <li>auto</li>
+                </ul>
+            </li>
+            <br>
+            <br>
+            <li>source 视频来源
+                <ul>
+                    <li>src</li>
+                    <li>type 视频类型</li>
+                    <li>media</li>
+                </ul>
+            </li>
+            <li>无法播放时备用链接或者备用文本信息</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>音频 audio</h2>
+        <ul>
+            <li>src=my-audio.ext</li>
+            <li>autoplay 自动播放</li>
+            <li>controls 添加默认控件</li>
+            <li>muted 静音</li>
+            <li>loop 循环播放</li>
+            <li>poster 加载时显示的图像</li>
+            <li>preload 预加载
+                <ul>
+                    <li>none 不加载</li>
+                    <li>metadata 加载元数据</li>
+                    <li>auto</li>
+                </ul>
+            </li>
+            <br>
+            <br>
+            <li>source 视频来源
+                <ul>
+                    <li>src</li>
+                    <li>type 音频类型 audio/mp3 ...</li>
+                </ul>
+            </li>
+            <li>无法播放时备用链接或者备用文本信息</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>表单 form</h2>
+        <ul>
+            <li>action 提交表单时处理数据的脚本的URL</li>
+            <li>method get/post</li>
+        </ul>
+        <br>
+        <ul>
+            <li>fieldset 组织表单元素 分组
+                <ul>
+                    <li>legend 分组标题</li>
+                    <li>label 控件标签
+                        <ul>
+                            <li>for=id-label</li>
+                        </ul>
+                    </li>
+                    <li>input 输入
+                        <ul>
+                            <li>id=id-label</li>
+                            <li>name=data_name 服务器端字段名</li>
+                            <li>value=default 预设的值</li>
+                            <li>placeholder=xxx-xxx-xxxx 提示文字</li>
+                            <li>pattern 输入格式要求</li>
+                            <li>maxlength 允许输入的最大字符数</li>
+                            <li>size 框的大小</li>
+                            <li>required 要求必填</li>
+                            <li>autofocus 加载后默认获得焦点</li>
+                            <li>disabled 禁用</li>
+                            <li>readonly 只读</li>
+                            <li>type
+                                <ul>
+                                    <li>text 文本框</li>
+                                    <li>password 密码框</li>
+                                    <li>email 邮件框</li>
+                                    <li>search 搜索框</li>
+                                    <li>url URL框</li>
+                                    <li>tel 电话框</li>
+                                    <li>file 文件上传</li>
+                                    <li>hidden 隐藏字段</li>
+                                    <li><dt>radio 单选按钮</dt>
+                                        <dd>同一组单选按钮name相同,value不同
+                                            <br>发送 name=value
+                                            <br>checked 默认选中
+                                        </dd>
+                                    </li>
+                                    <li><dt>checkbox 复选框</dt>
+                                        <dd>同一组单选按钮name相同,value不同
+                                            <br>checked 默认选中
+                                        </dd>
+                                    </li>
+                                    <li><dt>submit 提交按钮</dt>
+                                        <dd>如果不填写name 属性，则名-值对就不会传给脚本
+                                            <br>value值为显示文本
+                                        </dd>
+                                    </li>
+                                    <li>image 图像提交按钮
+                                        <li>src=image.url</li>
+                                    </li>
+                                    <li>reset 重置按钮</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>textarea 长文本输入区域
+                        <ul>
+                            <li>id=id-label</li>
+                            <li>name=data_name 服务器端字段名</li>
+                            <li>cols 文本区域宽度</li>
+                            <li>rows 文本区域高度</li>
+                        </ul>
+                    </li>
+                    <li>select 选择框
+                        <ul>
+                            <li>id=id-label</li>
+                            <li>name=data_name 服务器端字段名</li>
+                            <li>size 选择框高度</li>
+                            <li>multiple 允许多选</li>
+                            <br>
+                            <li>optgroup 选项分组
+                                <ul>
+                                    <li>label 子菜单标题</li>
+                                    <br>
+                                    <li><dt>option 选项</dt>
+                                        <dd>注意 元素内容为选项文字</dd>
+                                        <ul>
+                                            <li>value=option_data</li>
+                                            <li>selected 默认选中</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+myhostname = mail.lzrui.net
+mydomain = lzrui.net
+myorigin = $mydomain
+inet_interfaces = all
+inet_protocols = ipv4
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+unknown_local_recipient_reject_code = 550
+mynetworks = 127.0.0.1,120.78.73.159
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+home_mailbox = Maildir/
+smtpd_banner = $myhostname ESMTP
+debug_peer_level = 2
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix-2.6.6/samples
+readme_directory = /usr/share/doc/postfix-2.6.6/README_FILES
+
+# 规定邮件最大尺寸为10M
+message_size_limit = 10485760
+# 规定收件箱最大容量为1G
+mailbox_size_limit = 1073741824
+# SMTP认证
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain = $myhostname
+smtpd_recipient_restrictions = permit_mynetworks,permit_auth_destination,permit_sasl_authenticated,reject
+
+
+
+
+
+# 屏蔽Postfix默认的用户验证参数
+# TLS parameters
+#smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+#smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key  #smtpd_use_tls=yes
+#smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+#smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_tls_cert_file=/etc/dovecot/dovecot.pem
+smtpd_tls_key_file=/etc/dovecot/private/dovecot.pem
+smtpd_use_tls=yes
+smtpd_tls_auth_only = yes
+#Enabling SMTP for authenticated users, and handing off authentication to Dovecot
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_recipient_restrictions =  permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination
+
+# Postfix能够通过MySQL表中相关数据决定需要接受/发送邮件的域名
+mydestination = localhost
+
+# Postfix不要使用LDA「Local Delivery Agent」转而使用Dovecot的LMTP完成本地邮件投递
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+
+# Postfix去MySQL数据库种寻找域名、用户帐号密码及邮件别名等信息
+virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+
+
+
+# smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+biff = no
+append_dot_mydomain = no
+readme_directory = no
+
+myhostname = host.mydomain.com
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+
+relayhost = mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all

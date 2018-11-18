@@ -43,7 +43,59 @@ public class SocketHelper {
     private final static int port = 9048;
     private static BufferedReader br= null; 
     private static BufferedWriter bw = null;
-    
+
+    public static void start() {
+        new Thread(() -> {
+            try {
+                serverSocket = new ServerSocket(5566);
+                LogUtil.i("start####  server");
+                Socket client=serverSocket.accept();
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                LogUtil.i("start####  server get client");
+                for (int i = 0; true; i++) {
+                    Thread.sleep((long) (Math.random() * 2000));
+                    bw.write("start\n");
+                    bw.write("{\"time\":" + System.currentTimeMillis() + ",\"json\":\"" + i + "\"}");
+                    bw.write("\nend\n");
+                    bw.flush();
+                }
+            } catch (Exception e) {
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000L);
+                socket = new Socket("127.0.0.1", 3210);
+                LogUtil.i("start####  client");
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                StringBuilder stringBuilder = null;
+                boolean startJson = false;
+                while (true) {
+                    Thread.sleep(1000L);
+                    String line = br.readLine();
+                    if (line == null) continue;
+                    LogUtil.d("****start####"+line);
+                    if (line.equals("start")) {
+                        startJson = true;
+                        stringBuilder = new StringBuilder();
+                    } else if (line.equals("end")) {
+                        startJson = false;
+                        if (stringBuilder!=null) onGetJson(stringBuilder.toString());
+                        stringBuilder = null;
+                    } else if (startJson){
+                        if (stringBuilder!=null) stringBuilder.append(line);
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+        }).start();
+    }
+
+
     /**
      * 创建一个SocketServer对象用来建立服务器
      * @throws IOException

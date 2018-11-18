@@ -1,0 +1,645 @@
+500MB temp space
+150MB swap space
+
+oracle安装 http://blog.csdn.net/yabingshi_tech/article/details/46801539
+
+安装oracle所需软件包
+yum install binutils compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat
+
+验证 Oracle 所需要的系统依赖程序包是否完整
+rpm -qa binutils compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat
+
+
+对OS进行配置
+
+创建相关用户和用户组
+groupadd oinstall
+groupadd oper
+groupadd dba
+useradd -g oinstall -G dba,oper oracle
+
+修改oracle用户的密码
+passwd oracle
+
+修改系统参数
+vi /etc/sysctl.conf
+添加：
+# add before install  oracle
+fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 536870912
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048586
+
+
+运行sysctl -p应用以上参数
+/sbin/sysctl -p 
+
+
+
+修改用户Limits
+vi /etc/security/limits.conf
+新增如下内容：
+# add before install  oracle
+oracle soft nofile 65536
+oracle hard nofile 65536
+oracle soft nproc 16384
+oracle hard nproc 16384
+oracle stack nproc 10240
+oracle stack nproc 10240
+
+
+
+创建相关目录
+mkdir -p /u01/app/oracle/product/12c/db_1  
+mkdir –p /u01/app/oracle/oradata
+mkdir –p /u01/app/oracle/flash_recovery_area
+mkdir -p /u01/app/oracle/archlog
+chown -R oracle:oinstall /u01
+
+配置环境变量
+su - oracle
+vi .bash_profile
+添加：
+# Oracle Settings  
+COLUMNS=132; export COLUMNS  
+LINES=47; export LINES  
+EDITOR=vi; export EDITOR  
+   
+TMP=/tmp; export TMP  
+TMPDIR=$TMP; export TMPDIR  
+ORACLE_BASE=/u01/app/oracle; export ORACLE_BASE  
+ORACLE_HOME=$ORACLE_BASE/product/12c/db_1; export ORACLE_HOME  
+ORACLE_SID=orcl; export ORACLE_SID  
+SHLIB_PATH=$LD_LIBRARY_PATH;export SHLIB_PATH  
+NLS_LANG=American_America.zhs16gbk;export NLS_LANG  
+ORA_NLS10=$ORACLE_HOME/nls/data;export ORA_NLS10  
+TNS_ADMIN=$ORACLE_HOME/network/admin;export TNS_ADMIN  
+ORACLE_TERM=xterm; export ORACLE_TERM  
+PATH=/usr/sbin:$PATH; export PATH  
+PATH=$ORACLE_HOME/bin:$PATH; export PATH  
+LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib; export LD_LIBRARY_PATH  
+CLASSPATH=$ORACLE_HOME/jre:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib; export CLASSPATH  
+alias glance=/opt/perf/bin/glance:x  
+alias gohome='cd /u01/app/oracle/product/10.2.0'  
+alias cdb='cd /u01/app/oracle/admin/orcl/bdump'  
+alias cdu='cd /u01/app/oracle/admin/orcl/udump' 
+
+
+
+修改完用：source .bash_profile生效
+source .bash_profile
+
+
+修改/etc/hosts 
+[oracle@ser6-51 ~]$ cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+[oracle@ser6-51 ~]$ hostname
+ser6-51
+
+把127.0.0.1那一行改为：127.0.0.1   ser6-51
+
+
+
+修改操作系统发行版本
+由于 oracle 还没有推出支持 CentOS 的安装包，所以需要修改发行版本，以便通过 oracle 的安装检查。
+vi /etc/redhat-release 
+把CentOS release 6.5 (Final) 注释掉，前面加上一行redhat-4，当oracle安装完成后,再修改回来。
+如：
+redhat-4
+#CentOS release 6.5 (Final)
+
+关闭SELINUX
+vi /etc/selinux/config
+将SELINUX那一行改成：
+SELINUX=disabled
+
+
+
+安装
+解压安装包
+unzip linuxamd64_12102_database_1of2.zip 
+unzip linuxamd64_12102_database_2of2.zip 
+
+
+新建静默安装的应答文件 http://blog.csdn.net/yabingshi_tech/article/details/46801539
+su - oracle
+vi 12102db_install.rsp
+
+
+######################################################################  
+## Copyright(c) Oracle Corporation 1998,2013. All rights reserved.                                  ##  
+##                                                                     ##  
+## Specify values for the variables listed below to customize                                        ##  
+## your installation.                                                             ##  
+##                                                                     ##  
+## Each variable is associated with a comment. The comment                                ##  
+## can help to populate the variables with the appropriate                                       ##  
+## values.                                                                 ##  
+##                                                                     ##  
+## IMPORTANT NOTE: This file contains plain text passwords and                               ##  
+## should be secured to have read permission only by oracle user                                  ##  
+## or db administrator who owns this installation.                                            ##  
+##                                                                     ##  
+######################################################################  
+   
+#-------------------------------------------------------------------------------  
+# Do not change the following system generated value.  
+#-------------------------------------------------------------------------------  
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v12.1.0  
+   
+#-------------------------------------------------------------------------------  
+# Specify the installation option.  
+# It can be one of the following:  
+#   - INSTALL_DB_SWONLY  
+#   - INSTALL_DB_AND_CONFIG  
+#   - UPGRADE_DB  
+#------------------------------------------------------------------------------  
+oracle.install.option=INSTALL_DB_SWONLY  
+   
+#-------------------------------------------------------------------------------  
+# Specify the hostname of the system as set during the install. It can be used  
+# to force the installation to use an alternative hostname rather than using the  
+# first hostname found on the system. (e.g., for systems with multiple hostnames  
+# and network interfaces)  
+#-------------------------------------------------------------------------------  
+ORACLE_HOSTNAME=lzrui 
+   
+#-------------------------------------------------------------------------------  
+# Specify the Unix group to be set for the inventory directory.   
+#-------------------------------------------------------------------------------  
+UNIX_GROUP_NAME=oinstall  
+   
+#-------------------------------------------------------------------------------  
+# Specify the location which holds the inventory files.  
+# This is an optional parameter if installing on  
+# Windows based Operating System.  
+#-------------------------------------------------------------------------------  
+INVENTORY_LOCATION=/u01/app/oraInventory  
+   
+#-------------------------------------------------------------------------------  
+# Specify the languages in which the components will be installed.              
+#  
+# en   : English                  ja   : Japanese                    
+# fr   : French                   ko   : Korean                     
+# ar   : Arabic                   es   : Latin American Spanish     
+# bn   : Bengali                  lv   : Latvian                    
+# pt_BR: Brazilian Portuguese     lt   : Lithuanian                 
+# bg   : Bulgarian                ms   : Malay                      
+# fr_CA: Canadian French          es_MX: Mexican Spanish            
+# ca   : Catalan                  no   : Norwegian                  
+# hr   : Croatian                 pl   : Polish                     
+# cs   : Czech                    pt   : Portuguese                 
+# da   : Danish                   ro   : Romanian                   
+# nl   : Dutch                    ru   : Russian                    
+# ar_EG: Egyptian                 zh_CN: Simplified Chinese         
+# en_GB: English (Great Britain)  sk   : Slovak                     
+# et   : Estonian                 sl   : Slovenian                  
+# fi   : Finnish                  es_ES: Spanish                     
+# de   : German                   sv   : Swedish                    
+# el   : Greek                    th   : Thai                       
+# iw   : Hebrew                   zh_TW: Traditional Chinese        
+# hu   : Hungarian                tr   : Turkish                    
+# is   : Icelandic                uk   : Ukrainian                  
+# in   : Indonesian               vi   : Vietnamese                 
+# it   : Italian                                                    
+#  
+# all_langs   : All languages  
+#  
+# Specify value as the following to select any of the languages.  
+# Example : SELECTED_LANGUAGES=en,fr,ja  
+#  
+# Specify value as the following to select all the languages.  
+# Example : SELECTED_LANGUAGES=all_langs   
+#-------------------------------------------------------------------------------  
+SELECTED_LANGUAGES=en  
+   
+#-------------------------------------------------------------------------------  
+# Specify the complete path of the Oracle Home.  
+#-------------------------------------------------------------------------------  
+ORACLE_HOME=/u01/app/oracle/product/12c/db_1  
+   
+#-------------------------------------------------------------------------------  
+# Specify the complete path of the Oracle Base.  
+#-------------------------------------------------------------------------------  
+ORACLE_BASE=/u01/app/oracle  
+   
+#-------------------------------------------------------------------------------  
+# Specify the installation edition of the component.                      
+#                                                               
+# The value should contain only one of these choices.         
+#   - EE     : Enterprise Edition                                 
+#   - SE     : Standard Edition                                   
+#   - SEONE  : Standard Edition One  
+#   - PE     : Personal Edition (WINDOWS ONLY)  
+#-------------------------------------------------------------------------------  
+oracle.install.db.InstallEdition=EE  
+   
+#################################################################################  
+#                                                                                  #  
+# PRIVILEGED OPERATING SYSTEM GROUPS                                                #  
+# ------------------------------------------                                                                         #  
+# Provide values for the OS groups to which OSDBA and OSOPER privileges                                        #  
+# needs to be granted. If the install is being performed as a member of the                                           #  
+# group "dba", then that will be used unless specified otherwise below.                                            #  
+#                                                                                  #  
+# The value to be specified for OSDBA and OSOPER group is only for UNIX based                             #  
+# Operating System.                                                                      #  
+#                                                                                  #  
+###############################################################################  
+   
+#------------------------------------------------------------------------------  
+# The DBA_GROUP is the OS group which is to be granted OSDBA privileges.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.DBA_GROUP=dba  
+   
+#------------------------------------------------------------------------------  
+# The OPER_GROUP is the OS group which is to be granted OSOPER privileges.  
+# The value to be specified for OSOPER group is optional.  
+#------------------------------------------------------------------------------  
+oracle.install.db.OPER_GROUP=oper  
+   
+#------------------------------------------------------------------------------  
+# The BACKUPDBA_GROUP is the OS group which is to be granted OSBACKUPDBA privileges.  
+#------------------------------------------------------------------------------  
+oracle.install.db.BACKUPDBA_GROUP=dba  
+   
+#------------------------------------------------------------------------------  
+# The DGDBA_GROUP is the OS group which is to be granted OSDGDBA privileges.  
+#------------------------------------------------------------------------------  
+oracle.install.db.DGDBA_GROUP=dba  
+   
+#------------------------------------------------------------------------------  
+# The KMDBA_GROUP is the OS group which is to be granted OSKMDBA privileges.  
+#------------------------------------------------------------------------------  
+oracle.install.db.KMDBA_GROUP=dba  
+   
+################################################################################  
+#                                                                              #  
+#                        Database Configuration Options                               #  
+#                                                                              #  
+################################################################################  
+   
+#-------------------------------------------------------------------------------  
+# Specify the type of database to create.  
+# It can be one of the following:  
+#   - GENERAL_PURPOSE/TRANSACTION_PROCESSING                        
+#   - DATA_WAREHOUSE                                 
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.type=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the Starter Database Global Database Name.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.globalDBName=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the Starter Database SID.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.SID=  
+   
+#-------------------------------------------------------------------------------  
+# Specify whether the database should be configured as a Container database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.ConfigureAsContainerDB=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the  Pluggable Database name for the pluggable database in Container Database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.PDBName=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the Starter Database character set.  
+#                                                 
+#  One of the following  
+#  AL32UTF8, WE8ISO8859P15, WE8MSWIN1252, EE8ISO8859P2,  
+#  EE8MSWIN1250, NE8ISO8859P10, NEE8ISO8859P4, BLT8MSWIN1257,  
+#  BLT8ISO8859P13, CL8ISO8859P5, CL8MSWIN1251, AR8ISO8859P6,  
+#  AR8MSWIN1256, EL8ISO8859P7, EL8MSWIN1253, IW8ISO8859P8,  
+#  IW8MSWIN1255, JA16EUC, JA16EUCTILDE, JA16SJIS, JA16SJISTILDE,  
+#  KO16MSWIN949, ZHS16GBK, TH8TISASCII, ZHT32EUC, ZHT16MSWIN950,  
+#  ZHT16HKSCS, WE8ISO8859P9, TR8MSWIN1254, VN8MSWIN1258  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.characterSet=  
+   
+#------------------------------------------------------------------------------  
+# This variable should be set to true if Automatic Memory Management  
+# in Database is desired.  
+# If Automatic Memory Management is not desired, and memory allocation  
+# is to be done manually, then set it to false.  
+#------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.memoryOption=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the total memory allocation for the database. Value(in MB) should be  
+# at least 256 MB, and should not exceed the total physical memory available  
+# on the system.  
+# Example: oracle.install.db.config.starterdb.memoryLimit=512  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.memoryLimit=  
+   
+#################################################################################  
+#                                                                                  #  
+# Passwords can be supplied for the following four schemas in the                                                       #  
+# starter database:                                                                                                                                      #  
+#   SYS                                                                            #  
+#   SYSTEM                                                                        #  
+#   DBSNMP (used by Enterprise Manager)                                                   #  
+#                                                                                  #  
+# Same password can be used for all accounts (not recommended)                                                     #  
+# or different passwords for each account can be provided (recommended)                                     #  
+#                                                                                  #  
+#################################################################################  
+   
+#------------------------------------------------------------------------------  
+# This variable holds the password that is to be used for all schemas in the  
+# starter database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.password.ALL=oracle  
+   
+#-------------------------------------------------------------------------------  
+# Specify the SYS password for the starter database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.password.SYS=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the SYSTEM password for the starter database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.password.SYSTEM=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the DBSNMP password for the starter database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.password.DBSNMP=  
+   
+#-------------------------------------------------------------------------------  
+# Specify the PDBADMIN password required for creation of Pluggable Database in the Container Database.  
+#-------------------------------------------------------------------------------  
+oracle.install.db.config.starterdb.password.PDBADMIN=  
+#------------------------------------------------------------------------------  
+# Specify whether user doesn't want to configure Security Updates.  
+# The value for this variable should be true if you don't want to configure  
+# Security Updates, false otherwise.  
+#  
+# The value can be either true or false. If left blank it will be assumed  
+# to be false.  
+#  
+# Example    : DECLINE_SECURITY_UPDATES=false  
+#------------------------------------------------------------------------------  
+DECLINE_SECURITY_UPDATES=true  
+#------------------------------------------------------------------------------  
+# Specify the auto-updates option. It can be one of the following:  
+#   - MYORACLESUPPORT_DOWNLOAD  
+#   - OFFLINE_UPDATES  
+#   - SKIP_UPDATES  
+#------------------------------------------------------------------------------  
+oracle.installer.autoupdates.option=SKIP_UPDATES  
+
+
+
+
+
+
+
+
+
+静默安装软件
+su - oracle
+cd /download/database/
+./runInstaller  -silent -responseFile /home/oracle/12102db_install.rsp
+
+
+
+sh /u01/app/oraInventory/orainstRoot.sh 
+sh /u01/app/oracle/product/12c/db_1/root.sh 
+
+
+建库
+建响应文件
+vi /home/oracle/dbca.rsp
+
+[GENERAL]  
+RESPONSEFILE_VERSION = "12.1.2.0"  
+OPERATION_TYPE = "createDatabase"  
+[CREATEDATABASE]  
+GDBNAME = "orcl"  
+SID = "orcl"  
+TEMPLATENAME = "New_Database.dbt"  
+SYSPASSWORD = "orcl"  
+SYSTEMPASSWORD = "orcl"  
+SYSMANPASSWORD = "orcl"  
+DBSNMPPASSWORD = "orcl"  
+DATAFILEDESTINATION ="/u01/app/oracle/oradata"  
+STORAGETYPE=FS  
+CHARACTERSET = "ZHS16GBK"  
+DATABASETYPE = "MULTIPURPOSE"  
+AUTOMATICMEMORYMANAGEMENT = "FALSE"  
+
+dbca -silent -responseFile /home/oracle/dbca.rsp
+
+export ORACLE_SID=orcl
+sqlplus / as sysdba
+
+select status from v$instance;
+exit;
+
+
+
+配监听
+建响应文件
+vi 12102_netca.rsp
+[GENERAL]  
+RESPONSEFILE_VERSION="12.1"  
+CREATE_TYPE="CUSTOM"  
+   
+#-------------------------------------------------------------------------------  
+# Name       : SHOW_GUI  
+# Datatype   : Boolean  
+# Description: This variable controls appearance/suppression of the NetCA GUI,  
+# Pre-req    : N/A  
+# Default    : TRUE  
+# Note:  
+# This must be set to false in order to run NetCA in silent mode.  
+# This is a substitute of "/silent" flag in the NetCA command line.  
+# The command line flag has precedence over the one in this response file.  
+# This feature is present since 10.1.0.3.  
+#-------------------------------------------------------------------------------  
+#SHOW_GUI=false  
+   
+#-------------------------------------------------------------------------------  
+# Name       : LOG_FILE  
+# Datatype   : String  
+# Description: If present, NetCA will log output to this file in addition to the  
+#              standard out.  
+# Pre-req    : N/A  
+# Default    : NONE  
+# Note:  
+#      This is a substitute of "/log" in the NetCA command line.  
+# The command line argument has precedence over the one in this response file.  
+# This feature is present since 10.1.0.3.  
+#-------------------------------------------------------------------------------  
+#LOG_FILE=""/oracle12cHome/network/tools/log/netca.log""  
+   
+[oracle.net.ca]  
+#INSTALLED_COMPONENTS;StringList;list of installed components  
+# The possible values for installed components are:  
+# "net8","server","client","aso", "cman", "javavm"  
+INSTALLED_COMPONENTS={"server","net8","javavm"}  
+   
+#INSTALL_TYPE;String;type of install  
+# The possible values for install type are:  
+# "typical","minimal" or "custom"  
+INSTALL_TYPE=""typical""  
+   
+#LISTENER_NUMBER;Number;Number of Listeners  
+# A typical install sets one listener  
+LISTENER_NUMBER=1  
+   
+#LISTENER_NAMES;StringList;list of listener names  
+# The values for listener are:  
+# "LISTENER","LISTENER1","LISTENER2","LISTENER3", ...  
+# A typical install sets only "LISTENER"  
+LISTENER_NAMES="LISTENER"  
+   
+#LISTENER_PROTOCOLS;StringList;list of listener addresses (protocols and parameters separated by semicolons)  
+# The possible values for listener protocols are:  
+# "TCP;1521","TCPS;2484","NMP;ORAPIPE","IPC;IPCKEY","VI;1521"  
+# A typical install sets only "TCP;1521"  
+LISTENER_PROTOCOLS="TCP;1521"  
+   
+#LISTENER_START;String;name of the listener to start, in double quotes  
+LISTENER_START=""LISTENER""  
+   
+#NAMING_METHODS;StringList;list of naming methods  
+# The possible values for naming methods are:  
+# LDAP, TNSNAMES, ONAMES, HOSTNAME, NOVELL, NIS, DCE  
+# A typical install sets only: "TNSNAMES","ONAMES","HOSTNAMES"  
+# or "LDAP","TNSNAMES","ONAMES","HOSTNAMES" for LDAP  
+NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}  
+   
+#NOVELL_NAMECONTEXT;String;Novell Directory Service name context, in double quotes  
+# A typical install does not use this variable.  
+#NOVELL_NAMECONTEXT = ""NAMCONTEXT""  
+   
+#SUN_METAMAP;String; SUN meta map, in double quotes  
+# A typical install does not use this variable.  
+#SUN_METAMAP = ""MAP""  
+   
+#DCE_CELLNAME;String;DCE cell name, in double quotes  
+# A typical install does not use this variable.  
+#DCE_CELLNAME = ""CELL""  
+   
+#NSN_NUMBER;Number;Number of NetService Names  
+# A typical install sets one net service name  
+NSN_NUMBER=1  
+   
+#NSN_NAMES;StringList;list of Net Service names  
+# A typical install sets net service name to "EXTPROC_CONNECTION_DATA"  
+NSN_NAMES="EXTPROC_CONNECTION_DATA"  
+   
+#NSN_SERVICE;StringList;Oracle12c database's service name  
+# A typical install sets Oracle12c database's service name to "PLSExtProc"  
+NSN_SERVICE="PLSExtProc"  
+
+
+
+
+
+
+netca -silent -responseFile /home/oracle/12102_netca.rsp
+
+
+
+
+
+
+
+
+
+设置开机启动
+修改dbstart文件
+假如执行/u01/app/oracle/product/12c/db_1/bin/dbstart报错：
+
+ORACLE_HOME_LISTNER is not SET, unable to auto-start Oracle Net Listener
+Usage: /u01/app/oracle/oracle/product/10.2.0/db_1/bin/dbstart ORACLE_HOME
+
+修改dbstart文件，将ORACLE_HOME_LISTNER=$1
+修改为ORACLE_HOME_LISTNER=$ORACLE_HOME
+
+
+修改/etc/oratab
+添加：
+orcl:/u01/app/oracle/product/12c/db_1:Y
+
+修改/etc/rc.d/rc.local
+添加一行：
+su oracle -lc /u01/app/oracle/product/12c/db_1/bin/dbstart
+--说明：/u01/app/oracle/product/12c/dbhome_1为oracle的安装目录，要根据实际情况进行修改。
+
+
+
+开1521端口
+vi /etc/sysconfig/iptables
+添加一行：
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 1521-j ACCEPT
+
+重启防火墙
+/etc/init.d/iptables restart
+
+
+把操作系统版本改回原来的配置
+vi /etc/redhat-release 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+启动oracle数据库
+su - oracle
+#打开Oracle监听
+lsnrctl start
+#进入sqlplus
+sqlplus /nolog
+#使用sysdab角色登录sqlplus
+conn /as sysdba
+#启动数据库
+startup
+#关闭
+shutdown
+#强制关闭
+shutdown abort
+
+
+查看用户和默认表空间的关系。   
+select username,default_tablespace from dba_users;
+
+
+修改密码
+ALTER USER user_name IDENTIFIED BY new_password;  
+
+
+
+
+

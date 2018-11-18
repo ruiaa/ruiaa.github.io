@@ -141,6 +141,7 @@ FLUSH PRIVILEGES;
         +   primary key
         +   auto_increment
     +   显示 : show table_name;
+    +   show create table table_name;
     +   详细 : describe table_name;
     +   删表 : drop table table_name;
 
@@ -330,3 +331,20 @@ FLUSH PRIVILEGES;
         
         SELECT Customer,SUM(OrderPrice) FROM Orders GROUP BY Customer
         //结果集根据customer的值分组，sum函数分别对每一组起效
+
+
+#   ORDER BY 语句用于对结果集进行排序
++   默认按照升序对记录进行排序
++   按照降序对记录进行排序，可以使用 DESC 关键字
++   SELECT Company, OrderNumber FROM Orders ORDER BY Company DESC, OrderNumber ASC
+
+#   INSERT INTO 语句用于向表格中插入新的行
++   INSERT INTO 表名称 VALUES (值1, 值2,....)
++   INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
+
+#   DELETE 语句用于修改表中的数据
++   UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+
+#   DELETE 语句用于删除表中的行
++   DELETE FROM 表名称 WHERE 列名称 = 值
++   DELETE * FROM table_name 删除所有行

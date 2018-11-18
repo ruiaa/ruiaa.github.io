@@ -1,0 +1,1 @@
+baseline=(targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2
