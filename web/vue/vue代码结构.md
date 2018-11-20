@@ -1,5 +1,5 @@
 
-#	代码结构
+#   代码结构
 
         |-- src                              // 源码目录
         |   |-- components                   // vue所有组件
@@ -22,15 +22,15 @@
            ↓
        单页面应用
 
-+	index.html：初次访问的页面，提供注入点\<div id="app">
-+	App.vue：首页框架，提供\<router-view>（和导航\<router-link>）
-+	router/index.js：路由文件，url-->components
-+	src/main.js：程序入口文件，创建挂载根实例并注入路由，加载各种公共组件
++   index.html：初次访问的页面，提供注入点\<div id="app">
++   App.vue：首页框架，提供\<router-view>（和导航\<router-link>）
++   router/index.js：路由文件，url-->components
++   src/main.js：程序入口文件，创建挂载根实例并注入路由，加载各种公共组件
 
 
 
 
-#	index.html 访问入口
+#   index.html 访问入口
 
     <!DOCTYPE html>
     <html>
@@ -45,7 +45,7 @@
       </body>
     </html>
 
-#	src/main.js  程序入口
+#   src/main.js  程序入口
     import Vue from 'vue';
     import App from './App.vue';
     import router from './router/index.js';
@@ -58,7 +58,7 @@
       template: '<App/>',
     });
     
-#	src/app.vue  页面入口
+#   src/app.vue  页面入口
     <template>
       <div id="app">
         <img src="./assets/logo.png">
@@ -86,7 +86,7 @@
     <script></script>     标签包括的js内容：你可以在这里写一些页面的js的逻辑代码。 
     <style></style>       标签包裹的css内容：页面需要的CSS样式。
 
-#	src/router/index.js 总路由
+#   src/router/index.js 总路由
     import Vue from 'vue'
     import Router from 'vue-router'
     import Hello from '@/components/Hello'
@@ -101,8 +101,7 @@
           component: Hello  //路由需要的组件（驼峰式命名）
         },
         {
-        	path:'*',
-          redirect:'/'
+          path:'*', redirect:'/'
         }
       ]
 
