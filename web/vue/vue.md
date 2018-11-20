@@ -1,3 +1,69 @@
+		
+    <template>
+        文本插值：<div>{{ message }}</div>
+        原始HTML：<div v-html="rawHtml"></div>
+        属性：<span v-bind:title="message">
+        条件：<p v-if="seen">。。。</p>
+        循环：<li v-for="todo in todos">{{ todo.text }}</li>
+        输入：<button v-on:click="reverseMessage">
+        			<input v-model="useInput">
+        js表达式：{{ message.split('').reverse().join('') }}
+        					<div v-bind:id="'list-' + id"></div>
+        指令：v- 前缀的特殊属性
+        			<p v-if="seen">。。。</p>
+              <a v-bind:href="url"></a>
+        修饰符：以 . 指明的特殊后缀
+        				.prevent 令 v-on 指令对于触发的事件调用 event.preventDefault()
+            		<form v-on:submit.prevent="onSubmit"></form>
+        计算属性: <p>{{ reversedMessage2}}</p>
+    </template>
+    
+    <script>
+      import ...
+      
+  	  export default {
+      	data () {
+          {
+            message: 'Hello Vue!',
+            useInput: '',
+            todos: [{ text: '学习 JavaScript' }, { text: '学习 Vue' } ]
+          }
+        },
+      	methods: {
+          reverseMessage: function () {
+            this.message = this.message.split('').reverse().join('')
+          }
+        },
+        computed: {
+          reversedMessage2: function () {
+            return this.message.split('').reverse().join('')
+          }
+        },
+        watch: { 
+        	//侦听属性
+        	vmDataName: function(var){...} 
+          //路由变化
+          '$route'(to, from) {
+          	...
+          }
+        },
+        mounted(){
+        	//挂载结束状态，dom渲染完成
+          //可以请求数据进行填充
+        },
+        updated(){
+        	//更新完成状态
+        },
+        destroyed(){
+        	//销毁完成状态
+        }
+      }
+    </script>
+    
+    <style>
+    </style>
+    
+
 #   DOM渲染：声明+数据绑定
 +   文本插值：{{ data }}
 

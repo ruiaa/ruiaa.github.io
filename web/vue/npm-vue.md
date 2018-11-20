@@ -1,19 +1,23 @@
 #	安装
-npm install -g webpack										//webpack
-npm install --global vue-cli							//脚手架
+
+    npm install -g webpack										//webpack
+    npm install --global vue-cli							//脚手架
 
 #	创建项目
-vue init webpack-simple <项目名>					//根据模板在当前目录创建项目
-cd <项目名>
-npm install																//下载库
-npm install vue-router --save							//下载模板里面没有的库
-npm install axios --save
+
+    vue init webpack-simple <项目名>					//根据模板在当前目录创建项目
+    cd <项目名>
+    npm install																//下载库
+    npm install vue-router --save							//下载模板里面没有的库
+    npm install axios --save
 
 #	运行
-npm run dev																//package.json --> scripts
+
+    npm run dev																//package.json --> scripts
 
 #	构建
-npm run build
+
+    npm run build
 
 
 
@@ -70,32 +74,6 @@ npm run build
         |-- README.md                        // 项目说明，markdown文档
         |-- index.html                       // 访问的页面
         |-- package.json                     // 项目基本信息,包依赖信息等
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
