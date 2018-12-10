@@ -193,6 +193,7 @@ supervisor通过INI格式配置文件进行配置，很容易掌握，它为每�
         [include]
         files = /etc/supervisord.d/*.conf
 
+*
 
 #   进程的配置
 
@@ -271,7 +272,7 @@ supervisor通过INI格式配置文件进行配置，很容易掌握，它为每�
     loglevel=info
 
 
-+   启动
+#   启动
     +   supervisord -c /etc/supervisord.conf
     
 #   supervisorctl

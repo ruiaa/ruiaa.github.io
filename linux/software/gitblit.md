@@ -1,4 +1,4 @@
-#   gitblit
+#   gitblit	
 +   java -version 检测java环境
 +   wget http://dl.bintray.com/gitblit/releases/gitblit-1.8.0.tar.gz
 +   mkdir -p /opt/gitblit
@@ -21,3 +21,5 @@
 +   （修改service-centos.sh后需执行一次）./install-service-centos.sh
 +   service gitblit start/stop/restart
 +   初始管理员账号admin admin
+
+#	service gitblit start/stop/restart

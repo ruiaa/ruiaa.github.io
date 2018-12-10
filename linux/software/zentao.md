@@ -1,3 +1,5 @@
+禅道
+
 http://www.zentao.net/book/zentaopmshelp/90.html
 
 一、安装

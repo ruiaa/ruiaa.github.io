@@ -165,6 +165,9 @@ public class HelloWebApp {
 
 }
 
+#	请求转发和重定向
+
+
 #	MVC配置
 +	Spring Boot通过WebMvcAutoConfiguration来提供一些默认配置
 +	使用EnableWebMvc注解：同一个应用中，只能有一个被EnableWebMvc注解的类

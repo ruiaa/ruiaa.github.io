@@ -1,3 +1,24 @@
+CREATE TABLE `address` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `address` varchar(100) NOT NULL,
+    `begin` bigint(20) NOT NULL,
+    `end` bigint(20) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `mail` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `time` bigint(20) NOT NULL,
+    `from` varchar(80) NOT NULL,
+    `to` varchar(80) NOT NULL,
+    `sender` varchar(120) NOT NULL,
+    `receiver` varchar(120) NOT NULL,
+    `subject` text NOT NULL,
+    `content` text NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 ### 字段类型
 +   整型
     +   bool

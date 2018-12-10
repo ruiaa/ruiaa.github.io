@@ -1,15 +1,3 @@
-#   gitblit
-service gitblit start/stop/restart
-
-#		supervisor
-supervisord -c /etc/supervisord.conf
-
-#		tomcat
-/usr/local/tomcat/bin/startup.sh
-/usr/local/tomcat/bin/shutdown.sh
-
-
-
 启动oracle数据库
 su - oracle
 #打开Oracle监听

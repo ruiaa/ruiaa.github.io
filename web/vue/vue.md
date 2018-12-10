@@ -23,7 +23,7 @@
       
       export default {
         data () {
-          {
+          return {
             message: 'Hello Vue!',
             useInput: '',
             todos: [{ text: '学习 JavaScript' }, { text: '学习 Vue' } ]

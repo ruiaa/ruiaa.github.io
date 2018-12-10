@@ -1,9 +1,11 @@
-##ÏÂÔØ frp ²¢½âÑ¹
+ï»¿#   å†…ç½‘ç©¿é€
+
+##  ä¸‹è½½ frp å¹¶è§£åŽ‹
 wget https://github.com/fatedier/frp/releases/download/v0.9.3/frp_0.9.3_linux_amd64.tar.gz
 tar -zxvf frp_0.9.3_linux_amd64.tar.gz
 cd frp_0.9.3_linux_amd64
 
-# frpc.ini
+#   frpc.ini
 # A:\frp\frpc -c .A:\frp\frpc.ini
 type = http
 local_ip = 127.0.0.1
@@ -12,7 +14,7 @@ use_encryption = false
 use_compression = true
 custom_domains = lzrui.cn
 
-# frps.ini
+#   frps.ini
 # /usr/local/frp/frps -c /usr/local/frp/frps.ini &
 [common]
 vhost_http_port = 7776
@@ -23,14 +25,14 @@ dashboard_user = ruiaa
 dashboard_pwd = frp139162
 
 
-#	¿ª»úÆô¶¯Ïî
+#   å¼€æœºå¯åŠ¨é¡¹
 sudo vim /etc/rc.local
-Ìí¼Ó/home/frp/frps(frpsÎÄ¼þµÄ¾ø¶ÔµØÖ·) -c /home/frp/frps.ini(Í¬Àí) &
+æ·»åŠ /home/frp/frps(frpsæ–‡ä»¶çš„ç»å¯¹åœ°å€) -c /home/frp/frps.ini(åŒç†) &
 sudo chmod +x /etc/rc.d/rc.local
 
 nohup /usr/local/frp/frps -c /usr/local/frp/frps.ini >/usr/local/frp/log.txt 2>&1 &
 
-#	·þÎñÆ÷¶ËÈÈ¼ÓÔØÅäÖÃÎÄ¼þ
+#   æœåŠ¡å™¨ç«¯çƒ­åŠ è½½é…ç½®æ–‡ä»¶
 ./frps -c ./frps.ini --reload
 
 

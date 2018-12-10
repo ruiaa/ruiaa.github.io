@@ -1,3 +1,8 @@
+#   解压型，启动
+
++   /usr/local/tomcat/bin/startup.sh
++   /usr/local/tomcat/bin/shutdown.sh
+
 #   目录结构
 +   bin ——Tomcat执行脚本目录
     +   catalina.sh 用于启动和关闭tomcat服务器
