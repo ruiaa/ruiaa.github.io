@@ -9,7 +9,10 @@
     +   wget url
     +	http://jythoner.iteye.com/blog/354221
 
-+   解压 tar
++   tar
+    +   压缩
+    +   tar cvf ****.tar dir-file
+    +   解压 
     +   tar -zxvf ****.tar.gz 
     +   tar -jxvf ****.tar.bz(或bz2) 
 * 
