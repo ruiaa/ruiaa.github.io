@@ -1,20 +1,20 @@
 #   Javascript
 
 ##  引入位置
-+	HTML 中的脚本必须位于 \<script> 与 \</script> 标签之间。
-+	脚本可被放置在 HTML 页面的 \<body> 和 \<head> 部分中。
-+	外部 JavaScript 文件的文件扩展名是 .js，在\<script> 标签的 "src" 属性中设置该 .js 文件
++   HTML 中的脚本必须位于 \<script> 与 \</script> 标签之间。
++   脚本可被放置在 HTML 页面的 \<body> 和 \<head> 部分中。
++   外部 JavaScript 文件的文件扩展名是 .js，在\<script> 标签的 "src" 属性中设置该 .js 文件
 
-##	输出
-+	操作 HTML 元素：document.getElementById(id)
+##  输出
++   操作 HTML 元素：document.getElementById(id)
 
-##	语句
-+	分号用于分隔 JavaScript 语句
-+	代码块由左花括号开始，由右花括号结束。
-+	JavaScript 对大小写是敏感的
-+	可以在文本字符串中使用反斜杠对代码行进行换行
-+	单行注释以 //
-+	多行注释以 /* 开始，以 */ 结尾
+##  语句
++   分号用于分隔 JavaScript 语句
++   代码块由左花括号开始，由右花括号结束。
++   JavaScript 对大小写是敏感的
++   可以在文本字符串中使用反斜杠对代码行进行换行
++   单行注释以 //
++   多行注释以 /* 开始，以 */ 结尾
 +   
 +   if...else 语句 if(.){...} else if(.){...}else{...}
 +   switch 语句  switch(i){ case n:...;break; }
@@ -35,16 +35,16 @@
 +   with 设置代码在特定对象中的作用域，with(obj) {...//在obj的定义域下执行}
 
 
-##	变量
-+	声明：var
-+	未使用值来声明的变量，其值实际上是 undefined
-+	如果重新声明 JavaScript 变量，该变量的值不会丢失
+##  变量
++   声明：var
++   未使用值来声明的变量，其值实际上是 undefined
++   如果重新声明 JavaScript 变量，该变量的值不会丢失
 +   数据类型
     +   字符串，用双引号或单引号包围这个值。
-	+   数字：只有一种数字类型，可以带小数点。指数计数法来：123e5
+    +   数字：只有一种数字类型，可以带小数点。指数计数法来：123e5
         +   如果前缀为 0，则 JavaScript 会把数值常量解释为八进制数，如果前缀为 0x ，则解释为十六进制数。
 
-	            属性：
+                属性：
                 MAX VALUE
                 MIN VALUE
                 NEGATIVE INFINITIVE
@@ -60,15 +60,15 @@
                 toString()
                 valueOf()
 
-	+	布尔：true 或 false
+    +   布尔：true 或 false
     +   数组：创建new Array(o,o...)，或者[o,o...];访问[i]
-		+	new Array(i);如果只传入一个数字参数，则会创建一个长度为参数的数组
+        +   new Array(i);如果只传入一个数字参数，则会创建一个长度为参数的数组
     +   对象：对象由花括号包裹。在括号内部，对象的属性以名称和值对的形式name:value来定义。属性由逗号分隔
-		+	var person={firstname:"Bill", lastname:"Gates", id:5566};
-		+	属性访问：name=person.lastname;或者name=person["lastname"];
-		+   对象构造器
-		    
-		        function person(firstname,lastname,age,eyecolor)
+        +   var person={firstname:"Bill", lastname:"Gates", id:5566};
+        +   属性访问：name=person.lastname;或者name=person["lastname"];
+        +   对象构造器
+            
+                function person(firstname,lastname,age,eyecolor)
                 {
                 this.firstname=firstname;
                 this.lastname=lastname;
@@ -82,17 +82,17 @@
                 }
                 }
 
-	+	null：
-	+	undefined：表示变量不含有值
-	
+    +   null：
+    +   undefined：表示变量不含有值
+    
 +   声明变量类型
     +   声明新变量时，可以使用关键词 "new" 来声明其类型
-	+	var carname=new String;
-	+	var x=      new Number;
-	+	var y=      new Boolean;
-	+	var cars=   new Array;
-	+	var person= new Object;
-+	JavaScript 变量均为对象。声明一个变量时，就创建了一个新的对象
+    +   var carname=new String;
+    +   var x=      new Number;
+    +   var y=      new Boolean;
+    +   var cars=   new Array;
+    +   var person= new Object;
++   JavaScript 变量均为对象。声明一个变量时，就创建了一个新的对象
 +   
 +   变量的生存期
     +   函数内部声明的变量(var)是局部变量，只能在函数内部访问
@@ -111,26 +111,26 @@
 
 +   属性
 
-        constructor	返回对创建此对象的数组函数的引用。
-        length	设置或返回数组中元素的数目。
-        prototype	使您有能力向对象添加属性和方法。object.prototype.name=value
+        constructor 返回对创建此对象的数组函数的引用。
+        length  设置或返回数组中元素的数目。
+        prototype   使您有能力向对象添加属性和方法。object.prototype.name=value
 
 +   方法
 
-        concat()	连接两个或更多的数组，并返回结果。
-        join()	把数组的所有元素放入一个字符串。元素通过指定的分隔符进行分隔。
-        pop()	删除并返回数组的最后一个元素
-        push()	向数组的末尾添加一个或更多元素，并返回新的长度。
-        reverse()	颠倒数组中元素的顺序。
-        shift()	删除并返回数组的第一个元素
-        slice()	从某个已有的数组返回选定的元素
-        sort()	对数组的元素进行排序
-        splice()	删除元素，并向数组添加新元素。
-        toSource()	返回该对象的源代码。
-        toString()	把数组转换为字符串，并返回结果。
-        toLocaleString()	把数组转换为本地数组，并返回结果。
-        unshift()	向数组的开头添加一个或更多元素，并返回新的长度。
-        valueOf()	返回数组对象的原始值
+        concat()    连接两个或更多的数组，并返回结果。
+        join()  把数组的所有元素放入一个字符串。元素通过指定的分隔符进行分隔。
+        pop()   删除并返回数组的最后一个元素
+        push()  向数组的末尾添加一个或更多元素，并返回新的长度。
+        reverse()   颠倒数组中元素的顺序。
+        shift() 删除并返回数组的第一个元素
+        slice() 从某个已有的数组返回选定的元素
+        sort()  对数组的元素进行排序
+        splice()    删除元素，并向数组添加新元素。
+        toSource()  返回该对象的源代码。
+        toString()  把数组转换为字符串，并返回结果。
+        toLocaleString()    把数组转换为本地数组，并返回结果。
+        unshift()   向数组的开头添加一个或更多元素，并返回新的长度。
+        valueOf()   返回数组对象的原始值
 
 #   ECMAScript 原始类型
  +  Undefined、Null、Boolean、Number 和 String
@@ -173,11 +173,11 @@
         +   对于整数来说，小数点是无效字符
         +   十进制数包含前导 0，那么最好采用基数 10，这样才不会意外地得到八进制的值
         
-                var iNum1 = parseInt("0xA");	//返回 10
-                var iNum1 = parseInt("A", 16);	//返回 10
-                var iNum2 = parseInt("10", 8);	//返回 8
-                var iNum1 = parseInt("010");	//返回 8
-                var iNum3 = parseInt("010", 10);	//返回 10
+                var iNum1 = parseInt("0xA");    //返回 10
+                var iNum1 = parseInt("A", 16);  //返回 10
+                var iNum2 = parseInt("10", 8);  //返回 8
+                var iNum1 = parseInt("010");    //返回 8
+                var iNum3 = parseInt("010", 10);    //返回 10
 
     +   parseFloat()
         +   第一个出现的小数点是有效字符。如果有两个小数点，第二个小数点将被看作无效的
@@ -195,7 +195,7 @@
     +   String(value) - 把给定的值转换成字符串
         +   调用作为参数传递进来的值的 toString() 
         +   对 null 和 undefined 值强制类型转换可以生成字符串而不引发错误 
-        +   String(null);	//"null"
+        +   String(null);   //"null"
 
 #   ECMAScript 引用类型
 +   引用类型通常叫做类（class），也就是说，遇到引用值，所处理的就是对象。
@@ -225,7 +225,7 @@
 +   Boolean 对象
     +   new Boolean(true);  Boolean 对象是 Boolean 原始类型的引用类型
     +   注意：强制转换Boolean(new Boolean(false)) 返回true；
-    +   new Boolean(false) && true;	//输出 true
+    +   new Boolean(false) && true; //输出 true
 
 +   Number 对象
     +   new Number(68);   Number 对象是 Number 原始类型的引用类型
@@ -296,7 +296,7 @@
             function doAdd(iNum) {
               alert(iNum + 10);
             }
-            doAdd(10);	//输出 "20"
+            doAdd(10);  //输出 "20"
             //即
             var doAdd = new Function("iNum", "alert(iNum + 20)");
             var doAdd = new Function("iNum", "alert(iNum + 10)");
@@ -405,8 +405,8 @@
         var oCar1 = createCar("red",4,23);
         var oCar2 = createCar("blue",3,25);
         
-        oCar1.showColor();		//输出 "red"
-        oCar2.showColor();		//输出 "blue"
+        oCar1.showColor();      //输出 "red"
+        oCar2.showColor();      //输出 "blue"
 
 +   构造函数方式
 
@@ -464,8 +464,8 @@
         
         oCar1.drivers.push("Bill");
         
-        alert(oCar1.drivers);	//输出 "Mike,John,Bill"
-        alert(oCar2.drivers);	//输出 "Mike,John"
+        alert(oCar1.drivers);   //输出 "Mike,John,Bill"
+        alert(oCar2.drivers);   //输出 "Mike,John"
 
 +   动态原型方法
 
@@ -479,7 +479,7 @@
             Car.prototype.showColor = function() {
               alert(this.color);
             };
-        	
+            
             Car._initialized = true;
           }
         }
@@ -511,9 +511,9 @@
         
         var objA = new ClassA("blue");
         var objB = new ClassB("red", "John");
-        objA.sayColor();	//输出 "blue"
-        objB.sayColor();	//输出 "red"
-        objB.sayName();		//输出 "John"
+        objA.sayColor();    //输出 "blue"
+        objB.sayColor();    //输出 "red"
+        objB.sayName();     //输出 "John"
         
 +   call() 方法
     +   Function 对象的方法，第一个参数obj用作 函数内 this 的对象。其他参数都直接传递给函数自身。
@@ -609,7 +609,7 @@
 
 #   运算符
 +   赋值运算符：= 
-+   算术运算符：+，-，*，/，%，++，--
++   算术运算符：+，-，*，/，%，++，--          *
 +   字符串的 + 运算符：把文本值或字符串变量加起来（连接起来）
 +   比较运算符：==(等于)，===(全等 值和类型)，!=，>，<，>=，<=
 +   逻辑运算符：&&，||，!
@@ -725,19 +725,19 @@
 
 
 
-#	存储
-+	localStorage - 没有时间限制的数据存储
-+	sessionStorage - 针对一个 session 的数据存储，当用户关闭浏览器窗口后，数据会被删除
+#   存储
++   localStorage - 没有时间限制的数据存储
++   sessionStorage - 针对一个 session 的数据存储，当用户关闭浏览器窗口后，数据会被删除
 
 相同浏览器的不同页面间可以共享相同的localStorage（页面属于相同域名和端口），但是不同页面或标签页间无法共享sessionStorage的信息。
 
-+	document.cookie - 自动添加到http请求
++   document.cookie - 自动添加到http请求
 
 
 
 
 
-#	事件
+#   事件
 +   元素事件：element.event
     +   onload 和 onunload 事件会在用户进入或离开页面时被触发。
     +   onfocus  当输入字段获得焦点
@@ -762,6 +762,20 @@ $(document).ready(function(){
 })
 
 
+#   自定义属性
+
+    for (let i = 0; i < mails.length; i++) {
+        ......
+        "<li><a data-index='" + i + "' onclick='showMailDetail(this)'>"
+        ......
+    }
+    
+    
+    function showMailDetail(a) {
+        let mail=mails[a.dataset.index];
+    }
+    
+    
 
 
 

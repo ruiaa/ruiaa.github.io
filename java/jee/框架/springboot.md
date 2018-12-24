@@ -16,7 +16,8 @@
 #	启动项目
 +	Application.java的main方法
 +	命令启动 mvn spring-boot:run
-+	jar打包命令 mvn package
++	jar打包命令 mvn clean package
++	运行 java -jar xxx.jar
 
 #	静态资源处理
 src/main/resources/META-INF/resources
@@ -403,7 +404,7 @@ public class WebConfiguration {
 
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new MyFilter());
-        registration.addUrlPatterns("/*");
+        registration.addUrlPatterns("/*");  //*
         registration.addInitParameter("paramName", "paramValue");
         registration.setName("MyFilter");
         registration.setOrder(1);
@@ -478,8 +479,31 @@ public class SpringbootMybatisDemo2ApplicationTests {
 
 
 
+# 访问日志
+server.tomcat.accesslog.enabled=true
+server.tomcat.accesslog.pattern=%t %a "%r" %s (%bb) (%Dms)
+server.tomcat.basedir=./accessLogs/
+    ％a - 远程IP地址
+    ％A - 本地IP地址
+    ％b - 发送的字节数，不包括HTTP头，或“ - ”如果没有发送字节
+    ％B - 发送的字节数，不包括HTTP头
+    ％h - 远程主机名
+    ％H - 请求协议
+    ％l (小写的L)- 远程逻辑从identd的用户名（总是返回' - '）
+    ％m - 请求方法
+    ％p - 本地端口
+    ％q - 查询字符串（在前面加上一个“？”如果它存在，否则是一个空字符串
+    ％r - 第一行的要求
+    ％s - 响应的HTTP状态代码
+    ％S - 用户会话ID
+    ％t - 日期和时间，在通用日志格式
 
-
+    ％u - 远程用户身份验证
+    ％U - 请求的URL路径
+    ％v - 本地服务器名
+    ％D - 处理请求的时间（以毫秒为单位）
+    ％T - 处理请求的时间（以秒为单位）
+    ％I （大写的i） - 当前请求的线程名称
 
 
 

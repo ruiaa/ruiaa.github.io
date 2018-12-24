@@ -90,7 +90,7 @@
     +   -u:若目标文件已经存在，且源文件比较新才会更新
 
 
-##  touch , cat , find
+##  touch , cat , find , grep
 +   touch [-acfmdrt] [文件或目录]  ：  修改时间属性
 	+   修改文件或者目录的时间属性，不指定时使用当前系统时间
     +	若文件不存在，系统会建立一个新的文件
@@ -118,12 +118,53 @@
     +	cat -n textfile1 > textfile2  :  把 textfile1 的文档内容加上行号后输入 textfile2 
     +	cat /dev/null > /etc/test.txt  :  清空 /etc/test.txt 文档内容：
 
-+	find  :  在指定目录下查找文件
-
-
-
-
-
++	find path -option [ -print ] [ -exec -ok command ] {} \  :  在指定目录下查找文件
+	+	-name name, -iname name : 文件名称符合 name 的文件。iname 会忽略大小写 。  # find /root -name "*.c"         //*
+    +	-type c : 文件类型是 c 的文件 。  # find /root -type f    # d目录，c字型装置文件，b区块装置文件，p具名贮列，f一般文件，l:符号连结，s:socket
+    +   -ipath p, -path p : 路径名称符合 p 的文件，ipath 会忽略大小写
+    +   -mount, -xdev : 只检查和指定目录在同一个文件系统下的文件，避免列出其它文件系统中的文件
+    +   -amin n : 在过去 n 分钟内被读取过
+    +   -anewer file : 比文件 file 更晚被读取过的文件
+    +   -atime n : 在过去n天内被读取过的文件
+    +   -cmin n : 在过去 n 分钟内被修改过
+    +   -cnewer file :比文件 file 更新的文件
+    +   -ctime n : 在过去n天内被修改过的文件
+    +   -empty : 空的文件
+    +   -gid n or -group name : gid 是 n 或是 group 名称是 name
+    +   -size n : 文件大小 是 n 单位，b 代表 512 位元组的区块，c 表示字元数，k 表示 kilo bytes，w 是二个位元组。
+    +	-pid n : process id 是 n 的文件
+    
++	grep [-option] [范本样式][文件或目录...]  :  查找文件里符合条件的字符串
+	+	若不指定任何文件名称，或是所给予的文件名为"-"，则grep指令会从标准输入设备读取数据。
+    +   -a 或 --text : 不要忽略二进制的数据。
+    +   -A<显示行数> 或 --after-context=<显示行数> : 除了显示符合范本样式的那一列之外，并显示该行之后的内容。
+    +   -b 或 --byte-offset : 在显示符合样式的那一行之前，标示出该行第一个字符的编号。
+    +   -B<显示行数> 或 --before-context=<显示行数> : 除了显示符合样式的那一行之外，并显示该行之前的内容。
+    +   -c 或 --count : 计算符合样式的列数。
+    +   -C<显示行数> 或 --context=<显示行数>或-<显示行数> : 除了显示符合样式的那一行之外，并显示该行之前后的内容。
+    +   -d <动作> 或 --directories=<动作> : 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep指令将回报信息并停止动作。
+    +   -e<范本样式> 或 --regexp=<范本样式> : 指定字符串做为查找文件内容的样式。
+    +   -E 或 --extended-regexp : 将样式为延伸的普通表示法来使用。
+    +   -f<规则文件> 或 --file=<规则文件> : 指定规则文件，其内容含有一个或多个规则样式，让grep查找符合规则条件的文件内容，格式为每行一个规则样式。
+    +   -F 或 --fixed-regexp : 将样式视为固定字符串的列表。
+    +   -G 或 --basic-regexp : 将样式视为普通的表示法来使用。
+    +   -h 或 --no-filename : 在显示符合样式的那一行之前，不标示该行所属的文件名称。
+    +   -H 或 --with-filename : 在显示符合样式的那一行之前，表示该行所属的文件名称。
+    +   -i 或 --ignore-case : 忽略字符大小写的差别。
+    +   -l 或 --file-with-matches : 列出文件内容符合指定的样式的文件名称。
+    +   -L 或 --files-without-match : 列出文件内容不符合指定的样式的文件名称。
+    +   -n 或 --line-number : 在显示符合样式的那一行之前，标示出该行的列数编号。
+    +   -q 或 --quiet或--silent : 不显示任何信息。
+    +   -r 或 --recursive : 此参数的效果和指定"-d recurse"参数相同。
+    +   -s 或 --no-messages : 不显示错误信息。
+    +   -v 或 --revert-match : 显示不包含匹配文本的所有行。
+    +   -V 或 --version : 显示版本信息。
+    +   -w 或 --word-regexp : 只显示全字符合的列。
+    +   -x --line-regexp : 只显示全列符合的列。
+    +   -y : 此参数的效果和指定"-i"参数相同。
+    +	
+    +	grep test *file   # *在当前目录中，查找后缀有 file 字样的文件中包含 test 字符串的文件，并打印出该字符串的行
+	+	grep -r update /etc/acpi   # 查找指定目录/etc/acpi 及其子目录（如果存在子目录的话）下所有文件中包含字符串"update"的文件
 
 
 

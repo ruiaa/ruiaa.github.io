@@ -179,7 +179,33 @@
 
 
 
+url
+请求的地址。
+type
+请求的方法类型， GET , POST 。 默认是 GET 。
+data
+要发送出去的数据。
+dataType
+服务器返回的数据类型，支持： 'xml', 'html', 'script', 'json', 'jsonp', 'text' 。
+success
+请求成功时调用的处理函数。 success(data, textStatus, jqXHR) 。
+context
+回调函数执行时的上下文
+cache
+默认为 true ，是否为请求单独添加一个随机参数以防止浏览器缓存
+error
+请求错误时的调用函数。 error(jqXHR, textStatus, errorThrown) ，第二个参数是表示请求状态的字符串： "timeout", "error", "abort", "parsererror" 。第三个参数是当 HTTP 错误发生时，具体的错误描述： "Not Found", "Internal Server Error." 等。
+complete
+请求结束（无论成功或失败）时的一个回调函数。 complete(jqXHR, textStatus) ，第二个参数是表示请求状态的字符串： "success", "notmodified", "error", "timeout", "abort", "parsererror" 。
+jsonp
+一个参数名，默认是 callback ，一般用于指明回调函数名。设置成 false 可以让请求没有 callback 参数。
+jsonpCallback
+callback 参数值。默认是自动生成的一个随机值。
 
+
+
+
+$.ajaxSetup() 可以配置参数的默认值
 
 
 
