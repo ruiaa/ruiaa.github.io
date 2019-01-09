@@ -95,7 +95,14 @@
 	# 删掉一个目录:
 	>>> os.rmdir('/Users/michael/testdir')
 
-
+    
+    # 桌面路径
+    import winreg
+    def desktop_path():
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                             r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders')
+        return winreg.QueryValueEx(key, "Desktop")[0]
+ 
 +	文件操作
 
 
@@ -105,6 +112,10 @@
 	>>> os.remove('test.py')
 
 
+    
+    
+    os.listdir() 
+    返回指定的文件夹包含的文件或文件夹的名字的列表。这个列表以字母顺序。 它不包括 '.' 和'..' 即使它在文件夹中。
 
 ##	序列化 pickle模块
 

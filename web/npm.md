@@ -7,3 +7,6 @@ https://nodejs.org
 
 2、安装webpack
 npm install -g webpack
+
+3、使用cnpm代替npm
+npm install -g cnpm --registry=https://registry.npm.taobao.org
