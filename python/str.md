@@ -214,3 +214,25 @@ print str[-1] #截取倒数第一个字符
 print str[::-1] #创造一个与原字符串顺序相反的字符串
 print str[-3:-1] #截取倒数第三位与倒数第一位之前的字符
 print str[-3:] #截取倒数第三位到结尾
+
+
+
+
+
+
+
+
+
+
+# Filename : test.py
+# author by : www.runoob.com
+ 
+# 用户输入字符
+c = input("请输入一个字符: ")
+ 
+# 用户输入ASCII码，并将输入的数字转为整型
+a = int(input("请输入一个ASCII码: "))
+ 
+ 
+print( c + " 的ASCII 码为", ord(c))
+print( a , " 对应的字符为", chr(a))
