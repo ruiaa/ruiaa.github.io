@@ -236,6 +236,7 @@
 +   String 对象
     +   new String("hello world");  String 对象是 String 原始类型的引用类型
     +   length 属性：字符串中的字符个数
+    +	trim() 方法会删除一个字符串两端的空白字符。
     +   charAt() 方法返回包含指定位置处的字符的字符串
     +   charCodeAt()  返回指定位置处的字符代码
     +   concat() 方法，用于把一个或多个字符串连接到 String 对象的原始值上。该方法返回的是 String 原始值，保持原始的 String 对象不变：

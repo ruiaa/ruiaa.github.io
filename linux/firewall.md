@@ -6,7 +6,7 @@ firewall-cmd --version
 2.查看防火墙状态
 firewall-cmd --state
 3.添加80端口的权限
-firewall-cmd --zone=public --add-port=80/tcp --permanent
+firewall-cmd --zone=public --add-port=8080/tcp --permanent
 命令含义：
 --zone #作用域
 --add-port=80/tcp #添加端口，格式为：端口/通讯协议

@@ -86,6 +86,32 @@ vertices
 顶点
 captcha
 验证码 全自动区分计算机和人类的图灵测试（Completely Automated Public Turing test to tell Computers and Humans Apart）
+reproducibility
+再现性
+sequential
+序贯;时序;按次序的，相继的，构成连续镜头的
+dense
+密集的，稠密的;浓密的，浓厚的;愚钝的
+dimension
+[数]次元，度，维;尺寸;[复]面积，范围;[物]量纲;
+loss
+误差，损失，减少;丢失，遗失;损耗，亏损;失败
+optimizer
+计] 优化程序;[化] 最优控制，最优控制器
+weights
+权重
+biases
+偏差
+epoch
+时期;纪元;世;新时代
+convolutional
+卷积
+neural
+神经
+strides
+步幅
+batch 
+批处理
 
 
 
@@ -94,6 +120,3 @@ captcha
 
 
 
-
-Intermediate Language
-IL中间语言代码
