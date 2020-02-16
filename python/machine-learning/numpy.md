@@ -36,7 +36,7 @@ NumPy 的数组中比较重要 ndarray 对象属性有：
 属性  说明
 ndarray.ndim    秩，即轴的数量或维度的数量
 ndarray.shape   数组的维度，对于矩阵，n行m列 (n,m)
-ndarray.size    数组元素的总个数，相当于 .shape 中 n*m 的值
+ndarray.size    数组元素的总个数，相当于 .shape 中 n*m 的值*
 ndarray.dtype   ndarray 对象的元素类型
 ndarray.itemsize    ndarray 对象中每个元素的大小，以字节为单位
 ndarray.flags   ndarray 对象的内存信息

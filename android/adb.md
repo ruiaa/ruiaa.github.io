@@ -7,6 +7,7 @@
 安装应用
 ---------
 +   adb install path_in_computer_to_apk
+	+	adb install C:\Users\志瑞\Desktop\1.apk
     +   E:\androidstudio\project\linghong\canteen\app\build\outputs\apk\AndResGuard_app-release\app-release_aligned_signed.apk
 +   adb uninstall path_in_computer_to_apk
 

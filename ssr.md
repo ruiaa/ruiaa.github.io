@@ -11,5 +11,3 @@ n  不兼容SS客户端
 3  http_post 混淆插件
 n  不混淆插件兼容原版
 
-8081 hjkfjOPHG89m35G
-8082 hj1UODydihI78U9
